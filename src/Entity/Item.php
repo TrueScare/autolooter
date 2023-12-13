@@ -33,6 +33,10 @@ class Item
     #[ORM\ManyToOne(inversedBy: 'items')]
     private ?Rarity $rarity = null;
 
+    #[ORM\ManyToOne(inversedBy: 'items')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $owner = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -106,6 +110,18 @@ class Item
     public function setRarity(?Rarity $rarity): static
     {
         $this->rarity = $rarity;
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): static
+    {
+        $this->owner = $owner;
 
         return $this;
     }
