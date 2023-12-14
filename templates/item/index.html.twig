@@ -2,12 +2,16 @@
 
 {% block body %}
     <div class="item-listing row">
+        <div class="listing-header">Insgesamt {{ maxItemsFound }} gefunden.</div>
+        <div class="col-12">
+            {% include 'components/pagination.html.twig' with {route: path('item_index') } %}
+        </div>
         {% for item in items %}
             <div class="col-12 col-md-6 col-lg-3 mb-2 mt-2">
                 <div class="card"
                      style="background-color: {{ item.rarity.color }}">
                     <div class="card-body">
-                        <h1 class="card-title">{{ item.name }}</h1>
+                        <div class="card-title h3">{{ item.name }}</div>
                         <p class="card-text">{{ item.description }}</p>
                     </div>
                 </div>

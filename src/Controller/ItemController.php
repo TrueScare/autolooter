@@ -22,14 +22,17 @@ class ItemController extends AbstractController
     public function index(Request $request): Response
     {
         $page = $request->query->get('page');
-        $pageLimit = $request->query->get('pageLimit');
+        $page = $page <= 0 ? $page = 1 : $page;
+        $pageSize = $request->query->get('pageSize');
 
-        $items = $this->itemRepository->getItemsByOwner($this->getUser(),$page, $pageLimit);
+        $items = $this->itemRepository->getItemsByOwner($this->getUser(), $page, $pageSize);
+        $maxItemsFound = $this->itemRepository->getItemsCountByOwner($this->getUser());
 
         return $this->render('/item/index.html.twig', [
             'items' => $items,
+            'maxItemsFound' => $maxItemsFound,
             'page' => $page,
-            'pageLimit' => $pageLimit
+            'pageSize' => $pageSize
         ]);
     }
 }

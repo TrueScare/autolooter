@@ -1,0 +1,15 @@
+<form class="pagination d-flex gap-3" method="GET" href="{{ route }}">
+    <button name="page" class="col-2 btn btn-secondary previous {% if (page - 1) <= 0 %}disabled{% endif %}"
+            value="{{ page - 1 }}">
+        previous
+    </button>
+    <button name="page" class="col-2 btn btn-secondary next {% if (page + 1) > maxItemsFound/pageSize %}disabled{% endif %}"
+            value="{{ page + 1 }}">
+        next
+    </button>
+    <select name="pageSize" class="w-25 form-select page-size" onchange="this.form.submit()">
+        {% for value in [50, 25, 10] %}
+            <option value="{{ value }}" {% if value == pageSize %}selected{% endif %}>{{ value }}</option>
+        {% endfor %}
+    </select>
+</form>
