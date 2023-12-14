@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\ItemRepository;
+use App\Service\OrderService;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,15 +25,21 @@ class ItemController extends AbstractController
         $page = $request->query->get('page');
         $page = $page <= 0 ? $page = 1 : $page;
         $pageSize = $request->query->get('pageSize');
+        $order = $request->query->get('order');
 
-        $items = $this->itemRepository->getItemsByOwner($this->getUser(), $page, $pageSize);
+        $items = $this->itemRepository->getItemsByOwner($this->getUser(), $page, $pageSize, $order);
         $maxItemsFound = $this->itemRepository->getItemsCountByOwner($this->getUser());
 
         return $this->render('/item/index.html.twig', [
             'items' => $items,
             'maxItemsFound' => $maxItemsFound,
             'page' => $page,
-            'pageSize' => $pageSize
+            'pageSize' => $pageSize,
+            'orderOptions' => [OrderService::NAME_ASC => 'Name A-Z'
+                , OrderService::NAME_DESC => 'Name Z-A',
+                OrderService::RARITY_ASC => 'Rarität aufsteigend',
+                OrderService::RARITY_DESC => 'Rarität absteigend'],
+            'order' => $order
         ]);
     }
 }

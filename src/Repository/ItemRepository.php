@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Item;
 use App\Entity\User;
+use App\Service\OrderService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -24,14 +25,30 @@ class ItemRepository extends ServiceEntityRepository
         parent::__construct($registry, Item::class);
     }
 
-    public function getItemsByOwner(UserInterface $owner, $page = 1, $pageSize = 25)
+    public function getItemsByOwner(UserInterface $owner, $page = 1, $pageSize = 25, $order = OrderService::NAME_ASC)
     {
-        return $this->getDefaultQueryBuilder($owner)
+        $qb = $this->getDefaultQueryBuilder($owner)
             ->setMaxResults($pageSize)
             ->setFirstResult(($page - 1) * $pageSize)
             ->leftJoin('i.rarity', 'r')
-            ->addSelect('r')
-            ->getQuery()
+            ->addSelect('r');
+
+        switch ($order) {
+            case OrderService::NAME_ASC:
+                $qb->orderBy('i.name', 'ASC');
+                break;
+            case OrderService::NAME_DESC:
+                $qb->orderBy('i.name', 'DESC');
+                break;
+            case OrderService::RARITY_ASC:
+                $qb->orderBy('r.value', 'DESC'); // lowest value is actually the highest rarity
+                break;
+            case OrderService::RARITY_DESC:
+                $qb->orderBy('r.value', 'ASC'); // lowest value is actually the highest rarity
+                break;
+        }
+
+        return $qb->getQuery()
             ->execute();
     }
 
