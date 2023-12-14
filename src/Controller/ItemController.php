@@ -18,6 +18,9 @@ class ItemController extends AbstractController
     #[Route('/item', name: 'item_index')]
     public function index()
     {
-
+        $items = $this->itemRepository->findAll();
+        return $this->render('/item/index.html.twig', [
+            'items' => $items,
+        ]);
     }
 }

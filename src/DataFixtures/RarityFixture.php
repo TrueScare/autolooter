@@ -21,18 +21,28 @@ class RarityFixture extends Fixture
 
         $common = new Rarity();
         $common->setValue($baseRarity);
+        $common->setName("Common");
+        $common->setColor("#6e6d6a");
         $manager->persist($common);
 
         $rare = new Rarity();
         $rare->setValue($common->getValue() / 2);
+        $rare->setName("Rare");
+        $rare->setColor("#053880");
+
         $manager->persist($rare);
 
         $superrare = new Rarity();
         $superrare->setValue($rare->getValue() / 5);
+        $superrare->setName("Superrare");
+        $superrare->setColor("#2c1a52");
+
         $manager->persist($superrare);
 
         $ultrarare = new Rarity();
         $ultrarare->setValue($superrare->getValue() / 10);
+        $ultrarare->setName("Ultrarare");
+        $ultrarare->setColor("#6b5601");
         $manager->persist($ultrarare);
 
         $manager->flush();

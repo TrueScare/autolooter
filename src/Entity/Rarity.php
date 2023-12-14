@@ -24,6 +24,12 @@ class Rarity
     #[ORM\OneToMany(mappedBy: 'rarity', targetEntity: Table::class)]
     private Collection $tables;
 
+    #[ORM\Column(length: 10, nullable: true)]
+    private ?string $color = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
+
     public function __construct()
     {
         $this->items = new ArrayCollection();
@@ -103,6 +109,30 @@ class Rarity
                 $table->setRarity(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(string $color): static
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
 
         return $this;
     }
