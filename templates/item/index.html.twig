@@ -2,7 +2,6 @@
 
 {% block body %}
     <div class="item-listing row">
-        <div class="listing-header">Insgesamt {{ maxItemsFound }} gefunden.</div>
         <div class="col-12">
             {% include 'components/pagination.html.twig' with {route: path('item_index') } %}
         </div>

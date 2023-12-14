@@ -3,35 +3,35 @@
 namespace App\Controller;
 
 use App\Repository\ItemRepository;
+use App\Repository\TableRepository;
 use App\Service\OrderService;
 use App\Service\PaginationService;
-use Doctrine\ORM\Tools\Pagination\Paginator;
+use Doctrine\Common\Collections\Criteria;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
-class ItemController extends AbstractController
+class TableController extends AbstractController
 {
-    private ItemRepository $itemRepository;
+    private TableRepository $tableRepository;
     private PaginationService $paginationService;
 
-    public function __construct(ItemRepository $itemRepository, PaginationService $paginationService)
+    public function __construct(TableRepository $tableRepository, PaginationService $paginationService)
     {
-        $this->itemRepository = $itemRepository;
+        $this->tableRepository = $tableRepository;
         $this->paginationService = $paginationService;
     }
 
-    #[Route('/item', name: 'item_index')]
-    public function index(Request $request): Response
-    {
+    #[Route('/table', name:"table_index")]
+    public function index(Request $request){
         $order = $request->query->get('order');
-        $pageInfo = $this->paginationService->getPaginationInfoFromRequest($request);
-        $items = $this->itemRepository->getItemsByOwner($this->getUser(), $pageInfo, $order);
-        $maxItemsFound = $this->itemRepository->getItemsCountByOwner($this->getUser());
 
-        return $this->render('/item/index.html.twig', [
-            'items' => $items,
+        $pageInfo = $this->paginationService->getPaginationInfoFromRequest($request);
+        $tables = $this->tableRepository->getTablesByOwner($this->getUser(), $pageInfo, $order);
+        $maxItemsFound = $this->tableRepository->getTableCountByOwner($this->getUser());
+
+        return $this->render('/table/index.html.twig', [
+            'tables' => $tables,
             'maxItemsFound' => $maxItemsFound,
             'page' => $pageInfo->getPage(),
             'pageSize' => $pageInfo->getPageSize(),

@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Item;
 use App\Entity\User;
 use App\Service\OrderService;
+use App\Struct\PaginationInfo;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -25,11 +26,11 @@ class ItemRepository extends ServiceEntityRepository
         parent::__construct($registry, Item::class);
     }
 
-    public function getItemsByOwner(UserInterface $owner, $page = 1, $pageSize = 25, $order = OrderService::NAME_ASC)
+    public function getItemsByOwner(UserInterface $owner, PaginationInfo $paginationInfo, $order = OrderService::NAME_ASC)
     {
         $qb = $this->getDefaultQueryBuilder($owner)
-            ->setMaxResults($pageSize)
-            ->setFirstResult(($page - 1) * $pageSize)
+            ->setMaxResults($paginationInfo->getPageSize())
+            ->setFirstResult(($paginationInfo->getPage() - 1) * $paginationInfo->getPageSize())
             ->leftJoin('i.rarity', 'r')
             ->addSelect('r');
 
