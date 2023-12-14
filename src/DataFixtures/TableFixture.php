@@ -22,7 +22,7 @@ class TableFixture extends Fixture implements DependentFixtureInterface
         $owner = $this->getReference(UserFixture::BASE_USER);
 
         $tables = [];
-        for($i = 0; $i < 5; $i++){
+        for($i = 0; $i < 15; $i++){
             $table = new Table();
             $table->setName('table' . $i);
             $table->setDescription('table description' .$i);

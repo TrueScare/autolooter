@@ -1,0 +1,16 @@
+{% block listing %}
+    <div class="listing row">
+        {% block listing_header %}
+            <div class="col-12">
+                {% include 'components/pagination.html.twig' with {route: path('item_index') } %}
+            </div>
+        {% endblock %}
+        {% block listing_items %}
+            {% for entity in entities %}
+                {% block listing_item_include %}
+                    {% include 'components/cards/card-'~type~'.html.twig' %}
+                {% endblock %}
+            {% endfor %}
+        {% endblock %}
+    </div>
+{% endblock %}

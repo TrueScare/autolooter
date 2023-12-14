@@ -1,0 +1,14 @@
+{% extends 'components/cards/card-basic.html.twig' %}
+
+{% block card_content %}
+    <div class="card-body">
+        <div class="card-title h3">{{ entity.name }}</div>
+        <div class="card-subtitle text-muted">{{ entity.parent.name }}</div>
+        <p class="card-text">{{ entity.description }}</p>
+    </div>
+    <div class="card-footer" style="background-color: {{ entity.rarity.color }}">
+        <p class="card-text">
+            {{ entity.valueStart }}G - {{ entity.valueEnd }}G
+        </p>
+    </div>
+{% endblock %}

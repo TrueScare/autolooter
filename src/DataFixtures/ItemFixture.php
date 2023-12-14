@@ -22,7 +22,7 @@ class ItemFixture extends Fixture implements DependentFixtureInterface
         $baseTable = $this->getReference(TableFixture::BASE_TABLE);
         $owner = $this->getReference(UserFixture::BASE_USER);
 
-        for($i = 0; $i < 20; $i++){
+        for($i = 0; $i < 120; $i++){
             $item = new Item();
             $item->setName('product' . $i);
             $item->setDescription('product description' . $i);
