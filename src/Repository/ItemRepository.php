@@ -3,8 +3,11 @@
 namespace App\Repository;
 
 use App\Entity\Item;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends ServiceEntityRepository<Item>
@@ -19,6 +22,32 @@ class ItemRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Item::class);
+    }
+
+    public function getItemsByOwner(UserInterface $owner, $page = 1, $pageSize = 25)
+    {
+        return $this->getDefaultQueryBuilder($owner)
+            ->setMaxResults($pageSize)
+            ->setFirstResult(($page - 1) * $pageSize)
+            ->leftJoin('i.rarity', 'r')
+            ->addSelect('r')
+            ->getQuery()
+            ->execute();
+    }
+
+    public function getItemsCountByOwner(UserInterface $owner)
+    {
+        return $this->getDefaultQueryBuilder($owner)
+            ->select('count(i.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    private function getDefaultQueryBuilder(UserInterface $owner): QueryBuilder
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.owner = :owner')
+            ->setParameter('owner', $owner);
     }
 
 //    /**
