@@ -7,6 +7,9 @@ use App\Repository\TableRepository;
 use App\Service\OrderService;
 use App\Service\PaginationService;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,9 +18,9 @@ class TableController extends BaseController
 {
     private TableRepository $tableRepository;
 
-    public function __construct(TableRepository $tableRepository, PaginationService $paginationService)
+    public function __construct(TableRepository $tableRepository, PaginationService $paginationService, EntityManagerInterface $entityManager, LoggerInterface $logger)
     {
-        parent::__construct($paginationService);
+        parent::__construct($paginationService,$entityManager,$logger);
         $this->tableRepository = $tableRepository;
     }
 

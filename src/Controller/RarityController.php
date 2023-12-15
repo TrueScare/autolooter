@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Repository\RarityRepository;
 use App\Service\OrderService;
 use App\Service\PaginationService;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -12,9 +15,9 @@ class RarityController extends BaseController
 {
     private RarityRepository $rarityRepository;
 
-    public function __construct(RarityRepository $rarityRepository, PaginationService $paginationService)
+    public function __construct(RarityRepository $rarityRepository, PaginationService $paginationService, EntityManagerInterface $entityManager, LoggerInterface $logger)
     {
-        parent::__construct($paginationService);
+        parent::__construct($paginationService,$entityManager,$logger);
         $this->rarityRepository = $rarityRepository;
     }
 
