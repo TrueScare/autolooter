@@ -26,11 +26,12 @@ class TableFormType extends AbstractType
                 'choice_label' => 'name',
                 'required' => false,
                 'placeholder' => '...',
-                'choices' => $options['choices']
+                'choices' => $options['tableChoices']
             ])
             ->add('rarity', EntityType::class, [
                 'class' => Rarity::class,
                 'choice_label' => 'name',
+                'choices' => $options['rarityChoices']
             ])
             ->add('submit', SubmitType::class);
         ;
@@ -40,7 +41,8 @@ class TableFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Table::class,
-            'choices' => Table::class
+            'tableChoices' => Table::class,
+            'rarityChoices' => Rarity::class
         ]);
     }
 }

@@ -59,7 +59,8 @@ class ItemController extends BaseController
         $owner = $this->getUser();
 
         $option = [
-            'choices' => $owner->getTables()
+            'tableChoices' => $owner->getTables(),
+            'rarityChoices' => $owner->getRarities()
         ];
 
         $form = $this->createForm(ItemFormType::class, $item, $option);

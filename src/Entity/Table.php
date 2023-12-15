@@ -169,4 +169,40 @@ class Table
 
         return $this;
     }
+
+    /**
+     * List of Tables on the Path to root in order of occurrence from bottom to top
+     * @return array
+     */
+    public function getPathToRoot(){
+        // add yourself to the queue
+        $path[] = $this;
+
+        if ($this->parent == null) {
+            // you are the root? splendid!
+            return $path;
+        } else {
+            // search on for the root
+            return $this->getParent()->getPathToRoot($path);
+        }
+    }
+
+    /**
+     * Used to generate the pool of Tables that are in the path to the root
+     * @param $path
+     * @return array|mixed
+     */
+    public function getCollectionRoot($path = [])
+    {
+        // add yourself to the queue
+        $path[$this->getId()] = $this;
+
+        if ($this->parent == null) {
+            // you are the root? splendid!
+            return $path;
+        } else {
+            // search on for the root
+            return $this->getParent()->getPathToRoot($path);
+        }
+    }
 }

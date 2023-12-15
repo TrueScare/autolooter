@@ -62,12 +62,16 @@ class TableController extends BaseController
 
         /** @var User $owner */
         $owner = $this->getUser();
+
         $choices = $owner->getTables()->filter(function ($element) use ($table) {
-            return $element->getId() != $table?->getId();
+            // do not be able to create circle references
+            /** @var Table $element  */
+            return empty($element->getCollectionRoot()[$table?->getId()]);
         });
 
         $option = [
-            'choices' => $choices
+            'tableChoices' => $choices,
+            'rarityChoices' => $owner->getRarities()
         ];
 
         $form = $this->createForm(TableFormType::class, $table,$option);
