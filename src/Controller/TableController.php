@@ -11,15 +11,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class TableController extends AbstractController
+class TableController extends BaseController
 {
     private TableRepository $tableRepository;
-    private PaginationService $paginationService;
 
     public function __construct(TableRepository $tableRepository, PaginationService $paginationService)
     {
+        parent::__construct($paginationService);
         $this->tableRepository = $tableRepository;
-        $this->paginationService = $paginationService;
     }
 
     #[Route('/table', name:"table_index")]

@@ -6,5 +6,5 @@
         {% if entity.parent %}<div class="card-subtitle">{{ entity.parent.name }}</div>{% endif %}
         <p class="card-text">{{ entity.description }}</p>
     </div>
-    <div class="card-footer" style="background-color: {{ entity.rarity.color }}"></div>
+    <div class="card-footer" style="background-color: {{ color }}"></div>
 {% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'components/cards/card-basic.html.twig' %}
+
+{% block card_content %}
+    <div class="card-body">
+        <div class="card-title h3" style="color:{{ color }}">
+            {{ entity.name }}
+        </div>
+        <div class="card-subtitle">
+            {{ entity.value }}
+        </div>
+    </div>
+    <div class="card-footer" style="background-color: {{ color }}"></div>
+{% endblock %}

@@ -2,33 +2,32 @@
 
 namespace App\Controller;
 
-use App\Repository\ItemRepository;
+use App\Repository\RarityRepository;
 use App\Service\OrderService;
 use App\Service\PaginationService;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
-class ItemController extends BaseController
+class RarityController extends BaseController
 {
-    private ItemRepository $itemRepository;
+    private RarityRepository $rarityRepository;
 
-    public function __construct(ItemRepository $itemRepository, PaginationService $paginationService)
+    public function __construct(RarityRepository $rarityRepository, PaginationService $paginationService)
     {
         parent::__construct($paginationService);
-        $this->itemRepository = $itemRepository;
+        $this->rarityRepository = $rarityRepository;
     }
 
-    #[Route('/item', name: 'item_index')]
-    public function index(Request $request): Response
-    {
+    #[Route('/rarity', name:'rarity_index')]
+    public function index(Request $request){
         $order = $request->query->get('order');
         $pageInfo = $this->paginationService->getPaginationInfoFromRequest($request);
-        $items = $this->itemRepository->getItemsByOwner($this->getUser(), $pageInfo, $order);
-        $maxItemsFound = $this->itemRepository->getItemsCountByOwner($this->getUser());
 
-        return $this->render('/item/index.html.twig', [
-            'items' => $items,
+        $rarities = $this->rarityRepository->getRaritiesByOwner($this->getUser(), $pageInfo, $order);
+        $maxItemsFound = $this->rarityRepository->getRarityCountByOwner($this->getUser());
+
+        return $this->render('/rarity/index.html.twig', [
+            'rarities' => $rarities,
             'maxItemsFound' => $maxItemsFound,
             'page' => $pageInfo->getPage(),
             'pageSize' => $pageInfo->getPageSize(),
