@@ -4,7 +4,7 @@
     <div class="card-body">
         <div class="card-title h3">{{ entity.name }}</div>
         {% if entity.parent %}<div class="card-subtitle">{{ entity.parent.name }}</div>{% endif %}
-        <p class="card-text">{{ entity.description }}</p>
+        <p class="card-text">{{ entity.description|u.truncate(180, '...') }}</p>
     </div>
     <div class="card-footer" style="background-color: {{ color }}"></div>
 {% endblock %}

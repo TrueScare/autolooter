@@ -3,11 +3,11 @@
 {% block card_content %}
     <div class="card-body">
         <a class="card-title h3"
-        href="{{ path('item_detail', {id:entity.id}) }}">
+        href="{{ path('item_edit', {id:entity.id}) }}">
             {{ entity.name }}
         </a>
         <div class="card-subtitle text-muted">{{ entity.parent.name }}</div>
-        <p class="card-text">{{ entity.description }}</p>
+        <p class="card-text">{{ entity.description|u.truncate(180, '...') }}</p>
     </div>
     <div class="card-footer" style="background-color: {{ color }}">
         <p class="card-text">
