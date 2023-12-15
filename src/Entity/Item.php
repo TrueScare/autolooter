@@ -125,4 +125,38 @@ class Item
 
         return $this;
     }
+
+    public function getPathToRoot(){
+        return $this->getPathToRoot();
+    }
+
+    public function getCollectionToRoot(){
+        return $this->getParent()->getCollectionRoot();
+    }
+
+    public function getPeers()
+    {
+        $peers = $this->getOwner()->getTables();
+
+        $peers->filter(function ($element) {
+            /** @var Item $element */
+            return $element->getId() != $this->getId();
+        });
+
+        return $peers;
+    }
+
+    public function getProbability()
+    {
+        $peers = $this->getPeers();
+        $volume = 0;
+        foreach($peers as $peer){
+            /** @var Table $peer */
+            $volume += $peer->getRarity()->getValue();
+        }
+
+        $parentProbability = $this->getParent()->getProbability();
+        $probability = $this->getRarity()->getValue() / ($volume + $this->getRarity()->getValue());
+        return $parentProbability * $probability;
+    }
 }

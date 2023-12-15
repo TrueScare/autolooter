@@ -174,11 +174,12 @@ class Table
      * List of Tables on the Path to root in order of occurrence from bottom to top
      * @return array
      */
-    public function getPathToRoot(){
+    public function getPathToRoot()
+    {
         // add yourself to the queue
         $path[] = $this;
 
-        if ($this->parent == null) {
+        if (empty($this->getParent())) {
             // you are the root? splendid!
             return $path;
         } else {
@@ -197,12 +198,46 @@ class Table
         // add yourself to the queue
         $path[$this->getId()] = $this;
 
-        if ($this->parent == null) {
+        if (empty($this->getParent())) {
             // you are the root? splendid!
             return $path;
         } else {
             // search on for the root
             return $this->getParent()->getPathToRoot($path);
         }
+    }
+
+    public function getPeers()
+    {
+        if (empty($this->getParent())) {
+            $parentTables = $this->getOwner()->getRootTables();
+        } else {
+            $parentTables = $this->getParent()->getTables();
+        }
+
+        $parentTables = $parentTables->filter(function ($element) {
+            /** @var Table $element */
+            return $element->getId() != $this->getId();
+        });
+
+        return $parentTables;
+    }
+
+    public function getProbability($probability = 1)
+    {
+        $peers = $this->getPeers();
+        $volume = 0;
+        foreach($peers as $peer){
+            /** @var Table $peer */
+            $volume += $peer->getRarity()->getValue();
+        }
+
+        $probability *= $this->getRarity()->getValue() / ($volume + $this->getRarity()->getValue());
+
+        if (empty($this->getParent())) {
+            return $probability;
+        }
+
+        return $this->getParent()->getProbability($probability);
     }
 }

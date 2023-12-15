@@ -204,4 +204,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getRootTables(){
+        return $this->getTables()->filter(function($table){
+            /** @var Table $table */
+            return empty($table->getParent());
+        });
+    }
 }
