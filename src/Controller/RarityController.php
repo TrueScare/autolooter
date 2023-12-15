@@ -2,13 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\Item;
+use App\Entity\Rarity;
+use App\Entity\User;
+use App\Form\ItemFormType;
+use App\Form\RarityFormType;
 use App\Repository\RarityRepository;
 use App\Service\OrderService;
 use App\Service\PaginationService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class RarityController extends BaseController
@@ -40,5 +47,44 @@ class RarityController extends BaseController
                 OrderService::RARITY_DESC => 'Rarität absteigend'],
             'order' => $order
         ]);
+    }
+
+    #[Route('/rarity/edit/{id?}', name: 'rarity_edit')]
+    public function detail(?Rarity $rarity, Request $request): Response
+    {
+        if($rarity?->getOwner() !== $this->getUser())
+        {
+            $this->redirectToRoute('app_home');
+        }
+        $rarity->setOwner($this->getUser());
+
+        $form = $this->createForm(RarityFormType::class, $rarity);
+
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid())
+        {
+            /** @var Rarity $rarity */
+            $rarity = $form->getData();
+
+            try{
+                $this->entityManager->persist($rarity);
+                $this->entityManager->flush();
+                $this->addFlash('success', 'Info: Speichern erfolgreich.');
+            } catch(\Exception $e){
+                $this->logger->error($e);
+                $this->addFlash('error',"FEHLER: Speichern fehlgeschlagen.");
+            }
+        }
+
+        return $this->render('item/detail.html.twig', [
+            'rarity' => $rarity,
+            'form' => $form
+        ]);
+    }
+
+    #[Route('/rarity/new', name:'rarity_new')]
+    public function new(): RedirectResponse
+    {
+        return $this->redirectToRoute('rarity_edit', ['id' => null]);
     }
 }

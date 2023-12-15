@@ -2,8 +2,11 @@
 
 {% block card_content %}
     <div class="card-body">
-        <div class="card-title h3">{{ entity.name }}</div>
-        {% if entity.parent %}<div class="card-subtitle">{{ entity.parent.name }}</div>{% endif %}
+        <a class="card-title h3"
+             href="{{ path('table_edit', {'id': entity.id}) }}">
+            {{ entity.name }}
+        </a>
+        <div class="card-subtitle">{% if entity.parent %}{{ entity.parent.name }}{% endif %}</div>
         <p class="card-text">{{ entity.description|u.truncate(180, '...') }}</p>
     </div>
     <div class="card-footer" style="background-color: {{ color }}"></div>

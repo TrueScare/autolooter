@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Item;
+use App\Entity\User;
 use App\Form\ItemFormType;
 use App\Repository\ItemRepository;
 use App\Service\OrderService;
@@ -10,6 +11,7 @@ use App\Service\PaginationService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -45,15 +47,22 @@ class ItemController extends BaseController
         ]);
     }
 
-    #[Route('/item/edit/{id}', name: 'item_edit')]
+    #[Route('/item/edit/{id?}', name: 'item_edit')]
     public function detail(?Item $item, Request $request): Response
     {
-        if($item->getOwner() !== $this->getUser())
+        if($item?->getOwner() !== $this->getUser())
         {
             $this->redirectToRoute('app_home');
         }
 
-        $form = $this->createForm(ItemFormType::class, $item);
+        /** @var User $owner */
+        $owner = $this->getUser();
+
+        $option = [
+            'choices' => $owner->getTables()
+        ];
+
+        $form = $this->createForm(ItemFormType::class, $item, $option);
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid())
@@ -79,8 +88,8 @@ class ItemController extends BaseController
     }
 
     #[Route('/item/new', name: 'item_new')]
-    public function new(): void
+    public function new(Request $request): RedirectResponse
     {
-        $this->redirectToRoute('item_edit', ['id' => null]);
+        return $this->redirectToRoute('item_edit', ['id' => null]);
     }
 }

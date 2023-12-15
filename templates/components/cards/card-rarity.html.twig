@@ -2,9 +2,9 @@
 
 {% block card_content %}
     <div class="card-body">
-        <div class="card-title h3" style="color:{{ color }}">
+        <a href="{{ path('rarity_edit', {'id': entity.id}) }}" class="card-title h3" style="color:{{ color }}">
             {{ entity.name }}
-        </div>
+        </a>
         <div class="card-subtitle">
             {{ entity.value }}
         </div>

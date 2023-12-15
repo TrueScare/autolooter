@@ -25,6 +25,7 @@ class ItemFormType extends AbstractType
             ->add('parent', EntityType::class, [
                 'class' => Table::class,
                 'choice_label' => 'name',
+                'choices' => $options['choices']
             ])
             ->add('rarity', EntityType::class, [
                 'class' => Rarity::class,
@@ -37,6 +38,7 @@ class ItemFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Item::class,
+            'choices' => Table::class
         ]);
     }
 }
