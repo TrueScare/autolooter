@@ -174,7 +174,7 @@ class Table
      * List of Tables on the Path to root in order of occurrence from bottom to top
      * @return array
      */
-    public function getPathToRoot()
+    public function getPathToRoot($path = [])
     {
         // add yourself to the queue
         $path[] = $this;
@@ -227,17 +227,52 @@ class Table
     {
         $peers = $this->getPeers();
         $volume = 0;
-        foreach($peers as $peer){
+        foreach ($peers as $peer) {
+            // rule out all tables that do not result in an item
             /** @var Table $peer */
-            $volume += $peer->getRarity()->getValue();
+            $volume += $peer->hasPathToItems() ? $peer->getRarity()->getValue() : 0;
         }
 
-        $probability *= $this->getRarity()->getValue() / ($volume + $this->getRarity()->getValue());
+        if ($this->hasPathToItems()) {
+            $probability *= $this->getRarity()->getValue() / ($volume + $this->getRarity()->getValue());
+        } else {
+            $probability = 0;
+        }
 
         if (empty($this->getParent())) {
             return $probability;
         }
 
         return $this->getParent()->getProbability($probability);
+    }
+
+    public function getChildrenCollectionRecursive($tables = [])
+    {
+        if (empty($this->getTables())) {
+            return $tables;
+        }
+
+        foreach ($this->getTables() as $child) {
+            $tables[$child->getId()] = $child;
+            $tables = $child->getChildrenCollectionRecursive($tables);
+        }
+
+        return $tables;
+    }
+
+    public function hasPathToItems(): bool
+    {
+        if ($this->getItems()->count() > 0) {
+            return true;
+        }
+
+        $children = $this->getChildrenCollectionRecursive();
+        /** @var Table $child */
+        foreach ($children as $child) {
+            if ($child->getItems()->count() > 0) {
+                return true;
+            }
+        }
+        return false;
     }
 }

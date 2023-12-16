@@ -127,7 +127,7 @@ class Item
     }
 
     public function getPathToRoot(){
-        return $this->getPathToRoot();
+        return $this->getParent()->getPathToRoot();
     }
 
     public function getCollectionToRoot(){
@@ -136,9 +136,9 @@ class Item
 
     public function getPeers()
     {
-        $peers = $this->getOwner()->getTables();
+        $peers = $this->getParent()->getItems();
 
-        $peers->filter(function ($element) {
+        $peers = $peers->filter(function ($element) {
             /** @var Item $element */
             return $element->getId() != $this->getId();
         });
@@ -155,8 +155,10 @@ class Item
             $volume += $peer->getRarity()->getValue();
         }
 
-        $parentProbability = $this->getParent()->getProbability();
         $probability = $this->getRarity()->getValue() / ($volume + $this->getRarity()->getValue());
-        return $parentProbability * $probability;
+        $parentProbability = $this->getParent()->getProbability();
+
+        //return ($probability * $parentProbability);
+        return $probability * $parentProbability;
     }
 }

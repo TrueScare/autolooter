@@ -32,7 +32,10 @@ class ItemRepository extends ServiceEntityRepository
             ->setMaxResults($paginationInfo->getPageSize())
             ->setFirstResult(($paginationInfo->getPage() - 1) * $paginationInfo->getPageSize())
             ->leftJoin('i.rarity', 'r')
-            ->addSelect('r');
+            ->leftJoin('i.parent', 'p')
+            ->addSelect('r')
+            ->addSelect('p')
+        ;
 
         switch ($order) {
             case OrderService::NAME_ASC:

@@ -93,4 +93,32 @@ class ItemController extends BaseController
     {
         return $this->redirectToRoute('item_edit', ['id' => null]);
     }
+
+    #[Route('/item/random', name: 'item_random')]
+    public function random(Request $request){
+        /** @var User $owner */
+        $owner = $this->getUser();
+
+        $items = $owner->getItems();
+
+        $pick = $this->getPickFromItems($items);
+
+        return $this->render('item/random.html.twig',[
+            'item' => $pick
+        ]);
+    }
+
+    private function getPickFromItems($items){
+        // the items probability ALWAYS has to add up to 1 (100%)
+        $luckyPick = rand(0, 100)/100;
+
+        foreach($items as $item) {
+            $luckyPick -= $item->getProbability();
+            if($luckyPick <= 0){
+                return $item;
+            }
+        }
+        $this->addFlash('error', "No item found... that's suspicious.");
+        return $items->last();
+    }
 }
