@@ -25,20 +25,34 @@ class TableRepository extends ServiceEntityRepository
         parent::__construct($registry, Table::class);
     }
 
+    public function getAllTablesByOwner(UserInterface $owner){
+        return $this->getDefaultQueryBuilder($owner)
+            ->leftJoin('t.rarity', 'r')
+            ->leftJoin('t.parent', 'p')
+            ->addSelect('r')
+            ->addSelect('p')
+            ->getQuery()
+            ->execute()
+        ;
+    }
+
     public function getTablesByOwner(UserInterface $owner, PaginationInfo $paginationInfo, $order = OrderService::NAME_ASC)
     {
         $qb = $this->getDefaultQueryBuilder($owner)
             ->setMaxResults($paginationInfo->getPageSize())
             ->setFirstResult(($paginationInfo->getPage() - 1) * $paginationInfo->getPageSize())
             ->leftJoin('t.rarity', 'r')
-            ->addSelect('r');
+            ->leftJoin('t.parent', 'p')
+            ->addSelect('r')
+            ->addSelect('p')
+        ;
 
         switch ($order) {
             case OrderService::NAME_ASC:
-                $qb->orderBy('i.name', 'ASC');
+                $qb->orderBy('t.name', 'ASC');
                 break;
             case OrderService::NAME_DESC:
-                $qb->orderBy('i.name', 'DESC');
+                $qb->orderBy('t.name', 'DESC');
                 break;
             case OrderService::RARITY_ASC:
                 $qb->orderBy('r.value', 'DESC'); // lowest value is actually the highest rarity

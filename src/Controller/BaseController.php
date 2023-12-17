@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Service\PaginationService;
+use App\Struct\HeaderAction;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,5 +19,22 @@ class BaseController extends AbstractController
         $this->paginationService = $paginationService;
         $this->entityManager = $entityManager;
         $this->logger = $logger;
+    }
+
+    protected function getHeaderActions(){
+        return [
+            new HeaderAction(
+                'Zu den Raritäten',
+                $this->generateUrl('rarity_index')
+            ),
+            new HeaderAction(
+                'Zu den Tabellen',
+                $this->generateUrl('table_index')
+            ),
+            new HeaderAction(
+                'Zu den Items',
+                $this->generateUrl('item_index')
+            )
+        ];
     }
 }

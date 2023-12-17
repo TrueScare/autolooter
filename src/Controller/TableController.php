@@ -2,20 +2,14 @@
 
 namespace App\Controller;
 
-use App\Entity\Rarity;
 use App\Entity\Table;
 use App\Entity\User;
-use App\Form\RarityFormType;
 use App\Form\TableFormType;
-use App\Repository\ItemRepository;
 use App\Repository\TableRepository;
 use App\Service\OrderService;
 use App\Service\PaginationService;
-use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,7 +42,8 @@ class TableController extends BaseController
                 , OrderService::NAME_DESC => 'Name Z-A',
                 OrderService::RARITY_ASC => 'Rarität aufsteigend',
                 OrderService::RARITY_DESC => 'Rarität absteigend'],
-            'order' => $order
+            'order' => $order,
+            'headerActions' => $this->getHeaderActions()
         ]);
     }
 
@@ -95,7 +90,8 @@ class TableController extends BaseController
 
         return $this->render('table/detail.html.twig', [
             'table' => $table,
-            'form' => $form
+            'form' => $form,
+            'headerActions' => $this->getHeaderActions()
         ]);
     }
 

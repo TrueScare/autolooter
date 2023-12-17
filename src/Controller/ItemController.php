@@ -8,7 +8,6 @@ use App\Form\ItemFormType;
 use App\Repository\ItemRepository;
 use App\Service\OrderService;
 use App\Service\PaginationService;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -43,7 +42,8 @@ class ItemController extends BaseController
                 , OrderService::NAME_DESC => 'Name Z-A',
                 OrderService::RARITY_ASC => 'Rarität aufsteigend',
                 OrderService::RARITY_DESC => 'Rarität absteigend'],
-            'order' => $order
+            'order' => $order,
+            'headerActions' => $this->getHeaderActions()
         ]);
     }
 
@@ -84,7 +84,8 @@ class ItemController extends BaseController
 
         return $this->render('item/detail.html.twig', [
             'item' => $item,
-            'form' => $form
+            'form' => $form,
+            'headerActions' => $this->getHeaderActions()
         ]);
     }
 
@@ -104,7 +105,8 @@ class ItemController extends BaseController
         $pick = $this->getPickFromItems($items);
 
         return $this->render('item/random.html.twig',[
-            'item' => $pick
+            'item' => $pick,
+            'headerActions' => $this->getHeaderActions()
         ]);
     }
 

@@ -7,13 +7,13 @@
           method="GET"
           href="{{ route }}">
         <button name="page"
-                class="col-2 btn btn-secondary previous {% if (page - 1) <= 0 %}disabled{% endif %}"
+                class="col-2 btn btn-primary previous {% if (page - 1) <= 0 %}disabled{% endif %}"
                 value="{{ page - 1 }}">
             previous
         </button>
         <div class="page-display col-1 text-center">{{ page }} / {{ (maxItemsFound/pageSize)|round(0,'ceil') }}</div>
         <button name="page"
-                class="col-2 btn btn-secondary next {% if (page + 1) > (maxItemsFound/pageSize)|round(0,'ceil') %}disabled{% endif %}"
+                class="col-2 btn btn-primary next {% if (page + 1) > (maxItemsFound/pageSize)|round(0,'ceil') %}disabled{% endif %}"
                 value="{{ page + 1 }}">
             next
         </button>

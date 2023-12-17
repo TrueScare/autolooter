@@ -1,0 +1,17 @@
+<header class="d-flex flex-wrap align-items-center justify-content-center py-3 mb-4 border-bottom">
+    <div class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none justify-content-center">
+        <div class="logo-container">
+            <a href="{{ path('app_home') }}">
+                <img alt="Autolooter" src="{{ asset('build/images/Autolooter-logos.jpeg') }}" style="max-width: 150px; max-height: 150px;">
+            </a>
+        </div>
+    </div>
+
+    {% if headerActions is defined and headerActions|length > 0 %}
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+            {% for action in headerActions %}
+                <li><a href="{{ action.route }}" class="nav-link px-2">{{ action.label }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</header>

@@ -2,15 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\Item;
 use App\Entity\Rarity;
-use App\Entity\User;
-use App\Form\ItemFormType;
 use App\Form\RarityFormType;
 use App\Repository\RarityRepository;
 use App\Service\OrderService;
 use App\Service\PaginationService;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -45,7 +41,8 @@ class RarityController extends BaseController
                 , OrderService::NAME_DESC => 'Name Z-A',
                 OrderService::RARITY_ASC => 'Rarität aufsteigend',
                 OrderService::RARITY_DESC => 'Rarität absteigend'],
-            'order' => $order
+            'order' => $order,
+            'headerActions' => $this->getHeaderActions()
         ]);
     }
 
@@ -78,7 +75,8 @@ class RarityController extends BaseController
 
         return $this->render('item/detail.html.twig', [
             'rarity' => $rarity,
-            'form' => $form
+            'form' => $form,
+            'headerActions' => $this->getHeaderActions()
         ]);
     }
 
