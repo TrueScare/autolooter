@@ -10,7 +10,7 @@
     {% if headerActions is defined and headerActions|length > 0 %}
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
             {% for action in headerActions %}
-                <li><a href="{{ action.route }}" class="nav-link px-2">{{ action.label }}</a></li>
+                <li><a href="{{ action.route }}" class="fw-bold nav-link px-2">{{ action.label }}</a></li>
             {% endfor %}
         </ul>
     {% endif %}

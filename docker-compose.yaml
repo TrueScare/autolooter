@@ -6,6 +6,7 @@ services:
         environment:
             MYSQL_ROOT_PASSWORD: password
             MYSQL_DATABASE: autolooter
+        restart: always
         volumes:
             - "./database:/var/lib/mysql"
         ports:
@@ -14,3 +15,6 @@ services:
             # "3306" to "3306:3306". Where the first port is exposed to the host and the second is the container port.
             # See https://docs.docker.com/compose/compose-file/compose-file-v3/#ports for more information.
             - '4306:3306'
+
+volumes:
+    database:

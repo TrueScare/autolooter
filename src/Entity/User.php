@@ -35,9 +35,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Item::class)]
     private Collection $items;
 
-    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Rarity::class)]
-    private Collection $rarities;
-
     public function __construct()
     {
         $this->tables = new ArrayCollection();
@@ -169,36 +166,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($item->getOwner() === $this) {
                 $item->setOwner(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Rarity>
-     */
-    public function getRarities(): Collection
-    {
-        return $this->rarities;
-    }
-
-    public function addRarity(Rarity $rarity): static
-    {
-        if (!$this->rarities->contains($rarity)) {
-            $this->rarities->add($rarity);
-            $rarity->setOwner($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRarity(Rarity $rarity): static
-    {
-        if ($this->rarities->removeElement($rarity)) {
-            // set the owning side to null (unless already changed)
-            if ($rarity->getOwner() === $this) {
-                $rarity->setOwner(null);
             }
         }
 
