@@ -53,6 +53,11 @@ class RarityController extends BaseController
         {
             $this->redirectToRoute('app_home');
         }
+
+        if(empty($rarity)){
+            $rarity = new Rarity();
+        }
+
         $rarity->setOwner($this->getUser());
 
         $form = $this->createForm(RarityFormType::class, $rarity);

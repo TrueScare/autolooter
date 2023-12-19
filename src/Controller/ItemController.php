@@ -55,6 +55,10 @@ class ItemController extends BaseController
             $this->redirectToRoute('app_home');
         }
 
+        if(empty($item)){
+            $item = new Item();
+        }
+
         /** @var User $owner */
         $owner = $this->getUser();
 

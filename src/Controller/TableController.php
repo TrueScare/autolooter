@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Item;
 use App\Entity\Table;
 use App\Entity\User;
 use App\Form\TableFormType;
@@ -55,8 +56,14 @@ class TableController extends BaseController
             $this->redirectToRoute('app_home');
         }
 
+        if(empty($table)){
+            $table = new Item();
+        }
+
         /** @var User $owner */
         $owner = $this->getUser();
+
+        $table->setOwner($owner);
 
         $choices = $owner->getTables()->filter(function ($element) use ($table) {
             // do not be able to create circle references
@@ -76,7 +83,6 @@ class TableController extends BaseController
         {
             /** @var Table $table */
             $table = $form->getData();
-            $table->setOwner($this->getUser());
 
             try{
                 $this->entityManager->persist($table);
