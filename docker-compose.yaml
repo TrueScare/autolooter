@@ -6,6 +6,8 @@ services:
         environment:
             MYSQL_ROOT_PASSWORD: password
             MYSQL_DATABASE: autolooter
+            MYSQL_USER: autolooter_user
+            MYSQL_PASSWORD: autolooter_password
         restart: always
         volumes:
             - "./database:/var/lib/mysql"
