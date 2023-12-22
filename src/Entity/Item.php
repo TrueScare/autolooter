@@ -138,10 +138,7 @@ class Item
     {
         $peers = $this->getParent()->getItems();
 
-        $peers = $peers->filter(function ($element) {
-            /** @var Item $element */
-            return $element->getId() != $this->getId();
-        });
+        $peers->removeElement($this);
 
         return $peers;
     }
