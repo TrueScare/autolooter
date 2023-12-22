@@ -215,7 +215,10 @@ class Table
             $parentTables = $this->getParent()->getTables();
         }
 
-        $parentTables->removeElement($this);
+        $parentTables = $parentTables->filter(function ($element) {
+            /** @var Table $element */
+            return $element->getId() != $this->getId();
+        });
 
         return $parentTables;
     }
