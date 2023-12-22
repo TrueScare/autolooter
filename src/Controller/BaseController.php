@@ -24,6 +24,10 @@ class BaseController extends AbstractController
     protected function getHeaderActions(){
         return [
             new HeaderAction(
+                'Loot me up!',
+                $this->generateUrl('item_random')
+            ),
+            new HeaderAction(
                 'Zu den Raritäten',
                 $this->generateUrl('rarity_index')
             ),

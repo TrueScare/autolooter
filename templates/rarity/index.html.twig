@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Raritäten{% endblock %}
+
 {% block body %}
     {% include 'components/listing.html.twig' with {type:'rarity', entities:rarities} %}
 {% endblock %}

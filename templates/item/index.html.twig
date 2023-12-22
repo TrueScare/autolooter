@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Items{% endblock %}
+
 {% block body %}
     {% include 'components/listing.html.twig' with {type: 'item', entities:items} %}
 {% endblock %}

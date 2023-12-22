@@ -1,5 +1,10 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Random Item - {{ item.name }}{% endblock %}
+
 {% block body %}
-    {% include 'components/cards/card-item.html.twig' with {entity: item} %}
+    <div class="more-button">
+        <a href="{{ path('item_random') }}" class="btn btn-primary">Nochmal</a>
+    </div>
+    {% include 'components/cards/card-item-random.html.twig' with {entity: item} %}
 {% endblock %}

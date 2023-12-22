@@ -1,0 +1,14 @@
+{% extends 'components/cards/card-item.html.twig' %}
+
+{% block card_content_item_subtitle %}{% endblock %}
+{% block card_content_item_probability %}{% endblock %}
+
+{% block card_content_item_text %}
+    <p class="card-text">{{ entity.description }}</p>
+{% endblock %}
+
+{% block card_content_item_footer_content %}
+    <p class="card-text">
+            {{ (random(entity.valueStart * 100, entity.valueEnd * 100)/100)|replace({'.': ','}) }}G
+    </p>
+{% endblock %}

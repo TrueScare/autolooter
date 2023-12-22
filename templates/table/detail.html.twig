@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Tabellen {% if rarity.name %}- {{ table.name }}{% endif %}{% endblock %}
+
 {% block body %}
     <div class="card">
         <div class="card-body">
