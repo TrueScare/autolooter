@@ -57,7 +57,7 @@ class TableController extends BaseController
         }
 
         if(empty($table)){
-            $table = new Item();
+            $table = new Table();
         }
 
         /** @var User $owner */
@@ -68,7 +68,8 @@ class TableController extends BaseController
         $choices = $owner->getTables()->filter(function ($element) use ($table) {
             // do not be able to create circle references
             /** @var Table $element  */
-            return empty($element->getCollectionRoot()[$table?->getId()]) && empty(($table?->getChildrenCollectionRecursive()[$element->getId()]));
+            return empty($element->getCollectionRoot()[$table?->getId()])
+                && empty(($table?->getChildrenCollectionRecursive()[$element->getId()]));
         });
 
         $option = [

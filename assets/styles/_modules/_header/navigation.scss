@@ -1,0 +1,10 @@
+.nav .nav-item {
+   > .sub-nav {
+    display: none;
+     position: absolute;
+  }
+
+  &:hover > .sub-nav {
+    display: block;
+  }
+}

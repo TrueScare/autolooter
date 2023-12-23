@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Service\PaginationService;
 use App\Struct\HeaderAction;
 use Doctrine\ORM\EntityManagerInterface;
+use http\Header;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -29,15 +30,33 @@ class BaseController extends AbstractController
             ),
             new HeaderAction(
                 'Zu den Raritäten',
-                $this->generateUrl('rarity_index')
+                $this->generateUrl('rarity_index'),
+                [
+                    new HeaderAction(
+                        'neue Rarität',
+                        $this->generateUrl('rarity_new')
+                    )
+                ]
             ),
             new HeaderAction(
                 'Zu den Tabellen',
-                $this->generateUrl('table_index')
+                $this->generateUrl('table_index'),
+                [
+                    new HeaderAction(
+                        'neue Tabelle',
+                        $this->generateUrl('table_new')
+                    )
+                ]
             ),
             new HeaderAction(
                 'Zu den Items',
-                $this->generateUrl('item_index')
+                $this->generateUrl('item_index'),
+                [
+                    new HeaderAction(
+                        'neues Item',
+                        $this->generateUrl('item_new')
+                    )
+                ]
             )
         ];
     }

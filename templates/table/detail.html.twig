@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Tabellen {% if table.name %}- {{ table.name }}{% endif %}{% endblock %}
+{% block title %}Tabellen {% if table is defined and table.name %}- {{ table.name }}{% endif %}{% endblock %}
 
 {% block body %}
     <div class="card">

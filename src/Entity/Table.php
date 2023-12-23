@@ -246,7 +246,7 @@ class Table
         return $this->getParent()->getProbability($probability);
     }
 
-    public function getChildrenCollectionRecursive($tables = [])
+    public function  getChildrenCollectionRecursive($tables = [])
     {
         if (empty($this->getTables())) {
             return $tables;

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Raritäten {% if rarity.name %}- {{ rarity.name }}{% endif %}{% endblock %}
+{% block title %}Raritäten {% if rarity is defined and rarity.name %}- {{ rarity.name }}{% endif %}{% endblock %}
 
 {% block body %}
     <div class="card">

@@ -6,15 +6,18 @@ class HeaderAction
 {
     private $label;
     private $route;
+    private array $subactions;
 
     /**
      * @param $label
      * @param $routeName
+     * @param array $subactions
      */
-    public function __construct($label, $routeName)
+    public function __construct($label, $routeName, $subactions = [])
     {
         $this->label = $label;
         $this->route = $routeName;
+        $this->subactions = $subactions;
     }
 
     /**
@@ -47,6 +50,16 @@ class HeaderAction
     public function setRoute($route): void
     {
         $this->route = $route;
+    }
+
+    public function getSubactions(): array
+    {
+        return $this->subactions;
+    }
+
+    public function setSubactions(array $subactions): void
+    {
+        $this->subactions = $subactions;
     }
 
 

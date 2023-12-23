@@ -4,7 +4,8 @@
     <div class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none justify-content-center">
         <div class="logo-container rounded overflow-hidden">
             <a href="{{ path('app_home') }}">
-                <img alt="Autolooter" src="{{ asset('build/images/Autolooter-logos.jpeg') }}" style="max-width: 150px; max-height: 150px;">
+                <img alt="Autolooter" src="{{ asset('build/images/Autolooter-logos.jpeg') }}"
+                     style="max-width: 150px; max-height: 150px;">
             </a>
         </div>
     </div>
@@ -12,7 +13,19 @@
     {% if hasActions %}
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0 me-3">
             {% for action in headerActions %}
-                    <li><a href="{{ action.route }}" class="btn btn-secondary fw-bold nav-link px-2">{{ action.label }}</a></li>
+                <li class="nav-item">
+                    <a href="{{ action.route }}" class="btn nav-link btn-secondary fw-bold nav-link px-2">{{ action.label }}</a>
+
+                    {% if action.subactions is defined and action.subactions|length > 0 %}
+                        <ul class="list-unstyled sub-nav">
+                            {% for subaction in action.subactions %}
+                                <li>
+                                    <a href="{{ subaction.route }}" class="btn btn-secondary fw-bold nav-link px-2">{{ subaction.label }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </li>
             {% endfor %}
         </ul>
     {% endif %}
