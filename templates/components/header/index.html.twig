@@ -1,7 +1,7 @@
 {% set hasActions = headerActions is defined and headerActions|length > 0 %}
 
 <header class="d-flex flex-wrap align-items-center {% if hasActions %}justify-content-between{% else %}justify-content-center{% endif %} py-3 mb-4 border-bottom">
-    <div class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none justify-content-center">
+    <div class="d-flex align-items-center col col-md-3 mb-2 mb-md-0 text-dark text-decoration-none justify-content-center">
         <div class="logo-container rounded overflow-hidden">
             <a href="{{ path('app_home') }}">
                 <img alt="Autolooter" src="{{ asset('build/images/Autolooter-logos.jpeg') }}"
@@ -17,7 +17,7 @@
                     <a href="{{ action.route }}" class="btn nav-link btn-secondary fw-bold nav-link px-2">{{ action.label }}</a>
 
                     {% if action.subactions is defined and action.subactions|length > 0 %}
-                        <ul class="list-unstyled sub-nav">
+                        <ul class="list-unstyled sub-nav bg-secondary rounded-bottom-1">
                             {% for subaction in action.subactions %}
                                 <li>
                                     <a href="{{ subaction.route }}" class="btn btn-secondary fw-bold nav-link px-2">{{ subaction.label }}</a>

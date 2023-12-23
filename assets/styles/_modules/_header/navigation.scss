@@ -1,10 +1,12 @@
 .nav .nav-item {
-   > .sub-nav {
-    display: none;
-     position: absolute;
-  }
+    > .sub-nav {
+        display: none;
+        @include media-breakpoint-up(md) {
+            position: absolute;
+        }
+    }
 
-  &:hover > .sub-nav {
-    display: block;
-  }
+    &:hover > .sub-nav {
+        display: block;
+    }
 }

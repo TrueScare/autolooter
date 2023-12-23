@@ -2,36 +2,47 @@
     <h2 class="pagination-headline col-12">
         Insgesamt {{ maxItemsFound }} gefunden.
     </h2>
-
-    <form class="pagination d-flex gap-3 col-12 align-items-center"
-          method="GET"
-          href="{{ route }}">
-        <button name="page"
-                class="col-2 btn btn-primary previous {% if (page - 1) <= 0 %}disabled{% endif %}"
-                value="{{ page - 1 }}">
-            previous
-        </button>
-        <div class="page-display col-1 text-center">{{ page }} / {{ (maxItemsFound/pageSize)|round(0,'ceil') }}</div>
-        <button name="page"
-                class="col-2 btn btn-primary next {% if (page + 1) > (maxItemsFound/pageSize)|round(0,'ceil') %}disabled{% endif %}"
-                value="{{ page + 1 }}">
-            next
-        </button>
-        <select name="pageSize"
-                class="form-select page-size"
-                onchange="this.form.submit()">
-            {% for value in [50, 25, 10] %}
-                <option value="{{ value }}" {% if value == pageSize %}selected{% endif %}>{{ value }}</option>
-            {% endfor %}
-        </select>
-        <select name="order"
-                class="form-select page-size"
-                onchange="this.form.submit()">
-            {% for key,value in orderOptions %}
-                <option value="{{ key }}" {% if key == order %}selected{% endif %}>
-                    {{ value }}
-                </option>
-            {% endfor %}
-        </select>
-    </form>
+    <div class="col-12">
+        <form class="pagination row align-items-center m-0"
+              method="GET"
+              href="{{ route }}">
+            <div class="col-12 col-md-6 pb-3">
+                <div class="row pe-md-3">
+                    <button name="page"
+                            class="col-4 btn btn-primary previous {% if (page - 1) <= 0 %}disabled{% endif %}"
+                            value="{{ page - 1 }}">
+                        previous
+                    </button>
+                    <div class="page-display col-4 text-center">{{ page }}
+                        / {{ (maxItemsFound/pageSize)|round(0,'ceil') }}</div>
+                    <button name="page"
+                            class="col-4 btn btn-primary next {% if (page + 1) > (maxItemsFound/pageSize)|round(0,'ceil') %}disabled{% endif %}"
+                            value="{{ page + 1 }}">
+                        next
+                    </button>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 pb-3">
+                <div class="row gap-3">
+                    <select name="pageSize"
+                            class="col-6 form-select page-size"
+                            onchange="this.form.submit()">
+                        {% for value in [50, 25, 10] %}
+                            <option value="{{ value }}"
+                                    {% if value == pageSize %}selected{% endif %}>{{ value }}</option>
+                        {% endfor %}
+                    </select>
+                    <select name="order"
+                            class="col-6 form-select page-size"
+                            onchange="this.form.submit()">
+                        {% for key,value in orderOptions %}
+                            <option value="{{ key }}" {% if key == order %}selected{% endif %}>
+                                {{ value }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
