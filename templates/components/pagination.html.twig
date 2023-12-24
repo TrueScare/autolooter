@@ -6,8 +6,8 @@
         <form class="pagination row align-items-center m-0"
               method="GET"
               href="{{ route }}">
-            <div class="col-12 col-md-6 pb-3">
-                <div class="row pe-md-3">
+            <div class="col-12 col-lg-6 pb-3">
+                <div class="row pe-lg-3">
                     <button name="page"
                             class="col-4 btn btn-primary previous {% if (page - 1) <= 0 %}disabled{% endif %}"
                             value="{{ page - 1 }}">
@@ -22,25 +22,37 @@
                     </button>
                 </div>
             </div>
-            <div class="col-12 col-md-6 pb-3">
-                <div class="row gap-3">
-                    <select name="pageSize"
-                            class="col-6 form-select page-size"
-                            onchange="this.form.submit()">
-                        {% for value in [50, 25, 10] %}
-                            <option value="{{ value }}"
-                                    {% if value == pageSize %}selected{% endif %}>{{ value }}</option>
-                        {% endfor %}
-                    </select>
-                    <select name="order"
-                            class="col-6 form-select page-size"
-                            onchange="this.form.submit()">
-                        {% for key,value in orderOptions %}
-                            <option value="{{ key }}" {% if key == order %}selected{% endif %}>
-                                {{ value }}
-                            </option>
-                        {% endfor %}
-                    </select>
+            <div class="col-12 col-lg-6 pb-3">
+                <div class="row">
+                    <div class="col-4">
+                        <select name="pageSize"
+                                class="form-select page-size"
+                                onchange="this.form.submit()">
+                            {% for value in [50, 25, 10] %}
+                                <option value="{{ value }}"
+                                        {% if value == pageSize %}selected{% endif %}>{{ value }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-8">
+                        <select name="order"
+                                class="form-select page-size"
+                                onchange="this.form.submit()">
+                            {% for key,value in orderOptions %}
+                                <option value="{{ key }}" {% if key == order %}selected{% endif %}>
+                                    {{ value }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 pb-3">
+                <div class="row searchbar">
+                    <div class="col-10">
+                        <input name="searchTerm" type="text" placeholder="Suche..." class="form-control" {% if searchTerm %}value="{{ searchTerm }}"{% endif %}>
+                    </div>
+                    <button type="submit" class="col-2 btn btn-primary">Suchen</button>
                 </div>
             </div>
         </form>

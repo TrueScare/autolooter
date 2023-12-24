@@ -48,9 +48,6 @@ class TableRepository extends ServiceEntityRepository
         ;
 
         switch ($order) {
-            case OrderService::NAME_ASC:
-                $qb->orderBy('t.name', 'ASC');
-                break;
             case OrderService::NAME_DESC:
                 $qb->orderBy('t.name', 'DESC');
                 break;
@@ -60,6 +57,15 @@ class TableRepository extends ServiceEntityRepository
             case OrderService::RARITY_DESC:
                 $qb->orderBy('r.value', 'ASC'); // lowest value is actually the highest rarity
                 break;
+            case OrderService::NAME_ASC:
+            default:
+                $qb->orderBy('t.name', 'ASC');
+                break;
+        }
+
+        if(!empty($paginationInfo->getSearchTerm())){
+            $qb->andWhere('t.name like :term OR t.description like :term')
+                ->setParameter('term', '%' . $paginationInfo->getSearchTerm() . '%');
         }
 
         return $qb->getQuery()

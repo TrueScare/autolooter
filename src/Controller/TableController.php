@@ -27,7 +27,8 @@ class TableController extends BaseController
     }
 
     #[Route('/table', name:"table_index")]
-    public function index(Request $request){
+    public function index(Request $request): Response
+    {
         $order = $request->query->get('order');
 
         $pageInfo = $this->paginationService->getPaginationInfoFromRequest($request);
@@ -44,7 +45,8 @@ class TableController extends BaseController
                 OrderService::RARITY_ASC => 'Rarität aufsteigend',
                 OrderService::RARITY_DESC => 'Rarität absteigend'],
             'order' => $order,
-            'headerActions' => $this->getHeaderActions()
+            'headerActions' => $this->getHeaderActions(),
+            'searchTerm' => $pageInfo->getSearchTerm()
         ]);
     }
 

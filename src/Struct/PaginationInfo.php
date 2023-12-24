@@ -4,23 +4,26 @@ namespace App\Struct;
 
 class PaginationInfo
 {
-    private $page;
-    private $pageSize;
+    private int $page;
+    private int $pageSize;
+    private string $searchTerm;
 
     /**
-     * @param $page
-     * @param $pageSize
+     * @param int $page
+     * @param int $pageSize
+     * @param String|null $searchTerm
      */
-    public function __construct($page, $pageSize)
+    public function __construct(int $page,int $pageSize, ?String $searchTerm)
     {
         $this->page = $page;
         $this->pageSize = $pageSize;
+        $this->searchTerm = $searchTerm?? "";
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getPage()
+    public function getPage(): int
     {
         return $this->page;
     }
@@ -28,15 +31,15 @@ class PaginationInfo
     /**
      * @param mixed $page
      */
-    public function setPage($page): void
+    public function setPage(mixed $page): void
     {
         $this->page = $page;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getPageSize()
+    public function getPageSize(): int
     {
         return $this->pageSize;
     }
@@ -44,8 +47,18 @@ class PaginationInfo
     /**
      * @param mixed $pageSize
      */
-    public function setPageSize($pageSize): void
+    public function setPageSize(mixed $pageSize): void
     {
         $this->pageSize = $pageSize;
+    }
+
+    public function getSearchTerm(): string
+    {
+        return $this->searchTerm;
+    }
+
+    public function setSearchTerm(string $searchTerm): void
+    {
+        $this->searchTerm = $searchTerm;
     }
 }

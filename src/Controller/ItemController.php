@@ -43,7 +43,8 @@ class ItemController extends BaseController
                 OrderService::RARITY_ASC => 'Rarität aufsteigend',
                 OrderService::RARITY_DESC => 'Rarität absteigend'],
             'order' => $order,
-            'headerActions' => $this->getHeaderActions()
+            'headerActions' => $this->getHeaderActions(),
+            'searchTerm' => $pageInfo->getSearchTerm()
         ]);
     }
 

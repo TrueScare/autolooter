@@ -34,13 +34,9 @@ class ItemRepository extends ServiceEntityRepository
             ->leftJoin('i.rarity', 'r')
             ->leftJoin('i.parent', 'p')
             ->addSelect('r')
-            ->addSelect('p')
-        ;
+            ->addSelect('p');
 
         switch ($order) {
-            case OrderService::NAME_ASC:
-                $qb->orderBy('i.name', 'ASC');
-                break;
             case OrderService::NAME_DESC:
                 $qb->orderBy('i.name', 'DESC');
                 break;
@@ -50,6 +46,16 @@ class ItemRepository extends ServiceEntityRepository
             case OrderService::RARITY_DESC:
                 $qb->orderBy('r.value', 'ASC'); // lowest value is actually the highest rarity
                 break;
+            case OrderService::NAME_ASC:
+            default:
+                $qb->orderBy('i.name', 'ASC');
+                break;
+        }
+
+        if (!empty($paginationInfo->getSearchTerm())) {
+            $qb->orWhere('i.name like :term')
+                ->orWhere('i.description like :term')
+                ->setParameter('term', '%' . $paginationInfo->getSearchTerm() . '%');
         }
 
         return $qb->getQuery()

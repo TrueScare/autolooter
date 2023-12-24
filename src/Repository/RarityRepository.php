@@ -46,6 +46,11 @@ class RarityRepository extends ServiceEntityRepository
                 break;
         }
 
+        if ($paginationInfo->getSearchTerm() !== null)   {
+            $qb->andWhere('r.name like :term')
+                ->setParameter('term', '%' . $paginationInfo->getSearchTerm() . '%');
+        }
+
         return $qb->getQuery()
             ->execute();
     }
