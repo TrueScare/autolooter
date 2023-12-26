@@ -10,7 +10,6 @@ use Doctrine\Persistence\ObjectManager;
 
 class TableFixture extends Fixture implements DependentFixtureInterface
 {
-    public const BASE_TABLE = 'base_table';
     public function load(ObjectManager $manager): void
     {
         $rarityCollection = [
@@ -19,23 +18,30 @@ class TableFixture extends Fixture implements DependentFixtureInterface
             $this->getReference(RarityFixture::RARITY_SUPERRARE),
             $this->getReference(RarityFixture::RARITY_ULTRARARE),
         ];
+
         $owner = $this->getReference(UserFixture::BASE_USER);
 
         $tables = [];
-        for($i = 0; $i < 15; $i++){
-            $table = new Table();
-            $table->setName('table' . $i);
-            $table->setDescription('table description' .$i);
-            $table->setRarity($rarityCollection[array_rand($rarityCollection, 1)]);
-            $table->setOwner($owner);
-            $tables[] = $table;
+        for($i = 0; $i < 5; $i++) {
+            for ($j = 0; $j < 5; $j++) {
+                $table = new Table();
+                $table->setName('table' . $i . '.' . $j);
+                $table->setDescription('table description' . $i . '.' . $j);
+                $table->setRarity($rarityCollection[array_rand($rarityCollection, 1)]);
+                $table->setOwner($owner);
 
-            $manager->persist($table);
+                // set random parent from previous layer
+                if($i-1 >= 0){
+                    $table->setParent($tables[$i-1][rand(0, count($tables)-1)]);
+                }
+
+                $tables[$i][] = $table;
+
+                $manager->persist($table);
+            }
         }
 
         $manager->flush();
-
-        $this->addReference(self::BASE_TABLE, $tables[0]);
     }
 
     public function getDependencies(): array
