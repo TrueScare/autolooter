@@ -22,8 +22,8 @@ class TableFixture extends Fixture implements DependentFixtureInterface
         $owner = $this->getReference(UserFixture::BASE_USER);
 
         $tables = [];
-        for($i = 0; $i < 5; $i++) {
-            for ($j = 0; $j < 5; $j++) {
+        for($i = 0; $i < 15; $i++) {
+            for ($j = 0; $j < 10; $j++) {
                 $table = new Table();
                 $table->setName('table' . $i . '.' . $j);
                 $table->setDescription('table description' . $i . '.' . $j);
@@ -32,7 +32,7 @@ class TableFixture extends Fixture implements DependentFixtureInterface
 
                 // set random parent from previous layer
                 if($i-1 >= 0){
-                    $table->setParent($tables[$i-1][rand(0, count($tables)-1)]);
+                    $table->setParent($tables[$i-1][array_rand($tables[$i-1],1)]);
                 }
 
                 $tables[$i][] = $table;

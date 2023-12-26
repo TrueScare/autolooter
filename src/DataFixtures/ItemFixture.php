@@ -29,13 +29,13 @@ class ItemFixture extends Fixture implements DependentFixtureInterface
         $owner = $this->getReference(UserFixture::BASE_USER);
         $tables = $tableRepo->getAllTablesByOwner($owner);
 
-        for($i = 0; $i < 120; $i++){
+        for($i = 0; $i < 1200; $i++){
             $item = new Item();
             $item->setName('product' . $i);
             $item->setDescription('product description' . $i);
             $item->setOwner($owner);
             $item->setRarity($rarityCollection[array_rand($rarityCollection, 1)]);
-            $item->setParent($tables[rand(0,count($tables)-1)]);
+            $item->setParent($tables[array_rand($tables, 1)]);
             $item->setValueStart(rand(1,10));
             $item->setValueEnd(rand(11,20));
 
