@@ -20,31 +20,31 @@ class ItemFormType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Name'
+                'label' => 'label.name'
             ])
             ->add('description', TextareaType::class, [
-                'label' => 'Beschreibung'
+                'label' => 'label.description'
             ])
             ->add('value_start', NumberType::class, [
-                'label' => 'Wert von...'
+                'label' => 'label.value_from'
             ])
             ->add('value_end', NumberType::class, [
-                'label' => 'Wert bis...'
+                'label' => 'label.value_to'
             ])
             ->add('parent', EntityType::class, [
                 'class' => Table::class,
                 'choice_label' => 'name',
                 'choices' => $options['tableChoices'],
-                'label' => 'Tabelle'
+                'label' => 'label.parent'
             ])
             ->add('rarity', EntityType::class, [
                 'class' => Rarity::class,
                 'choice_label' => 'name',
                 'choices' => $options['rarityChoices'],
-                'label' => 'Rarität'
+                'label' => 'label.rarity'
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'Speichern',
+                'label' => 'label.save',
             ]);
     }
 

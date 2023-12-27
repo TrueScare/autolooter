@@ -18,16 +18,16 @@ class RarityFormType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Name'
+                'label' => 'label.name'
             ])
             ->add('value', TextType::class,[
-                'label' => 'Wert'
+                'label' => 'label.value'
             ])
             ->add('color', ColorType::class, [
-                'label' => 'Farbe'
+                'label' => 'label.color'
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'Speichern'
+                'label' => 'label.save'
             ]);
         ;
     }

@@ -22,27 +22,27 @@ class TableFormType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Name'
+                'label' => 'label.name'
             ])
             ->add('description', TextareaType::class,[
-                'label' => 'Beschreibung'
+                'label' => 'label.description'
             ])
             ->add('parent', EntityType::class, [
                 'class' => Table::class,
                 'choice_label' => 'name',
                 'required' => false,
-                'placeholder' => '...',
+                'placeholder' => 'label.parent_placeholder',
                 'choices' => $options['tableChoices'],
-                'label' => 'Übergeordnete Tabelle'
+                'label' => 'label.parent'
             ])
             ->add('rarity', EntityType::class, [
                 'class' => Rarity::class,
                 'choice_label' => 'name',
                 'choices' => $options['rarityChoices'],
-                'label' => 'Rarität'
+                'label' => 'label.rarity'
             ])
             ->add('submit', SubmitType::class,[
-                'label' => 'Speichern'
+                'label' => 'label.save'
             ]);
         ;
     }

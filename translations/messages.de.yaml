@@ -1,0 +1,18 @@
+label:
+  name: "Name"
+  description: "Beschreibung"
+  value: "Wert"
+  value_from: "Wert von..."
+  value_to: "Wert bis..."
+  parent: "Übergeordnete Tabelle"
+  parent_placeholder: "..."
+  rarity: "Rarität"
+  save: "Speichern"
+  color: "Farbe"
+
+pagination:
+  entities_found: "Insgesmat %count% gefunden."
+  previous: "vorherige"
+  next: "nächste"
+  search: "Suchen"
+  search_placeholder: "Suche..."
