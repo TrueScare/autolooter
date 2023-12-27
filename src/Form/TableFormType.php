@@ -11,6 +11,8 @@ use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -19,21 +21,29 @@ class TableFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
-            ->add('description')
+            ->add('name', TextType::class, [
+                'label' => 'Name'
+            ])
+            ->add('description', TextareaType::class,[
+                'label' => 'Beschreibung'
+            ])
             ->add('parent', EntityType::class, [
                 'class' => Table::class,
                 'choice_label' => 'name',
                 'required' => false,
                 'placeholder' => '...',
-                'choices' => $options['tableChoices']
+                'choices' => $options['tableChoices'],
+                'label' => 'Übergeordnete Tabelle'
             ])
             ->add('rarity', EntityType::class, [
                 'class' => Rarity::class,
                 'choice_label' => 'name',
-                'choices' => $options['rarityChoices']
+                'choices' => $options['rarityChoices'],
+                'label' => 'Rarität'
             ])
-            ->add('submit', SubmitType::class);
+            ->add('submit', SubmitType::class,[
+                'label' => 'Speichern'
+            ]);
         ;
     }
 
