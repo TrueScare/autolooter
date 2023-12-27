@@ -11,14 +11,14 @@
                     <button name="page"
                             class="col-4 btn btn-primary previous {% if (page - 1) <= 0 %}disabled{% endif %}"
                             value="{{ page - 1 }}">
-                        previous
+                        vorherige
                     </button>
                     <div class="page-display col-4 text-center">{{ page }}
                         / {{ (maxItemsFound/pageSize)|round(0,'ceil') }}</div>
                     <button name="page"
                             class="col-4 btn btn-primary next {% if (page + 1) > (maxItemsFound/pageSize)|round(0,'ceil') %}disabled{% endif %}"
                             value="{{ page + 1 }}">
-                        next
+                        nächste
                     </button>
                 </div>
             </div>
