@@ -6,9 +6,33 @@
     {% endif %}
 
     <div class="col-12 col-md-6 col-lg-3 mb-2 mt-2">
-        <div class="card" style="border-color:{{ color }}">
-            {% block card_content %}
-            {% endblock %}
-        </div>
+        {% block card_inner %}
+            <div class="card" style="border-color:{{ color }}">
+                {% block card_content %}
+                    <div class="card-body">
+                        {% block card_title %}
+                            <div class="card-title h3">
+                                {% block card_title_inner %}{% endblock %}
+                            </div>
+                        {% endblock %}
+                        {% block card_subtitle %}
+                            <div class="card-subtitle text-muted">
+                                {% block card_subtitle_inner %}{% endblock %}
+                            </div>
+                        {% endblock %}
+                        {% block card_text %}
+                            <p class="card-text">
+                                {% block card_text_inner %}{% endblock %}
+                            </p>
+                        {% endblock %}
+                    </div>
+                    {% block card_footer %}
+                        <div class="card-footer">
+                            {% block card_footer_inner %}{% endblock %}
+                        </div>
+                    {% endblock %}
+                {% endblock %}
+            </div>
+        {% endblock %}
     </div>
 {% endblock %}

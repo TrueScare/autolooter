@@ -1,32 +1,25 @@
 {% extends 'components/cards/card-basic.html.twig' %}
 
-{% block card_content %}
-    {% block card_content_item %}
-        <div class="card-body">
-            {% block card_content_item_title %}
-                <a class="card-title h3"
-                   href="{{ path('item_edit', {id:entity.id}) }}">
-                    {{ entity.name }}
-                </a>
-            {% endblock %}
-            {% block card_content_item_subtitle %}
-                <div class="card-subtitle text-muted">{{ entity.parent.name }}</div>
-            {% endblock %}
-            {% block card_content_item_probability %}
-                <div class="probability">{{ (entity.probability * 100)|round(6) }}%</div>
-            {% endblock %}
-            {% block card_content_item_text %}
-                <p class="card-text">{{ entity.description|u.truncate(180, '...') }}</p>
-            {% endblock %}
-        </div>
-        {% block card_content_item_footer %}
-            <div class="card-footer" style="background-color: {{ color }}">
-                {% block card_content_item_footer_content %}
-                    <p class="card-text">
-                        {{ entity.valueStart }}G - {{ entity.valueEnd }}G
-                    </p>
-                {% endblock %}
-            </div>
+{% block card_title %}
+    <a class="card-title h3"
+       href="{{ path('item_edit', {id:entity.id}) }}">
+        {{ entity.name }}
+    </a>
+{% endblock %}
+
+{% block card_subtitle_inner %}{{ entity.parent.name }}{% endblock %}
+
+{% block card_text %}
+    {#<div class="probability">{{ (entity.probability * 100)|round(6) }}%</div>#}
+    <p class="card-text">{{ entity.description|u.truncate(180, '...') }}</p>
+{% endblock %}
+
+{% block card_footer %}
+    <div class="card-footer" style="background-color: {{ color }}">
+        {% block card_footer_inner %}
+            <p class="card-text">
+                {{ entity.valueStart }}G - {{ entity.valueEnd }}G
+            </p>
         {% endblock %}
-    {% endblock %}
+    </div>
 {% endblock %}

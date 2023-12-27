@@ -1,10 +1,9 @@
 {% extends 'components/cards/card-item.html.twig' %}
 
-{% block card_content_item_subtitle %}{% endblock %}
-{% block card_content_item_probability %}{% endblock %}
+{% block card_subtitle %}{% endblock %}
 
-{% block card_content_item_text %}
-    <p class="card-text">{{ entity.description }}</p>
+{% block card_text_inner %}
+    {{ entity.description }}
 {% endblock %}
 
 {% block card_content_item_footer_content %}

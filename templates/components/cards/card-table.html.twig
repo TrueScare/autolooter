@@ -1,14 +1,18 @@
 {% extends 'components/cards/card-basic.html.twig' %}
 
-{% block card_content %}
-    <div class="card-body">
-        <a class="card-title h3"
-             href="{{ path('table_edit', {'id': entity.id}) }}">
-            {{ entity.name }}
-        </a>
-        <div class="card-subtitle">{% if entity.parent %}{{ entity.parent.name }}{% endif %}</div>
-        <div class="probability">{{ (entity.probability * 100)|round(6) }}%</div>
-        <p class="card-text">{{ entity.description|u.truncate(180, '...') }}</p>
-    </div>
+{% block card_title %}
+    <a class="card-title h3"
+       href="{{ path('table_edit', {'id': entity.id}) }}">
+        {{ entity.name }}
+    </a>
+{% endblock %}
+
+{% block card_subtitle %}
+    {# <div class="probability">{{ (entity.probability * 100)|round(6) }}%</div> #}
+    <div class="card-subtitle">{% if entity.parent %}{{ entity.parent.name }}{% endif %}</div>
+{% endblock %}
+
+{% block card_text_innter %}{{ entity.description|u.truncate(180, '...') }}{% endblock %}
+{% block card_footer %}
     <div class="card-footer" style="background-color: {{ color }}"></div>
 {% endblock %}
