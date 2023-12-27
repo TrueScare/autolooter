@@ -5,11 +5,12 @@ namespace App\Form;
 use App\Entity\Item;
 use App\Entity\Rarity;
 use App\Entity\Table;
-use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Button;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -18,21 +19,33 @@ class ItemFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
-            ->add('description')
-            ->add('value_start')
-            ->add('value_end')
+            ->add('name', TextType::class, [
+                'label' => 'Name'
+            ])
+            ->add('description', TextareaType::class, [
+                'label' => 'Beschreibung'
+            ])
+            ->add('value_start', NumberType::class, [
+                'label' => 'Wert von...'
+            ])
+            ->add('value_end', NumberType::class, [
+                'label' => 'Wert bis...'
+            ])
             ->add('parent', EntityType::class, [
                 'class' => Table::class,
                 'choice_label' => 'name',
-                'choices' => $options['tableChoices']
+                'choices' => $options['tableChoices'],
+                'label' => 'Tabelle'
             ])
             ->add('rarity', EntityType::class, [
                 'class' => Rarity::class,
                 'choice_label' => 'name',
-                'choices' => $options['rarityChoices']
+                'choices' => $options['rarityChoices'],
+                'label' => 'Rarität'
             ])
-            ->add('submit', SubmitType::class);
+            ->add('submit', SubmitType::class, [
+                'label' => 'Speichern',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
