@@ -6,7 +6,7 @@
     {{ entity.description }}
 {% endblock %}
 
-{% block card_content_item_footer_content %}
+ {% block card_footer_inner %}
     <p class="card-text">
             {{ (random(entity.valueStart * 100, entity.valueEnd * 100)/100)|replace({'.': ','}) }}G
     </p>
