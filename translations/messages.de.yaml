@@ -16,3 +16,5 @@ pagination:
   next: "nächste"
   search: "Suchen"
   search_placeholder: "Suche..."
+  pagesize_label: "Anzahl an Treffern"
+  ordering: 'Ergebnis Ordnung'
