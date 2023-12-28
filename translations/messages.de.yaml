@@ -27,3 +27,13 @@ section:
     logocontainer: 'Logo Container'
   navigation: 'Navigation'
   pagination: 'Pagination'
+
+card:
+  role:
+    label: 'Rollen:'
+  items:
+    label: 'Items:'
+  tables:
+    label: 'Tabellen:'
+  rarities:
+    label: 'Raritäten:'

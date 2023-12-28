@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="de-DE">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Autolooter{% endblock %}</title>
+    <link rel="icon"
+          href="{{ asset('build/images/Autolooter-favicon.jpeg') }}">
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+</head>
+<section class="container" aria-label="{{ "section.main"|trans }}">
+    <div class="message-container" aria-label="{{ "section.messages"|trans }}">
+        {% for label, messages in app.flashes() %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+    <main>
+        {% block body %}
+        {% endblock %}
+    </main>
+</section>
+</html>
