@@ -1,25 +1,25 @@
-<div class="pagination d-flex flex-wrap">
+<div class="pagination row">
     <h2 class="pagination-headline col-12">
-        {{ "pagination.entities_found"|trans({'%count%': maxItemsFound})  }}
+        {{ "pagination.entities_found"|trans({'%count%': maxItemsFound}) }}
     </h2>
     <div class="col-12">
         <form class="pagination row align-items-center m-0"
               method="GET"
               href="{{ route }}">
             <div class="col-12 col-lg-6 pb-3">
-                <div class="row pe-lg-3">
-                    <button name="page"
-                            class="col-4 btn btn-primary previous {% if (page - 1) <= 0 %}disabled{% endif %}"
-                            value="{{ page - 1 }}">
-                        {{ "pagination.previous"|trans }}
-                    </button>
-                    <div class="page-display col-4 text-center">{{ page }}
-                        / {{ (maxItemsFound/pageSize)|round(0,'ceil') }}</div>
-                    <button name="page"
-                            class="col-4 btn btn-primary next {% if (page + 1) > (maxItemsFound/pageSize)|round(0,'ceil') %}disabled{% endif %}"
-                            value="{{ page + 1 }}">
-                        {{ "pagination.next"|trans }}
-                    </button>
+                <div class="row searchbar">
+                    <div class="col-8 col-lg-10">
+                        <input name="searchTerm"
+                               type="text"
+                               placeholder="{{ "pagination.search_placeholder"|trans }}"
+                               class="form-control" {% if searchTerm %}value="{{ searchTerm }}"{% endif %}>
+                    </div>
+                    <div class="col-4 col-lg-2">
+                        <button type="submit"
+                                class="w-100 btn btn-primary">
+                            {{ "pagination.search"|trans }}
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="col-12 col-lg-6 pb-3">
@@ -48,13 +48,24 @@
                 </div>
             </div>
             <div class="col-12 col-lg-6 pb-3">
-                <div class="row searchbar">
-                    <div class="col-10">
-                        <input name="searchTerm" type="text" placeholder="{{ "pagination.search_placeholder"|trans }}" class="form-control" {% if searchTerm %}value="{{ searchTerm }}"{% endif %}>
+                <div class="row pe-lg-3">
+                    <div class="col-4">
+                        <button name="page"
+                                class="w-100 btn btn-primary previous {% if (page - 1) <= 0 %}disabled{% endif %}"
+                                value="{{ page - 1 }}">
+                            {{ "pagination.previous"|trans }}
+                        </button>
                     </div>
-                    <button type="submit" class="col-2 btn btn-primary">
-                        {{ "pagination.search"|trans }}
-                    </button>
+                    <div class="page-display col-4 text-center">
+                        {{ page }} / {{ (maxItemsFound/pageSize)|round(0,'ceil') }}
+                    </div>
+                    <div class="col-4">
+                        <button name="page"
+                                class="w-100 btn btn-primary next {% if (page + 1) > (maxItemsFound/pageSize)|round(0,'ceil') %}disabled{% endif %}"
+                                value="{{ page + 1 }}">
+                            {{ "pagination.next"|trans }}
+                        </button>
+                    </div>
                 </div>
             </div>
         </form>
