@@ -1,17 +1,18 @@
 {% set hasActions = headerActions is defined and headerActions|length > 0 %}
 
-<header class="d-flex flex-wrap align-items-center {% if hasActions %}justify-content-between{% else %}justify-content-center{% endif %} py-3 mb-4 border-bottom">
+<header class="d-flex flex-wrap align-items-center {% if hasActions %}justify-content-between{% else %}justify-content-center{% endif %} py-3 mb-4 border-bottom" {{ "section.heading"|trans }}>
     <div class="d-flex align-items-center col col-md-3 mb-2 mb-md-0 text-dark text-decoration-none justify-content-center">
-        <div class="logo-container rounded overflow-hidden">
+        <div class="logo-container rounded overflow-hidden" aria-label="{{ "section.headline.logocontainer"|trans }}">
             <a href="{{ path('app_home') }}">
                 <img alt="Autolooter" src="{{ asset('build/images/Autolooter-logos.jpeg') }}"
-                     style="max-width: 150px; max-height: 150px;">
+                     style="max-width: 150px; max-height: 150px;"
+                >
             </a>
         </div>
     </div>
 
     {% if hasActions %}
-        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0 me-3">
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0 me-3" aria-label="{{ "section.navigation"|trans }}">
             {% for action in headerActions %}
                 <li class="nav-item">
                     <a href="{{ action.route }}" class="btn nav-link btn-secondary fw-bold nav-link px-2">{{ action.label }}</a>

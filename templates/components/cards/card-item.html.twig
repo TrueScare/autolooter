@@ -1,8 +1,7 @@
 {% extends 'components/cards/card-basic.html.twig' %}
 
-{% block card_title %}
-    <a class="card-title h3"
-       href="{{ path('item_edit', {id:entity.id}) }}">
+{% block card_title_inner %}
+    <a href="{{ path('item_edit', {id:entity.id}) }}">
         {{ entity.name }}
     </a>
 {% endblock %}

@@ -14,11 +14,11 @@
     {% endblock %}
 </head>
 <body>
-<div class="heading">
-    {% include 'components/header/index.html.twig' %}
-</div>
-<div class="container">
-    <div class="message-container">
+
+{% include 'components/header/index.html.twig' %}
+
+<section class="container" aria-label="{{ "section.main"|trans }}">
+    <div class="message-container" aria-label="{{ "section.messages"|trans }}">
         {% for label, messages in app.flashes() %}
             {% for message in messages %}
                 <div class="alert alert-{{ label }}">
@@ -27,8 +27,10 @@
             {% endfor %}
         {% endfor %}
     </div>
-    {% block body %}
-    {% endblock %}
-</div>
+    <main>
+        {% block body %}
+        {% endblock %}
+    </main>
+</section>
 </body>
 </html>

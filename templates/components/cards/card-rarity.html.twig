@@ -1,12 +1,19 @@
 {% extends 'components/cards/card-basic.html.twig' %}
 
-{% block card_title %}
-    <a href="{{ path('rarity_edit', {'id': entity.id}) }}" class="card-title h3" style="color:{{ color }}">
+{% block card_title_inner %}
+    <a href="{{ path('rarity_edit', {'id': entity.id}) }}"style="color:{{ color }}">
         {{ entity.name }}
     </a>
+{% endblock %}
+
+{% block card_subtitle %}
     <div class="card-subtitle">
         {{ entity.value }}
     </div>
+{% endblock %}
+
+{% block card_text_inner %}
+    {{ entity.description|u.truncate(180, '...') }}
 {% endblock %}
 
 {% block card_footer %}

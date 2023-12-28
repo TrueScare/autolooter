@@ -1,8 +1,8 @@
-<div class="pagination row">
+<section class="pagination row">
     <h2 class="pagination-headline col-12">
         {{ "pagination.entities_found"|trans({'%count%': maxItemsFound}) }}
     </h2>
-    <div class="col-12">
+    <div class="col-12" aria-label="{{ "section.pagination"|trans }}">
         <form class="pagination row align-items-center m-0"
               method="GET"
               href="{{ route }}">
@@ -76,4 +76,4 @@
             </div>
         </form>
     </div>
-</div>
+</section>

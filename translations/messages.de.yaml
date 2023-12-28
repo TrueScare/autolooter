@@ -18,3 +18,12 @@ pagination:
   search_placeholder: "Suche..."
   pagesize_label: "Anzahl an Treffern"
   ordering: 'Ergebnis Ordnung'
+
+section:
+  main: "Inhalt"
+  messages: 'Nachrichten'
+  heading: 'Kopfzeile'
+  headline:
+    logocontainer: 'Logo Container'
+  navigation: 'Navigation'
+  pagination: 'Pagination'
