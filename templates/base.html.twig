@@ -14,8 +14,9 @@
     {% endblock %}
 </head>
 <body>
-
-{% include 'components/header/index.html.twig' %}
+{% block header %}
+    {% include 'components/header/index.html.twig' %}
+{% endblock %}
 
 <section class="container" aria-label="{{ "section.main"|trans }}">
     <div class="message-container" aria-label="{{ "section.messages"|trans }}">

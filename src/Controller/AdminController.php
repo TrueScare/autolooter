@@ -32,7 +32,9 @@ class AdminController extends BaseController
     #[Route('/admin', name: "admin_index")]
     public function index(): Response
     {
-        return $this->render('admin/base.html.twig');
+        return $this->render('admin/index.html.twig',[
+            'headerActions' => $this->getAdminHeaderActions()
+        ]);
     }
 
     #[Route('/admin/users', name: 'admin_users')]
@@ -52,7 +54,8 @@ class AdminController extends BaseController
             'page' => $pageInfo->getPage(),
             'pageSize' => $pageInfo->getPageSize(),
             'order' => $order,
-            'searchTerm' => $pageInfo->getSearchTerm()
+            'searchTerm' => $pageInfo->getSearchTerm(),
+            'headerActions' => $this->getAdminHeaderActions()
         ]);
     }
 

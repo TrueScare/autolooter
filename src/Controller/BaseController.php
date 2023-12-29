@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use http\Header;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 
 class BaseController extends AbstractController
 {
@@ -22,7 +23,12 @@ class BaseController extends AbstractController
         $this->logger = $logger;
     }
 
-    protected function getHeaderActions(){
+
+    /**
+     * @return HeaderAction[]
+     */
+    protected function getHeaderActions(): array
+    {
         return [
             new HeaderAction(
                 'Loot me up!',
@@ -57,6 +63,20 @@ class BaseController extends AbstractController
                         $this->generateUrl('item_new')
                     )
                 ]
+            )
+        ];
+    }
+
+
+    /**
+     * @return HeaderAction[]
+     */
+    protected function getAdminHeaderActions(): array
+    {
+        return [
+            new HeaderAction(
+                'Users',
+                $this->generateUrl('admin_users')
             )
         ];
     }
