@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ItemController extends BaseController
 {
@@ -49,7 +50,7 @@ class ItemController extends BaseController
     }
 
     #[Route('/item/edit/{id?}', name: 'item_edit')]
-    public function detail(?Item $item, Request $request): Response
+    public function detail(?Item $item, Request $request, TranslatorInterface $translator): Response
     {
         if($item?->getOwner() !== $this->getUser())
         {
@@ -80,10 +81,10 @@ class ItemController extends BaseController
             try{
                 $this->entityManager->persist($item);
                 $this->entityManager->flush();
-                $this->addFlash('success', 'Info: Speichern erfolgreich.');
+                $this->addFlash('success', $translator->trans('success.save'));
             } catch(\Exception $e){
                 $this->logger->error($e);
-                $this->addFlash('error',"FEHLER: Speichern fehlgeschlagen.");
+                $this->addFlash('error',$translator->trans('error.save'));
             }
         }
 

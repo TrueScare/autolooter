@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TableController extends BaseController
 {
@@ -51,7 +52,7 @@ class TableController extends BaseController
     }
 
     #[Route('/table/edit/{id?}', name: 'table_edit')]
-    public function detail(?Table $table, Request $request): Response
+    public function detail(?Table $table, Request $request,TranslatorInterface $translator): Response
     {
         if($table?->getOwner() !== $this->getUser())
         {
@@ -90,10 +91,10 @@ class TableController extends BaseController
             try{
                 $this->entityManager->persist($table);
                 $this->entityManager->flush();
-                $this->addFlash('success', 'Info: Speichern erfolgreich.');
+                $this->addFlash('success', $translator->trans('success.save'));
             } catch(\Exception $e){
                 $this->logger->error($e);
-                $this->addFlash('error',"FEHLER: Speichern fehlgeschlagen.");
+                $this->addFlash('error',$translator->trans('error.save'));
             }
         }
 

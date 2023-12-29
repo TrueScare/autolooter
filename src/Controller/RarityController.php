@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RarityController extends BaseController
 {
@@ -48,7 +49,7 @@ class RarityController extends BaseController
     }
 
     #[Route('/rarity/edit/{id?}', name: 'rarity_edit')]
-    public function detail(?Rarity $rarity, Request $request): Response
+    public function detail(?Rarity $rarity, Request $request, TranslatorInterface $translator): Response
     {
         if($rarity?->getOwner() !== $this->getUser())
         {
@@ -72,10 +73,10 @@ class RarityController extends BaseController
             try{
                 $this->entityManager->persist($rarity);
                 $this->entityManager->flush();
-                $this->addFlash('success', 'Info: Speichern erfolgreich.');
+                $this->addFlash('success', $translator->trans('success.save'));
             } catch(\Exception $e){
                 $this->logger->error($e);
-                $this->addFlash('error',"FEHLER: Speichern fehlgeschlagen.");
+                $this->addFlash('error',$translator->trans('error.save'));
             }
         }
 

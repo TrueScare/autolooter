@@ -7,12 +7,13 @@ use App\Form\UserFormType;
 use App\Repository\UserRepository;
 use App\Service\OrderService;
 use App\Service\PaginationService;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 
 class AdminController extends BaseController
@@ -56,7 +57,7 @@ class AdminController extends BaseController
     }
 
     #[Route('/admin/user/{id?}', name:'admin_user_edit')]
-    public function userEdit(?User $user, Request $request): Response
+    public function userEdit(?User $user, Request $request, UserPasswordHasherInterface $passwordHasher, TranslatorInterface $translator): Response
     {
         if (empty($user)) {
             $user = new User();
@@ -66,13 +67,23 @@ class AdminController extends BaseController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
+            if(!empty($plainPassword = $form->get('plainPassword')->getData())){
+                $user->setPassword(
+                  $passwordHasher->hashPassword($user, $plainPassword)
+                );
+            }
+
             $user = $form->getData();
 
             try {
                 $this->entityManager->persist($user);
+                $this->entityManager->flush();
+
+                $this->addFlash('success', $translator->trans('success.save'));
             } catch (\Exception $e) {
                 $this->logger->error($e);
-                $this->addFlash('error', "FEHLER: Speichern fehlgeschlagen.");
+                $this->addFlash('error', $translator->trans('error.save'));
             }
         }
 
