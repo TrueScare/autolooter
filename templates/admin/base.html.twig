@@ -2,7 +2,7 @@
 <html lang="de-DE">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Autolooter{% endblock %}</title>
+    <title>{% block title %}Autolooter - ADMIN {% endblock %}</title>
     <link rel="icon"
           href="{{ asset('build/images/Autolooter-favicon.jpeg') }}">
     {% block stylesheets %}
@@ -13,6 +13,7 @@
         {{ encore_entry_script_tags('app') }}
     {% endblock %}
 </head>
+
 <section class="container" aria-label="{{ "section.main"|trans }}">
     <div class="message-container" aria-label="{{ "section.messages"|trans }}">
         {% for label, messages in app.flashes() %}

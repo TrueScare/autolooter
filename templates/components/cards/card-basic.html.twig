@@ -1,8 +1,10 @@
 {% block card_basic %}
     {% if entity.color|default %}
         {% set color = entity.color %}
-    {% else %}
+    {% elseif entity.rarity.color|default %}
         {% set color = entity.rarity.color %}
+        {% else %}
+        {% set color = 'inherit' %}
     {% endif %}
 
 

@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use App\Service\OrderService;
+use App\Struct\PaginationInfo;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -37,6 +39,28 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $user->setPassword($newHashedPassword);
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
+    }
+
+    public function getUsers(PaginationInfo $paginationInfo, $order = OrderService::NAME_ASC){
+        $qb = $this->createQueryBuilder('u');
+
+        switch ($order) {
+            case OrderService::NAME_DESC:
+                $qb->orderBy('u.username', 'DESC');
+                break;
+            case OrderService::NAME_ASC:
+            default:
+                $qb->orderBy('u.username', 'ASC');
+                break;
+        }
+
+        if (!empty($paginationInfo->getSearchTerm())) {
+            $qb->orWhere('u.username like :term')
+                ->setParameter('term', '%' . $paginationInfo->getSearchTerm() . '%');
+        }
+
+        return $qb->getQuery()
+            ->execute();
     }
 
 //    /**

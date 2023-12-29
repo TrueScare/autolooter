@@ -2,7 +2,7 @@
     <div class="listing row">
         {% block listing_header %}
             <div class="col-12">
-                {% include 'components/pagination.html.twig' with {route: path('item_index') } %}
+                {% include 'components/pagination.html.twig' %}
             </div>
         {% endblock %}
         {% block listing_items %}

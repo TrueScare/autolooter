@@ -1,25 +1,5 @@
 {% extends 'admin/base.html.twig' %}
 
 {% block body %}
-    <div class="row">
-        {% for user in users %}
-            <div class="col-12 col-lg-4">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title h3">
-                            {{ user.username }}
-                        </div>
-                        <div class="card-text">
-                            <ul class="list-unstyled">
-                                <li>{{ 'card.role.label'|trans }} {% for role in user.roles %}<span> {{ role }}{% if role != loop.last %},{% endif %}</span>{% endfor %}</li>
-                                <li>{{ 'card.rarities.label'|trans }} {{ user.rarities|length }}</li>
-                                <li>{{ 'card.tables.label'|trans }} {{ user.tables|length }}</li>
-                                <li>{{ 'card.items.label'|trans }} {{ user.items|length }}</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
+    {% include 'components/listing.html.twig' with {route: path('admin_users'), entities: users, type:'user'} %}
 {% endblock %}

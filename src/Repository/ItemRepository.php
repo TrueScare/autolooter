@@ -53,8 +53,7 @@ class ItemRepository extends ServiceEntityRepository
         }
 
         if (!empty($paginationInfo->getSearchTerm())) {
-            $qb->orWhere('i.name like :term')
-                ->orWhere('i.description like :term')
+            $qb->andWhere('i.name like :term OR i.description like :term')
                 ->setParameter('term', '%' . $paginationInfo->getSearchTerm() . '%');
         }
 
