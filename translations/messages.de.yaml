@@ -9,6 +9,10 @@ label:
   rarity: "Rarität"
   save: "Speichern"
   color: "Farbe"
+  username: "Username"
+  password: "Passwort"
+  roles: "Rollen"
+  mail: "E-Mail"
 
 pagination:
   entities_found: "Insgesmat %count% gefunden."

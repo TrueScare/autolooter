@@ -1,12 +1,15 @@
 {% extends 'components/cards/card-basic.html.twig' %}
 
 {% block card_title_inner %}
-    {{ entity.username }}
+    <a href="{{ path('admin_user_edit', {'id' : entity.id}) }}">
+        {{ entity.username }}
+    </a>
 {% endblock %}
 
 {% block card_text_inner %}
     <ul class="list-unstyled">
-        <li>{{ 'card.role.label'|trans }} {% for role in entity.roles %}<span> {{ role }}{% if role != loop.last %},{% endif %}</span>{% endfor %}</li>
+        <li>{{ 'card.role.label'|trans }} {% for role in entity.roles %}
+                <span> {{ role }}{% if role != loop.last %},{% endif %}</span>{% endfor %}</li>
         <li>{{ 'card.rarities.label'|trans }} {{ entity.rarities|length }}</li>
         <li>{{ 'card.tables.label'|trans }} {{ entity.tables|length }}</li>
         <li>{{ 'card.items.label'|trans }} {{ entity.items|length }}</li>

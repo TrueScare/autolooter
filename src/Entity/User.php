@@ -38,6 +38,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Rarity::class)]
     private Collection $rarities;
 
+    #[ORM\Column(length: 255)]
+    private ?string $email = null;
+
     public function __construct()
     {
         $this->tables = new ArrayCollection();
@@ -210,5 +213,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             /** @var Table $table */
             return empty($table->getParent());
         });
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
+
+        return $this;
     }
 }
