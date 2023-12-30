@@ -1,9 +1,9 @@
 {% block pagination %}
 <section class="pagination row">
     {% block pagination_headline %}
-        <h2 class="pagination-headline col-12">
+        <h1 class="pagination-headline col-12 text-center mb-5">
             {{ "pagination.entities_found"|trans({'%count%': maxItemsFound}) }}
-        </h2>
+        </h1>
     {% endblock %}
     {% block pagination_filter %}
     <div class="col-12" aria-label="{{ "section.pagination"|trans }}">
