@@ -41,6 +41,8 @@ card:
     label: 'Tabellen:'
   rarities:
     label: 'Seltenheiten:'
+  badge:
+    items: 'Items'
 
 error:
   blank_pw: 'Das Passwort darf nicht leer sein!'
