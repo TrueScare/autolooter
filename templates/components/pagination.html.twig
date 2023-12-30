@@ -49,9 +49,9 @@
                                     class="form-select page-size"
                                     onchange="this.form.submit()"
                                     aria-label="{{ "pagination.ordering"|trans }}">
-                                {% for key,value in orderOptions %}
-                                    <option value="{{ key }}" {% if key == order %}selected{% endif %}>
-                                        {{ value }}
+                                {% for orderOption in orderOptions %}
+                                    <option value="{{ orderOption.value }}" {% if orderOption == order %}selected{% endif %}>
+                                        {{ orderOption|trans }}
                                     </option>
                                 {% endfor %}
                             </select>

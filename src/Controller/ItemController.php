@@ -6,8 +6,8 @@ use App\Entity\Item;
 use App\Entity\User;
 use App\Form\ItemFormType;
 use App\Repository\ItemRepository;
-use App\Service\OrderService;
 use App\Service\PaginationService;
+use App\Struct\Order;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -22,27 +22,30 @@ class ItemController extends BaseController
 
     public function __construct(ItemRepository $itemRepository, PaginationService $paginationService, EntityManagerInterface $entityManager, LoggerInterface $logger)
     {
-        parent::__construct($paginationService,$entityManager,$logger);
+        parent::__construct($paginationService, $entityManager, $logger);
         $this->itemRepository = $itemRepository;
     }
 
     #[Route('/item', name: 'item_index')]
     public function index(Request $request): Response
     {
-        $order = $request->query->get('order');
+        $order = Order::tryFrom($request->query->get('order'));
         $pageInfo = $this->paginationService->getPaginationInfoFromRequest($request);
+
         $items = $this->itemRepository->getItemsByOwner($this->getUser(), $pageInfo, $order);
-        $maxItemsFound = $this->itemRepository->getItemsCountByOwner($this->getUser());
+        $maxItemsFound = $this->itemRepository->getItemsCountByOwner($this->getUser(), $pageInfo);
 
         return $this->render('/item/index.html.twig', [
             'items' => $items,
             'maxItemsFound' => $maxItemsFound,
             'page' => $pageInfo->getPage(),
             'pageSize' => $pageInfo->getPageSize(),
-            'orderOptions' => [OrderService::NAME_ASC => 'Name A-Z'
-                , OrderService::NAME_DESC => 'Name Z-A',
-                OrderService::RARITY_ASC => 'Rarität aufsteigend',
-                OrderService::RARITY_DESC => 'Rarität absteigend'],
+            'orderOptions' => [
+                Order::NAME_ASC,
+                Order::NAME_DESC,
+                Order::RARITY_ASC,
+                Order::RARITY_DESC
+            ],
             'order' => $order,
             'headerActions' => $this->getHeaderActions(),
             'searchTerm' => $pageInfo->getSearchTerm()
@@ -52,12 +55,11 @@ class ItemController extends BaseController
     #[Route('/item/edit/{id?}', name: 'item_edit')]
     public function detail(?Item $item, Request $request, TranslatorInterface $translator): Response
     {
-        if($item?->getOwner() !== $this->getUser())
-        {
+        if ($item?->getOwner() !== $this->getUser()) {
             $this->redirectToRoute('app_home');
         }
 
-        if(empty($item)){
+        if (empty($item)) {
             $item = new Item();
         }
 
@@ -72,25 +74,24 @@ class ItemController extends BaseController
         $form = $this->createForm(ItemFormType::class, $item, $option);
 
         $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             /** @var Item $item */
             $item = $form->getData();
             $item->setOwner($this->getUser());
 
-            try{
+            try {
                 $this->entityManager->persist($item);
                 $this->entityManager->flush();
                 $this->addFlash('success', $translator->trans('success.save'));
-            } catch(\Exception $e){
+            } catch (\Exception $e) {
                 $this->logger->error($e);
-                $this->addFlash('error',$translator->trans('error.save'));
+                $this->addFlash('error', $translator->trans('error.save'));
             }
         }
 
         return $this->render('item/detail.html.twig', [
             'item' => $item,
-            'form' => $form,
+            'form' => $form->createView(),
             'headerActions' => $this->getHeaderActions()
         ]);
     }
@@ -102,7 +103,8 @@ class ItemController extends BaseController
     }
 
     #[Route('/item/random', name: 'item_random')]
-    public function random(Request $request){
+    public function random(Request $request): Response
+    {
         /** @var User $owner */
         $owner = $this->getUser();
 
@@ -110,19 +112,20 @@ class ItemController extends BaseController
 
         $pick = $this->getPickFromItems($items);
 
-        return $this->render('item/random.html.twig',[
+        return $this->render('item/random.html.twig', [
             'item' => $pick,
             'headerActions' => $this->getHeaderActions()
         ]);
     }
 
-    private function getPickFromItems($items){
+    private function getPickFromItems($items)
+    {
         // the items probability ALWAYS has to add up to 1 (100%)
-        $luckyPick = rand(0, 100)/100;
+        $luckyPick = rand(0, 100) / 100;
 
-        foreach($items as $item) {
+        foreach ($items as $item) {
             $luckyPick -= $item->getProbability();
-            if($luckyPick <= 0){
+            if ($luckyPick <= 0) {
                 return $item;
             }
         }

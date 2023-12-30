@@ -5,8 +5,8 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserFormType;
 use App\Repository\UserRepository;
-use App\Service\OrderService;
 use App\Service\PaginationService;
+use App\Struct\Order;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,8 +48,8 @@ class AdminController extends BaseController
             'users' => $users,
             'maxItemsFound' => count($users),
             'orderOptions' => [
-                OrderService::NAME_ASC => 'Username A-Z',
-                OrderService::NAME_DESC => 'Username Z-A'
+                Order::NAME_ASC,
+                Order::NAME_DESC
             ],
             'page' => $pageInfo->getPage(),
             'pageSize' => $pageInfo->getPageSize(),

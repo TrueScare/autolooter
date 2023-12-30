@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Table;
-use App\Service\OrderService;
+use App\Struct\Order;
 use App\Struct\PaginationInfo;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -25,90 +25,84 @@ class TableRepository extends ServiceEntityRepository
         parent::__construct($registry, Table::class);
     }
 
-    public function getAllTablesByOwner(UserInterface $owner){
+    public function getAllTablesByOwner(UserInterface $owner)
+    {
         return $this->getDefaultQueryBuilder($owner)
             ->leftJoin('t.rarity', 'r')
             ->leftJoin('t.parent', 'p')
             ->addSelect('r')
             ->addSelect('p')
             ->getQuery()
-            ->execute()
-        ;
+            ->execute();
     }
 
-    public function getTablesByOwner(UserInterface $owner, PaginationInfo $paginationInfo, $order = OrderService::NAME_ASC)
+    public function getTablesByOwner(UserInterface $owner, PaginationInfo $paginationInfo, $order = Order::NAME_ASC)
     {
+        $order = $order ?? Order::NAME_ASC;
+
         $qb = $this->getDefaultQueryBuilder($owner)
             ->setMaxResults($paginationInfo->getPageSize())
             ->setFirstResult(($paginationInfo->getPage() - 1) * $paginationInfo->getPageSize())
             ->leftJoin('t.rarity', 'r')
             ->leftJoin('t.parent', 'p')
             ->addSelect('r')
-            ->addSelect('p')
-        ;
+            ->addSelect('p');
 
-        switch ($order) {
-            case OrderService::NAME_DESC:
-                $qb->orderBy('t.name', 'DESC');
-                break;
-            case OrderService::RARITY_ASC:
-                $qb->orderBy('r.value', 'DESC'); // lowest value is actually the highest rarity
-                break;
-            case OrderService::RARITY_DESC:
-                $qb->orderBy('r.value', 'ASC'); // lowest value is actually the highest rarity
-                break;
-            case OrderService::NAME_ASC:
-            default:
-                $qb->orderBy('t.name', 'ASC');
-                break;
-        }
-
-        if(!empty($paginationInfo->getSearchTerm())){
-            $qb->andWhere('t.name like :term OR t.description like :term')
-                ->setParameter('term', '%' . $paginationInfo->getSearchTerm() . '%');
-        }
+        $qb = $this->handleSearchTerm($qb, $paginationInfo);
+        $qb = $this->handleOrder($qb, $order);
 
         return $qb->getQuery()
             ->execute();
     }
 
-    public function getTableCountByOwner(UserInterface $owner)
+    public function getTableCountByOwner(UserInterface $owner, PaginationInfo $paginationInfo)
     {
-        return $this->getDefaultQueryBuilder($owner)
-            ->select('count(t.id)')
-            ->getQuery()
+        $qb = $this->getDefaultQueryBuilder($owner)
+            ->select('count(t.id)');
+
+        $qb = $this->handleSearchTerm($qb, $paginationInfo);
+
+        return $qb->getQuery()
             ->getSingleScalarResult();
     }
 
-    private function getDefaultQueryBuilder(UserInterface $owner): QueryBuilder
+    protected function getDefaultQueryBuilder(UserInterface $owner): QueryBuilder
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.owner = :owner')
             ->setParameter('owner', $owner);
     }
 
-//    /**
-//     * @return Table[] Returns an array of Table objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('t.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    protected function handleOrder(QueryBuilder $qb, Order $order): QueryBuilder
+    {
+        switch ($order) {
+            case Order::NAME_DESC:
+                $qb->orderBy('t.name', 'DESC');
+                break;
+            case Order::RARITY_ASC:
+                $qb->orderBy('t.value', 'DESC'); // lowest value is actually the highest rarity
+                break;
+            case Order::RARITY_DESC:
+                $qb->orderBy('t.value', 'ASC'); // lowest value is actually the highest rarity
+                break;
+            case Order::NAME_ASC:
+            default:
+                $qb->orderBy('t.name', 'ASC');
+                break;
+        }
 
-//    public function findOneBySomeField($value): ?Table
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        return $qb;
+    }
+
+    protected function handleSearchTerm(QueryBuilder $qb, PaginationInfo $paginationInfo): QueryBuilder
+    {
+        if (!empty($paginationInfo->getSearchTerm())) {
+            $qb->andWhere('t.name like :term OR t.description like :term')
+                ->setParameter('term', '%' . $paginationInfo->getSearchTerm() . '%');
+        }
+
+        return $qb;
+    }
+
+
 }

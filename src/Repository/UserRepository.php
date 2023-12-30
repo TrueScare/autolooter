@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\User;
-use App\Service\OrderService;
+use App\Struct\Order;
 use App\Struct\PaginationInfo;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -41,14 +41,14 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
-    public function getUsers(PaginationInfo $paginationInfo, $order = OrderService::NAME_ASC){
+    public function getUsers(PaginationInfo $paginationInfo, $order = Order::NAME_ASC){
         $qb = $this->createQueryBuilder('u');
 
         switch ($order) {
-            case OrderService::NAME_DESC:
+            case Order::NAME_DESC:
                 $qb->orderBy('u.username', 'DESC');
                 break;
-            case OrderService::NAME_ASC:
+            case Order::NAME_ASC:
             default:
                 $qb->orderBy('u.username', 'ASC');
                 break;
@@ -62,29 +62,4 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $qb->getQuery()
             ->execute();
     }
-
-//    /**
-//     * @return User[] Returns an array of User objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('u.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?User
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }

@@ -2,13 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Item;
 use App\Entity\Table;
 use App\Entity\User;
 use App\Form\TableFormType;
 use App\Repository\TableRepository;
-use App\Service\OrderService;
 use App\Service\PaginationService;
+use App\Struct\Order;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -30,21 +29,23 @@ class TableController extends BaseController
     #[Route('/table', name:"table_index")]
     public function index(Request $request): Response
     {
-        $order = $request->query->get('order');
-
+        $order = Order::tryFrom($request->query->get('order'));
         $pageInfo = $this->paginationService->getPaginationInfoFromRequest($request);
+
         $tables = $this->tableRepository->getTablesByOwner($this->getUser(), $pageInfo, $order);
-        $maxItemsFound = $this->tableRepository->getTableCountByOwner($this->getUser());
+        $maxItemsFound = $this->tableRepository->getTableCountByOwner($this->getUser(), $pageInfo);
 
         return $this->render('/table/index.html.twig', [
             'tables' => $tables,
             'maxItemsFound' => $maxItemsFound,
             'page' => $pageInfo->getPage(),
             'pageSize' => $pageInfo->getPageSize(),
-            'orderOptions' => [OrderService::NAME_ASC => 'Name A-Z'
-                , OrderService::NAME_DESC => 'Name Z-A',
-                OrderService::RARITY_ASC => 'Rarität aufsteigend',
-                OrderService::RARITY_DESC => 'Rarität absteigend'],
+            'orderOptions' => [
+                Order::NAME_ASC,
+                Order::NAME_DESC,
+                Order::RARITY_ASC,
+                Order::RARITY_DESC
+            ],
             'order' => $order,
             'headerActions' => $this->getHeaderActions(),
             'searchTerm' => $pageInfo->getSearchTerm()
@@ -100,7 +101,7 @@ class TableController extends BaseController
 
         return $this->render('table/detail.html.twig', [
             'table' => $table,
-            'form' => $form,
+            'form' => $form->createView(),
             'headerActions' => $this->getHeaderActions()
         ]);
     }

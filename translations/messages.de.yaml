@@ -6,7 +6,7 @@ label:
   value_to: "Wert bis..."
   parent: "Übergeordnete Tabelle"
   parent_placeholder: "..."
-  rarity: "Rarität"
+  rarity: "Seltenheit"
   save: "Speichern"
   color: "Farbe"
   username: "Username"
@@ -40,7 +40,7 @@ card:
   tables:
     label: 'Tabellen:'
   rarities:
-    label: 'Raritäten:'
+    label: 'Seltenheiten:'
 
 error:
   blank_pw: 'Das Passwort darf nicht leer sein!'
@@ -49,3 +49,9 @@ error:
 
 success:
   save: "Speichern erfolgreich!"
+enum:
+  order:
+    rarity_desc: 'Seltenheit absteigend'
+    rarity_asc: 'Seltenheit aufsteigend'
+    name_desc: 'Name absteigend'
+    name_asc: 'Name aufsteigend'

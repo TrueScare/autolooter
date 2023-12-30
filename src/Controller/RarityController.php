@@ -5,8 +5,8 @@ namespace App\Controller;
 use App\Entity\Rarity;
 use App\Form\RarityFormType;
 use App\Repository\RarityRepository;
-use App\Service\OrderService;
 use App\Service\PaginationService;
+use App\Struct\Order;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -26,22 +26,25 @@ class RarityController extends BaseController
     }
 
     #[Route('/rarity', name:'rarity_index')]
-    public function index(Request $request){
-        $order = $request->query->get('order');
+    public function index(Request $request): Response
+    {
+        $order = Order::tryFrom($request->query->get('order'));
         $pageInfo = $this->paginationService->getPaginationInfoFromRequest($request);
 
         $rarities = $this->rarityRepository->getRaritiesByOwner($this->getUser(), $pageInfo, $order);
-        $maxItemsFound = $this->rarityRepository->getRarityCountByOwner($this->getUser());
+        $maxItemsFound = $this->rarityRepository->getRarityCountByOwner($this->getUser(), $pageInfo);
 
         return $this->render('/rarity/index.html.twig', [
             'rarities' => $rarities,
             'maxItemsFound' => $maxItemsFound,
             'page' => $pageInfo->getPage(),
             'pageSize' => $pageInfo->getPageSize(),
-            'orderOptions' => [OrderService::NAME_ASC => 'Name A-Z'
-                , OrderService::NAME_DESC => 'Name Z-A',
-                OrderService::RARITY_ASC => 'Rarität aufsteigend',
-                OrderService::RARITY_DESC => 'Rarität absteigend'],
+            'orderOptions' => [
+                Order::NAME_ASC,
+                Order::NAME_DESC,
+                Order::RARITY_ASC,
+                Order::RARITY_DESC
+            ],
             'order' => $order,
             'headerActions' => $this->getHeaderActions(),
             'searchTerm' => $pageInfo->getSearchTerm()
@@ -82,7 +85,7 @@ class RarityController extends BaseController
 
         return $this->render('item/detail.html.twig', [
             'rarity' => $rarity,
-            'form' => $form,
+            'form' => $form->createView(),
             'headerActions' => $this->getHeaderActions()
         ]);
     }
