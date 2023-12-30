@@ -3,7 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\User;
-use App\Service\RoleService;
+use App\Struct\Role;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -41,7 +41,7 @@ class UserFixture extends Fixture
             $this->passwordHasher->hashPassword($admin,
                 'admin_user')
         );
-        $admin->setRoles([RoleService::ADMIN]);
+        $admin->setRoles([Role::ADMIN]);
         $admin->setEmail('admin@testmail.de');
 
         $manager->persist($user);
