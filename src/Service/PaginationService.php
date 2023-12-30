@@ -11,7 +11,7 @@ class PaginationService
     public const PAGE_SIZE25 = 25;
     public const PAGE_SIZE50 = 50;
 
-    public static function getPaginationInfoFromRequest(Request $request): PaginationInfo
+    public function getPaginationInfoFromRequest(Request $request): PaginationInfo
     {
         $page = $request->query->get('page');
         $page = $page <= 0 ? $page = 1 : $page;
