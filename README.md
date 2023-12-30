@@ -12,19 +12,20 @@ The idea was to give the website all the tables and then have a button to get a 
    2. [SQL Setup](#sql-setup)
 4. [Demo Data](#demo-data)
 5. [Routes](#routes)
+6. [How I develop](#how-i-develop-this-project)
 
 # Requirements
 
-- PHP 8.2
-- Composer/Symfony 7
-- npm
-- Docker **OR** an SQL-Server on the same machine
+- [PHP](https://www.php.net/downloads.php) 8.2 
+- [Composer](https://getcomposer.org/download/)/[Symfony](https://symfony.com/doc/current/setup.html) 7
+- [npm](https://nodejs.org/en/download)
+- [Docker](https://www.docker.com/products/docker-desktop/) **OR** an SQL-Server you have access to and can sneak a database into
 
 # Setup Project
 
 - Clone repo
 - ```composer install```
-- ``npm run install``
+- ``npm install``
 - ``npm run dev``
 - best case create a .env.local file for your environment such as your **DATABASE_URL**
 
@@ -81,3 +82,12 @@ The admin user has access to the backend but no rarities, tables and items prepa
 |                    | table_detail    | /table/edit/{id?}  | App\Entity\Table(nullable) <br/>Symfony\Component\HttpFoundation\Request <br/>Symfony\Contracts\Translation\TranslatorInterface                                                                          | edit page for tables                                                                      |
 |                    | table_new       | /table/new         | Symfony\Component\HttpFoundation\Request                                                                                                                                                                 | route to use and redirect a null value to the edit page to create new entity              |
 
+# How I develop this project
+
+Fun fact, it sure is not the optimal way, but it works for me :)
+
+- develop on a Windows 11 machine
+- run docker Desktop with WSL 2 for the db image
+- run npm ```npm run watch``` to track all my style changes
+- run symfony server ```syfmony server:start -d``` as local server
+- hack away and have fun :)
