@@ -171,10 +171,11 @@ class Table
     }
 
     /**
-     * List of Tables on the Path to root in order of occurrence from bottom to top
+     * Recursively Collect the Tables on the Path to root in order of occurrence from bottom to top
+     * @param array $path
      * @return array
      */
-    public function getPathToRoot($path = [])
+    public function getPathToRoot(array $path = []): array
     {
         // add yourself to the queue
         $path[] = $this;
@@ -190,10 +191,10 @@ class Table
 
     /**
      * Used to generate the pool of Tables that are in the path to the root
-     * @param $path
-     * @return array|mixed
+     * @param array $path
+     * @return array
      */
-    public function getCollectionRoot($path = [])
+    public function getCollectionRoot(array $path = []): array
     {
         // add yourself to the queue
         $path[$this->getId()] = $this;
@@ -207,7 +208,12 @@ class Table
         }
     }
 
-    public function getPeers()
+    /**
+     * Collect other tables form parent.
+     *
+     * @return Collection
+     */
+    public function getPeers(): Collection
     {
         if (empty($this->getParent())) {
             $parentTables = $this->getOwner()->getRootTables();
@@ -223,7 +229,13 @@ class Table
         return $parentTables;
     }
 
-    public function getProbability($probability = 1)
+    /**
+     * Recursively collect the probability of this table by multiplying with the probability of the parent table.
+     *
+     * @param int $probability
+     * @return float|int|mixed
+     */
+    public function getProbability(int $probability = 1): mixed
     {
         $peers = $this->getPeers();
         $volume = 0;
@@ -246,7 +258,13 @@ class Table
         return $this->getParent()->getProbability($probability);
     }
 
-    public function  getChildrenCollectionRecursive($tables = [])
+    /**
+     * Recursively collect all the children down the path.
+     *
+     * @param array $tables
+     * @return array|mixed
+     */
+    public function  getChildrenCollectionRecursive(array $tables = []): mixed
     {
         if (empty($this->getTables())) {
             return $tables;
@@ -260,6 +278,11 @@ class Table
         return $tables;
     }
 
+    /**
+     * Checks if this table either has items OR has tables down the line that have items
+     *
+     * @return bool
+     */
     public function hasPathToItems(): bool
     {
         if ($this->getItems()->count() > 0) {

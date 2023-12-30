@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ItemRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -134,7 +135,12 @@ class Item
         return $this->getParent()->getCollectionRoot();
     }
 
-    public function getPeers()
+    /**
+     * Collect all the items from the parent table.
+     *
+     * @return Collection
+     */
+    public function getPeers(): Collection
     {
         $peers = $this->getParent()->getItems();
 
@@ -146,7 +152,12 @@ class Item
         return $peers;
     }
 
-    public function getProbability()
+    /**
+     * Recursively calculate the probability by fetching the count/rarity from its peers and dividing by its own rarity.
+     *
+     * @return float|int
+     */
+    public function getProbability(): float|int
     {
         $peers = $this->getPeers();
         $volume = 0;
@@ -158,7 +169,6 @@ class Item
         $probability = $this->getRarity()->getValue() / ($volume + $this->getRarity()->getValue());
         $parentProbability = $this->getParent()->getProbability();
 
-        //return ($probability * $parentProbability);
         return $probability * $parentProbability;
     }
 }
