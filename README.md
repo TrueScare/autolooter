@@ -4,16 +4,80 @@ This project was initially started to get a tool that helps me and my friends or
 
 The idea was to give the website all the tables and then have a button to get a random item.
 
-## Requirements
-- PHP 8.2
-- Composer/Symfony
-- npm
-- Docker
+# Table of Contents
+1. [Requirements](#requirements)
+2. [Setup Project](#setup-project)
+3. [Setup Database](#setup-database)
+   1. [Docker Setup](#docker-setup)
+   2. [SQL Setup](#sql-setup)
+4. [Demo Data](#demo-data)
+5. [Routes](#routes)
 
-## Setup
+# Requirements
+
+- PHP 8.2
+- Composer/Symfony 7
+- npm
+- Docker **OR** an SQL-Server on the same machine
+
+# Setup Project
+
 - Clone repo
-- docker-compose up to get the SQL-Container started
+- ```composer install```
 - ``npm run install``
 - ``npm run dev``
-- to get the local dev server ``symfony server:start``
+- best case create a .env.local file for your environment such as your **DATABASE_URL**
+
+# Setup Database
+
+## Docker setup
+
+- add ```DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=10.11.2-MariaDB&charset=utf8mb4"``` 
+to your .env.local (symfony adds the username/password/database).
+- turn on the container with ```docker-compose up``` to get the SQL-Container started.
+
+## SQl Setup
+
+- add ```DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=10.11.2-MariaDB&charset=utf8mb4"```
+to your .env.local 
+- replace db_user/db_password/db_name with your credentials.
+
+# Demo Data
+
+I prepared some fixtures to run and add some demo values for development.
+Included are two users:
+
+| User       | Password   | Roles      |
+|------------|------------|------------|
+| base_user  | base_user  | ROLE_USER  |
+| admin_user | admin_user | ROLE_ADMIN |
+
+The base user has all the rarities, tables and items from the fixtures.
+The admin user has access to the backend but no rarities, tables and items prepared.
+
 - if you want some demo data run ``symfony console doctrine:fixtures:load``
+- I had some issues on my machine where the mysql-docker server shuts down sometimes. Repeating the statement above
+  should result in success.
+
+# Routes
+
+| Controller         | Route Name      | Route              | Parameter                                                                                                                                                                                                | Purpose                                                                                   |
+|--------------------|-----------------|--------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
+| AdminController    | admin_index     | /admin             | -                                                                                                                                                                                                        | landing page for the admin page                                                           |
+|                    | admin_users     | /admin/users       | Symfony\Component\HttpFoundation\Request                                                                                                                                                                 | listing page for the users                                                                |
+|                    | admin_user_edit | /admin/user/{id?}  | App\Entity\User(nullable) <br/> Symfony\Component\HttpFoundation\Request <br/>Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface <br/>Symfony\Contracts\Translation\TranslatorInterface | edit page for the users and creation page if **id** is null                               |
+|                    | -               | -                  | -                                                                                                                                                                                                        | has no routes and is only there to unify the controller and provide common functionality  |
+| HomeController     | app_home        | /                  | -                                                                                                                                                                                                        | homepage for the whole app                                                                |
+| ItemController     | item_index      | /item              | Symfony\Component\HttpFoundation\Request                                                                                                                                                                 | listing page for the items                                                                |
+|                    | item_detail     | /item/edit/{id?}   | App\Entity\Item(nullable) <br/>Symfony\Component\HttpFoundation\Request <br/>Symfony\Contracts\Translation\TranslatorInterface                                                                           | edit page for items                                                                       |
+|                    | item_new        | /item/new          | Symfony\Component\HttpFoundation\Request                                                                                                                                                                 | route to use and redirect a null value to the edit page to create new entity              |
+|                    | item_random     | /item/random       | Symfony\Component\HttpFoundation\Request                                                                                                                                                                 | site that renders a random item from all items                                            |
+| RarityController   | rarity_index    | /rarity            | Symfony\Component\HttpFoundation\Request                                                                                                                                                                 | listing page for the rarities                                                             |
+|                    | rarity_detail   | /rarity/edit/{id?} | App\Entity\Rarity(nullable) <br/>Symfony\Component\HttpFoundation\Request <br/>Symfony\Contracts\Translation\TranslatorInterface                                                                         | edit page for rarities                                                                    |
+|                    | rarity_new      | /rarity/new        | Symfony\Component\HttpFoundation\Request                                                                                                                                                                 | route to use and redirect a null value to the edit page to create new entity              |
+| SecurityController | app_login       | /login             | Symfony\Component\Security\Http\Authentication\AuthenticationUtils                                                                                                                                       | login page                                                                                |
+|                    | app_logout      | /logout            | -                                                                                                                                                                                                        | logout route - will only redirect to the login page                                       |
+| TableController    | table_index     | /table             | Symfony\Component\HttpFoundation\Request                                                                                                                                                                 | listing page for the tables                                                               |
+|                    | table_detail    | /table/edit/{id?}  | App\Entity\Table(nullable) <br/>Symfony\Component\HttpFoundation\Request <br/>Symfony\Contracts\Translation\TranslatorInterface                                                                          | edit page for tables                                                                      |
+|                    | table_new       | /table/new         | Symfony\Component\HttpFoundation\Request                                                                                                                                                                 | route to use and redirect a null value to the edit page to create new entity              |
+
