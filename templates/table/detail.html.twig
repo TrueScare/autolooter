@@ -8,5 +8,29 @@
             {{ form(form) }}
         </div>
     </div>
-{% endblock %}
+    {% if table.items|length > 0 %}
+        <details class="items-container card mt-3">
+            <summary class="card-title px-3 h2"><span>{{ "card.items.label"|trans }}</span></summary>
+            <div class="card-body">
+                <div class="row">
+                    {% for item in table.items %}
+                        {% include 'components/cards/card-item.html.twig' with {entity: item} %}
+                    {% endfor %}
+                </div>
+            </div>
+        </details>
+    {% endif %}
 
+    {% if table.tables|length > 0 %}
+        <details class="table-container card mt-3">
+            <summary class="card-title px-3 h2"><span>{{ "card.tables.label"|trans }}</span></summary>
+            <div class="card-body">
+                <div class="row">
+                    {% for table in table.tables %}
+                        {% include 'components/cards/card-table.html.twig' with {entity: table} %}
+                    {% endfor %}
+                </div>
+            </div>
+        </details>
+    {% endif %}
+{% endblock %}
