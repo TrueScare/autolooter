@@ -38,6 +38,10 @@ class RarityRepository extends ServiceEntityRepository
         $order = $order ?? Order::NAME_ASC;
 
         $qb = $this->getDefaultQueryBuilder($owner)
+            ->leftJoin('r.items', 'i')
+            ->leftJoin('r.tables', 't')
+            ->addSelect('t')
+            ->addSelect('i')
             ->setMaxResults($paginationInfo->getPageSize())
             ->setFirstResult(($paginationInfo->getPage() - 1) * $paginationInfo->getPageSize());
 

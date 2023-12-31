@@ -44,8 +44,10 @@ class TableRepository extends ServiceEntityRepository
             ->setMaxResults($paginationInfo->getPageSize())
             ->setFirstResult(($paginationInfo->getPage() - 1) * $paginationInfo->getPageSize())
             ->leftJoin('t.rarity', 'r')
+            ->leftJoin('t.items', 'i')
             ->leftJoin('t.parent', 'p')
             ->addSelect('r')
+            ->addSelect('i')
             ->addSelect('p');
 
         $qb = $this->handleSearchTerm($qb, $paginationInfo);
