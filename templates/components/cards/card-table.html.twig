@@ -5,8 +5,9 @@
        href="{{ path('table_edit', {'id': entity.id}) }}">
         {{ entity.name }}
     </a>
-
-    <div class="badge bg-primary position-absolute">{{ entity.items|length }} {{ 'card.badge.items'|trans }}</div>
+    <div class="badge-container">
+        <div class="badge bg-primary">{{ entity.items|length }} {{ 'card.badge.items'|trans }}</div>
+    </div>
 {% endblock %}
 
 {% block card_subtitle %}

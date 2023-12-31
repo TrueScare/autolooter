@@ -1,9 +1,16 @@
 {% extends 'components/cards/card-basic.html.twig' %}
 
 {% block card_title_inner %}
-    <a href="{{ path('rarity_edit', {'id': entity.id}) }}"style="color:{{ color }}">
+    <a href="{{ path('rarity_edit', {'id': entity.id}) }}" style="color:{{ color }}">
         {{ entity.name }}
     </a>
+{% endblock %}
+{% block card_title %}
+    {{ parent() }}
+    <div class="badge-container position-absolute">
+        <div class="badge bg-primary">{{ entity.tables|length }} {{ 'card.badge.table'|trans }}</div>
+        <div class="badge bg-primary">{{ entity.items|length }} {{ 'card.badge.items'|trans }}</div>
+    </div>
 {% endblock %}
 
 {% block card_subtitle %}
