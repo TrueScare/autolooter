@@ -6,7 +6,12 @@
         {{ entity.name }}
     </a>
     <div class="badge-container">
-        <div class="badge bg-primary">{{ entity.items|length }} {{ 'card.badge.items'|trans }}</div>
+        {% if entity.tables|length > 0 %}
+            <div class="badge bg-primary">{{ entity.tables|length }} {{ 'card.badge.table'|trans }}</div>
+        {% endif %}
+        {% if entity.items|length > 0 %}
+            <div class="badge bg-primary">{{ entity.items|length }} {{ 'card.badge.items'|trans }}</div>
+        {% endif %}
     </div>
 {% endblock %}
 

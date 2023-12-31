@@ -7,6 +7,7 @@ use App\Struct\Order;
 use App\Struct\PaginationInfo;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -44,17 +45,18 @@ class TableRepository extends ServiceEntityRepository
             ->setMaxResults($paginationInfo->getPageSize())
             ->setFirstResult(($paginationInfo->getPage() - 1) * $paginationInfo->getPageSize())
             ->leftJoin('t.rarity', 'r')
-            ->leftJoin('t.items', 'i')
             ->leftJoin('t.parent', 'p')
+            ->leftJoin('t.items', 'i')
+            ->leftJoin('t.tables', '_t')
             ->addSelect('r')
+            ->addSelect('p')
             ->addSelect('i')
-            ->addSelect('p');
+            ->addSelect('_t');
 
         $qb = $this->handleSearchTerm($qb, $paginationInfo);
         $qb = $this->handleOrder($qb, $order);
 
-        return $qb->getQuery()
-            ->execute();
+        return new Paginator($qb, fetchJoinCollection: true);
     }
 
     public function getTableCountByOwner(UserInterface $owner, PaginationInfo $paginationInfo)

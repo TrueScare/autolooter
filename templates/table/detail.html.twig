@@ -3,6 +3,14 @@
 {% block title %}Tabellen {% if table is defined and table.name %}- {{ table.name }}{% endif %}{% endblock %}
 
 {% block body %}
+    {% if table.parent %}
+        <div class="card mb-3">
+            <a class="btn btn-primary w-100"
+               href="{{ path('table_edit', {'id': table.parent.id}) }}">
+                {{ "path.goto.parent"|trans }} {{ table.parent.name }}
+            </a>
+        </div>
+    {% endif %}
     <div class="card">
         <div class="card-body">
             {{ form(form) }}

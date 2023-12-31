@@ -9,6 +9,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -48,8 +49,7 @@ class RarityRepository extends ServiceEntityRepository
         $qb = $this->handleSearchTerm($qb, $paginationInfo);
         $qb = $this->handleOrder($qb, $order);
 
-        return $qb->getQuery()
-            ->execute();
+        return new Paginator($qb, fetchJoinCollection: true);
     }
 
     /**

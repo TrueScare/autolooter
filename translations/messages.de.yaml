@@ -58,3 +58,7 @@ enum:
     rarity_asc: 'Seltenheit aufsteigend'
     name_desc: 'Name absteigend'
     name_asc: 'Name aufsteigend'
+
+path:
+  goto:
+    parent: 'Gehe zur übergeordneten Tabelle'
