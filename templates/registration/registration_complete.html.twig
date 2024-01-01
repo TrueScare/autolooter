@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ "registration.complete.title"|trans }}{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">
+                {{ "registration.complete.title"|trans }}
+            </h1>
+            <p class="card-text">
+                {{ 'registration.complete.sendto'|trans({'%mail%': user.email}) }}
+            </p>
+        </div>
+    </div>
+{% endblock %}
+

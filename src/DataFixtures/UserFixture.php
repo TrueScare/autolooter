@@ -33,6 +33,7 @@ class UserFixture extends Fixture
             )
         );
         $user->setEmail('user@testmail.de');
+        $user->setIsVerified(true);
 
         $admin = new User();
 
@@ -43,6 +44,7 @@ class UserFixture extends Fixture
         );
         $admin->setRoles([Role::ADMIN]);
         $admin->setEmail('admin@testmail.de');
+        $admin->setIsVerified(true);
 
         $manager->persist($user);
         $manager->persist($admin);
