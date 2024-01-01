@@ -9,6 +9,7 @@ use App\Repository\TableRepository;
 use App\Service\PaginationService;
 use App\Struct\Order;
 use Doctrine\ORM\EntityManagerInterface;
+use mysql_xdevapi\Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,11 +23,11 @@ class TableController extends BaseController
 
     public function __construct(TableRepository $tableRepository, PaginationService $paginationService, EntityManagerInterface $entityManager, LoggerInterface $logger)
     {
-        parent::__construct($paginationService,$entityManager,$logger);
+        parent::__construct($paginationService, $entityManager, $logger);
         $this->tableRepository = $tableRepository;
     }
 
-    #[Route('/table', name:"table_index")]
+    #[Route('/table', name: "table_index")]
     public function index(Request $request): Response
     {
         $order = Order::tryFrom($request->query->get('order'));
@@ -53,14 +54,13 @@ class TableController extends BaseController
     }
 
     #[Route('/table/edit/{id?}', name: 'table_edit')]
-    public function detail(?Table $table, Request $request,TranslatorInterface $translator): Response
+    public function detail(?Table $table, Request $request, TranslatorInterface $translator): Response
     {
-        if($table?->getOwner() !== $this->getUser())
-        {
+        if ($table?->getOwner() !== $this->getUser()) {
             $this->redirectToRoute('app_home');
         }
 
-        if(empty($table)){
+        if (empty($table)) {
             $table = new Table();
         }
 
@@ -71,7 +71,7 @@ class TableController extends BaseController
 
         $choices = $owner->getTables()->filter(function ($element) use ($table) {
             // do not be able to create circle references
-            /** @var Table $element  */
+            /** @var Table $element */
             return empty(($table?->getChildrenCollectionRecursive()[$element->getId()]));
         });
 
@@ -80,21 +80,20 @@ class TableController extends BaseController
             'rarityChoices' => $owner->getRarities()
         ];
 
-        $form = $this->createForm(TableFormType::class, $table,$option);
+        $form = $this->createForm(TableFormType::class, $table, $option);
 
         $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             /** @var Table $table */
             $table = $form->getData();
 
-            try{
+            try {
                 $this->entityManager->persist($table);
                 $this->entityManager->flush();
                 $this->addFlash('success', $translator->trans('success.save'));
-            } catch(\Exception $e){
+            } catch (\Exception $e) {
                 $this->logger->error($e);
-                $this->addFlash('error',$translator->trans('error.save'));
+                $this->addFlash('error', $translator->trans('error.save'));
             }
         }
 
@@ -105,9 +104,34 @@ class TableController extends BaseController
         ]);
     }
 
-    #[Route('/table/new', name:'table_new')]
+    #[Route('/table/new', name: 'table_new')]
     public function new(): RedirectResponse
     {
         return $this->redirectToRoute('table_edit', ['id' => null]);
+    }
+
+    /**
+     * @param Table $table
+     * @param Request $request
+     * @param TranslatorInterface $translator
+     * @return RedirectResponse
+     */
+    #[Route('/table/delete/{id}')]
+    public function delete(Table $table, Request $request, TranslatorInterface $translator): RedirectResponse
+    {
+        if ($this->getUser() !== $table->getOwner()) {
+            $this->addFlash('error', $translator->trans('error.table.notfound'));
+            return $this->redirectToRoute('user_home');
+        }
+
+        try {
+            $this->entityManager->remove($table);
+            $this->entityManager->flush();
+            $this->addFlash('success', $translator->trans('success.delete'));
+        } catch (\Exception $e){
+            $this->logger->error($e);
+        }
+
+        return $this->redirectToRoute('table_index');
     }
 }

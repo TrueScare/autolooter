@@ -6,9 +6,12 @@ use App\Repository\TableRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Event\PreRemoveEventArgs;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[ORM\Entity(repositoryClass: TableRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: '`table`')]
 class Table
 {
@@ -264,7 +267,7 @@ class Table
      * @param array $tables
      * @return array|mixed
      */
-    public function  getChildrenCollectionRecursive(array $tables = []): mixed
+    public function getChildrenCollectionRecursive(array $tables = []): mixed
     {
         if (empty($this->getTables())) {
             return $tables;
@@ -297,5 +300,41 @@ class Table
             }
         }
         return false;
+    }
+
+    /**
+     * Set this tables parent as new parent for child tables and items before deletion
+     *
+     * @param PreRemoveEventArgs $args
+     * @param TranslatorInterface $translator
+     * @return void
+     */
+    #[ORM\PreRemove]
+    public function preRemoved(PreRemoveEventArgs $args): void
+    {
+        $parent = $this->getParent();
+        // if parent is null the child tables will become new root tables, which is fine
+        if (!empty($tables = $this->getTables())) {
+            foreach ($tables as $table) {
+                $table->setParent($parent);
+            }
+        }
+
+        // not so good with the items as they HAVE to have a parent defined
+        if(empty($parent)){
+            $parent = new Table();
+            $parent->setName('Lost and Found');
+            $parent->setDescription('Lost and Found');
+            $parent->setRarity($this->getRarity());
+            $parent->setOwner($this->getOwner());
+        }
+
+        if (!empty($items = $this->getItems())) {
+            foreach ($items as $item) {
+                $item->setParent($parent);
+            }
+        }
+
+        $args->getObjectManager()->persist($parent);
     }
 }
