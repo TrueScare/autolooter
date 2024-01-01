@@ -20,7 +20,7 @@
     <div class="card-subtitle">{% if entity.parent %}{{ entity.parent.name }}{% endif %}</div>
 {% endblock %}
 
-{% block card_text_innter %}{{ entity.description|u.truncate(180, '...') }}{% endblock %}
+{% block card_text_inner %}{{ entity.description|u.truncate(180, '...') }}{% endblock %}
 {% block card_footer %}
     <div class="card-footer" style="background-color: {{ color }}"></div>
 {% endblock %}

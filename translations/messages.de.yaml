@@ -49,9 +49,13 @@ error:
   blank_pw: 'Das Passwort darf nicht leer sein!'
   min_len_pw: 'Das Passwort muss mindestens 6 Zeichen Lang sein.'
   save: "FEHLER: Speichern fehlgeschlagen."
+  table:
+    notfound: 'Tabelle konnte nicht gefunden werden.'
 
 success:
   save: "Speichern erfolgreich!"
+  delete: 'Löschen erfolgreich!'
+
 enum:
   order:
     rarity_desc: 'Seltenheit absteigend'
@@ -77,3 +81,8 @@ mail:
     button_label: 'Meine E-Mail bestätigen'
     expires_note: 'Dieser Link läuft ab in %time%.'
     greetings: 'Cheers!'
+
+lostAndFound:
+  entity:
+    name: 'Systemtabelle: Verloren geganges'
+    description: 'Diese Tabelle wurde erstellt da Items bei dem versuch eine Tabelle zu löschen keiner neuen Tabelle zugeordnet werden konnten.'
