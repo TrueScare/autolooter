@@ -62,3 +62,18 @@ enum:
 path:
   goto:
     parent: 'Gehe zur übergeordneten Tabelle'
+
+registration:
+  complete:
+    title: 'Registrierung abgeschlossen'
+    sendto: 'Wir haben dir einen Bestätigungslink an %mail% geschickt. Bitte überprüfe dein Postfach nach unserer Nachricht. Der Link bringt dich dann zurück zu uns.'
+  mail:
+    verified: 'Deine E-Mail Adresse wurde erfolgreich bestätigt. Viel spaß!'
+
+mail:
+  registration_confirm:
+    title: 'Hi! Bitte Bestätige deine E-Mail!'
+    please_confirm: 'Bitte bestätige deine E-Mail indem du auf den Link klickst:'
+    button_label: 'Meine E-Mail bestätigen'
+    expires_note: 'Dieser Link läuft ab in %time%.'
+    greetings: 'Cheers!'
