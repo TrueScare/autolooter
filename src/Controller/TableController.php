@@ -93,7 +93,7 @@ class TableController extends BaseController
                 $this->addFlash('success', $translator->trans('success.save'));
             } catch (\Exception $e) {
                 $this->logger->error($e);
-                $this->addFlash('error', $translator->trans('error.save'));
+                $this->addFlash('danger', $translator->trans('error.save'));
             }
         }
 
@@ -116,11 +116,11 @@ class TableController extends BaseController
      * @param TranslatorInterface $translator
      * @return RedirectResponse
      */
-    #[Route('/table/delete/{id}')]
+    #[Route('/table/delete/{id}', name: 'table_delete')]
     public function delete(Table $table, Request $request, TranslatorInterface $translator): RedirectResponse
     {
         if ($this->getUser() !== $table->getOwner()) {
-            $this->addFlash('error', $translator->trans('error.table.notfound'));
+            $this->addFlash('danger', $translator->trans('error.table.notfound'));
             return $this->redirectToRoute('user_home');
         }
 
@@ -129,6 +129,7 @@ class TableController extends BaseController
             $this->entityManager->flush();
             $this->addFlash('success', $translator->trans('success.delete'));
         } catch (\Exception $e){
+            $this->addFlash('danger', $translator->trans('error.delete'));
             $this->logger->error($e);
         }
 

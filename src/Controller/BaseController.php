@@ -35,11 +35,11 @@ class BaseController extends AbstractController
                 $this->generateUrl('item_random')
             ),
             new HeaderAction(
-                'Zu den Raritäten',
+                'Zu den Seltenheiten',
                 $this->generateUrl('rarity_index'),
                 [
                     new HeaderAction(
-                        'neue Rarität',
+                        'neue Seltenheit',
                         $this->generateUrl('rarity_new')
                     )
                 ]

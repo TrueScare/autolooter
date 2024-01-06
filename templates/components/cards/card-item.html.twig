@@ -14,6 +14,11 @@
 {% endblock %}
 
 {% block card_footer %}
+    <div class="btn-group">
+        {% include 'components/actions/edit-action.html.twig' with {route: path('item_edit', {id:entity.id})} %}
+        {% include 'components/actions/delete-action.html.twig' with {route: path('item_delete', {id: entity.id}), identifier: entity.name} %}
+    </div>
+
     <div class="card-footer" style="background-color: {{ color }}">
         {% block card_footer_inner %}
             <p class="card-text">

@@ -79,7 +79,7 @@ class RarityController extends BaseController
                 $this->addFlash('success', $translator->trans('success.save'));
             } catch(\Exception $e){
                 $this->logger->error($e);
-                $this->addFlash('error',$translator->trans('error.save'));
+                $this->addFlash('danger',$translator->trans('error.save'));
             }
         }
 
@@ -94,5 +94,30 @@ class RarityController extends BaseController
     public function new(): RedirectResponse
     {
         return $this->redirectToRoute('rarity_edit', ['id' => null]);
+    }
+
+    /**
+     * @param Rarity $rarity
+     * @param TranslatorInterface $translator
+     * @return RedirectResponse
+     */
+    #[Route('/rarity/delete/{id}', name:'rarity_delete')]
+    public function delete(Rarity $rarity, TranslatorInterface $translator): RedirectResponse
+    {
+        if($this->getUser() !== $rarity->getOwner()){
+            $this->addFlash('danger', $translator->trans('error.rarity.notfound'));
+            return $this->redirectToRoute('item_index');
+        }
+
+        try {
+            $this->entityManager->remove($rarity);
+            $this->entityManager->flush();
+            $this->addFlash('success', $translator->trans('success.delete'));
+        } catch (\Exception $e){
+            $this->addFlash('danger', $translator->trans('error.delete') . $e);
+            $this->logger->error($e);
+        }
+
+        return $this->redirectToRoute('rarity_index');
     }
 }

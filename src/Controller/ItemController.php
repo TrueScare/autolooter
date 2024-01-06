@@ -85,7 +85,7 @@ class ItemController extends BaseController
                 $this->addFlash('success', $translator->trans('success.save'));
             } catch (\Exception $e) {
                 $this->logger->error($e);
-                $this->addFlash('error', $translator->trans('error.save'));
+                $this->addFlash('danger', $translator->trans('error.save'));
             }
         }
 
@@ -129,7 +129,32 @@ class ItemController extends BaseController
                 return $item;
             }
         }
-        $this->addFlash('error', "No item found... that's suspicious.");
+        $this->addFlash('danger', "No item found... that's suspicious.");
         return $items->last();
+    }
+
+    /**
+     * @param Item $item
+     * @param TranslatorInterface $translator
+     * @return Response
+     */
+    #[Route('/item/delete/{id}', name: 'item_delete')]
+    public function delete(Item $item,TranslatorInterface $translator):Response
+    {
+        if($this->getUser() !== $item->getOwner()){
+            $this->addFlash('danger', $translator->trans('error.item.notfound'));
+            return $this->redirectToRoute('item_index');
+        }
+
+        try {
+            $this->entityManager->remove($item);
+            $this->entityManager->flush();
+            $this->addFlash('success', $translator->trans('success.delete'));
+        } catch (\Exception $e){
+            $this->addFlash('danger', $translator->trans('error.delete'));
+            $this->logger->error($e);
+        }
+
+        return $this->redirectToRoute('item_index');
     }
 }
