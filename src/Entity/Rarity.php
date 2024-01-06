@@ -6,9 +6,11 @@ use App\Repository\RarityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Event\PreRemoveEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RarityRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Rarity
 {
     #[ORM\Id]
@@ -167,5 +169,39 @@ class Rarity
         $this->description = $description;
 
         return $this;
+    }
+
+    /**
+     * @param PreRemoveEventArgs $args
+     * @return void
+     */
+    #[ORM\PreRemove]
+    public function preRemove(PreRemoveEventArgs $args): void
+    {
+        if (empty($this->getTables())
+            && empty($this->getItems())
+        ) {
+            return;
+        }
+
+        $rarity = new Rarity();
+        $rarity->setName('Lost and Found');
+        $rarity->setDescription('Lost and Found');
+        $rarity->setValue(0);
+        $rarity->setColor('#fff');
+        $rarity->setOwner($this->getOwner());
+
+        if(!empty($items = $this->getItems())) {
+            foreach ($items as $item) {
+                $item->setRarity($rarity);
+            }
+        }
+        if(!empty($tables = $this->getTables())){
+            foreach($tables as $table){
+                $table->setRarity($rarity);
+            }
+        }
+
+        $args->getObjectManager()->persist($rarity);
     }
 }

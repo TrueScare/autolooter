@@ -306,7 +306,6 @@ class Table
      * Set this tables parent as new parent for child tables and items before deletion
      *
      * @param PreRemoveEventArgs $args
-     * @param TranslatorInterface $translator
      * @return void
      */
     #[ORM\PreRemove]

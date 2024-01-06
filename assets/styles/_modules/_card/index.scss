@@ -12,4 +12,21 @@
         top: 5px;
         right: -10px;
     }
+
+    .btn-group {
+        transition: all 1s ease-out;
+        max-height: 0;
+        overflow: hidden;
+        border-radius: 0;
+
+        .btn {
+            border-radius: 0;
+        }
+    }
+
+    &:hover {
+        .btn-group {
+            max-height: 100%;
+        }
+    }
 }

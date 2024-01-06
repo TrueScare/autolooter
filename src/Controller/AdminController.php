@@ -9,6 +9,7 @@ use App\Service\PaginationService;
 use App\Struct\Order;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -86,7 +87,7 @@ class AdminController extends BaseController
                 $this->addFlash('success', $translator->trans('success.save'));
             } catch (\Exception $e) {
                 $this->logger->error($e);
-                $this->addFlash('error', $translator->trans('error.save'));
+                $this->addFlash('danger', $translator->trans('error.save'));
             }
         }
 
@@ -94,5 +95,25 @@ class AdminController extends BaseController
             'user' => $user,
             'form' => $form
         ]);
+    }
+
+    /**
+     * @param User $user
+     * @param TranslatorInterface $translator
+     * @return RedirectResponse
+     */
+    #[Route('/admin/user/delete/{id}',name: 'admin_user_delete')]
+    public function deleteUser(User $user, TranslatorInterface $translator): RedirectResponse
+    {
+        try {
+            $this->entityManager->remove($user);
+            $this->entityManager->flush();
+            $this->addFlash('success', $translator->trans('success.delete'));
+        } catch (\Exception $e){
+            $this->addFlash('danger', $translator->trans('error.delete'));
+            $this->logger->error($e);
+        }
+
+        return $this->redirectToRoute('admin_users');
     }
 }
