@@ -1,5 +1,8 @@
 {% block flash_messages %}
-    <div class="flash-message position-relative alert alert-{{ label }}" data-message>
+    <div class="flash-message position-relative alert alert-{{ label }}"
+         data-controller="message"
+         data-action="click->message#close"
+    >
         <div class="btn close position-absolute">X</div>
         {% block flash_messages_message %}
             {{ message }}

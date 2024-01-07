@@ -22,7 +22,7 @@
     <div class="message-container" aria-label="{{ "section.messages"|trans }}">
         {% for label, messages in app.flashes() %}
             {% for message in messages %}
-
+                {% include 'components/messages/flash-messages.html.twig' %}
             {% endfor %}
         {% endfor %}
     </div>
