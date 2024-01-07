@@ -93,7 +93,7 @@ lostAndFound:
     description: 'Diese Tabelle wurde erstellt da Items bei dem versuch eine Tabelle zu löschen keiner neuen Tabelle zugeordnet werden konnten.'
 delete:
   label: 'löschen'
-  message: 'Soll %identifier% wirklich gelöscht werden?'
+  message: 'Soll "%identifier%" wirklich gelöscht werden?'
 edit:
   label: 'bearbeiten'
 

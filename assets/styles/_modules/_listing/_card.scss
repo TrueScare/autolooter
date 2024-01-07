@@ -4,10 +4,6 @@
         min-height: 0;
         transition: all 1s ease-in-out;
 
-        a:not(:hover) {
-            text-decoration: none;
-        }
-
         .card-footer {
             color: white;
         }
@@ -19,8 +15,7 @@
         }
 
         .btn-group {
-            transition: all 1s ease-in-out;
-            max-height: 0;
+            transition: all .5s ease-in-out;
             overflow: hidden;
             border-radius: 0;
 
@@ -29,15 +24,20 @@
             }
         }
 
-        &:hover {
-            .btn-group {
-                max-height: 100%;
+        @media (hover: hover){
+            .btn-group{
+                opacity: 0;
             }
-        }
-    }
-    &:hover {
-        .card {
-            min-height: 100%;
+
+            &:hover {
+                .btn-group {
+                    opacity: 1;
+                }
+            }
+
+            a:not(:hover) {
+                text-decoration: none;
+            }
         }
     }
 }

@@ -1,0 +1,7 @@
+dialog#dialog {
+    height: fit-content;
+    &::backdrop{
+        background-color: $primary;
+        opacity: 0.55;
+    }
+}

@@ -18,12 +18,14 @@ export default class extends Controller {
 
     show(event) {
         this.dialogContent.innerHTML = event.params.message;
+        document.querySelector('body').style.overflow = 'hidden';
         this.dialogConfirm.addEventListener('click', () => this.execRoute());
         this.dialogCancel.addEventListener('click', () => this.close());
         this.dialog.showModal();
     }
     close(){
         this.dialogContent.innerHTML = '';
+        document.querySelector('body').style.overflow = 'auto';
         this.dialogConfirm.removeEventListener('click', () => this.execRoute())
         this.dialogCancel.removeEventListener('click', () => this.close());
         this.dialog.close();
