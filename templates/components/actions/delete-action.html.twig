@@ -1,7 +1,10 @@
 {% block delete_action %}
-    <a href="{{ route }}"
-            class="btn btn-danger"
-            onclick="return confirm('{{ "delete.message"|trans({'%identifier%': identifier}) }}');"
+    <a
+       class="btn btn-danger"
+       data-controller="dialog"
+       data-dialog-route-value="{{ route }}"
+       data-action="click->dialog#show"
+       data-dialog-message-param="{{ "delete.message"|trans({'%identifier%': identifier}) }}"
     >
         {{ "delete.label"|trans }}
     </a>

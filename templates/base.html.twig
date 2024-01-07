@@ -22,7 +22,7 @@
     <div class="message-container" aria-label="{{ "section.messages"|trans }}">
         {% for label, messages in app.flashes() %}
             {% for message in messages %}
-
+                {% include 'components/messages/flash-messages.html.twig' %}
             {% endfor %}
         {% endfor %}
     </div>
@@ -31,5 +31,14 @@
         {% endblock %}
     </main>
 </section>
+
+<dialog id="dialog" class="card modal-dialog-centered position-fixed">
+    <div id="dialog_content" class="card-body">
+    </div>
+    <div class="btn-group">
+        <div class="btn btn-primary confirm" id="dialog_btn_confirm">{{ "dialog.ok"|trans }}</div>
+        <div class="btn btn-secondary cancel" id="dialog_btn_cancel">{{ "dialog.cancel"|trans }}</div>
+    </div>
+</dialog>
 </body>
 </html>

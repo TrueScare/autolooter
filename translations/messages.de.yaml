@@ -96,3 +96,7 @@ delete:
   message: 'Soll %identifier% wirklich gelöscht werden?'
 edit:
   label: 'bearbeiten'
+
+dialog:
+  cancel: 'abbrechen'
+  ok: 'Ok'
