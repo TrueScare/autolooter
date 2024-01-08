@@ -21,6 +21,7 @@ export default class extends Controller {
         document.querySelector('body').style.overflow = 'hidden';
         this.dialogConfirm.addEventListener('click', () => this.execRoute());
         this.dialogCancel.addEventListener('click', () => this.close());
+        this.dialog.style.display = 'block';
         this.dialog.showModal();
     }
     close(){
@@ -28,6 +29,7 @@ export default class extends Controller {
         document.querySelector('body').style.overflow = 'auto';
         this.dialogConfirm.removeEventListener('click', () => this.execRoute())
         this.dialogCancel.removeEventListener('click', () => this.close());
+        this.dialog.style.display = 'none';
         this.dialog.close();
     }
 

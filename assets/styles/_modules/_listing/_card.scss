@@ -24,7 +24,7 @@
             }
         }
 
-        @media (hover: hover) {
+        @include media-breakpoint-up(lg){
             .btn-group {
                 opacity: 0;
             }
