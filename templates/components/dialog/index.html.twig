@@ -1,0 +1,27 @@
+{% block dialog %}
+    <dialog id="dialog" class="card position-fixed">
+        {% block dialog_content %}
+            <div id="dialog_content" class="card-body">
+                {% block dialog_content_inner %}{% endblock %}
+            </div>
+        {% endblock %}
+        {% block dialog_actions %}
+            <div class="btn-group dialog-actions">
+                {% block dialog_actions_inner %}
+                    {% block dialog_actions_confirm %}
+                        <div class="btn btn-primary confirm"
+                             id="dialog_btn_confirm">
+                            {{ "dialog.ok"|trans }}
+                        </div>
+                    {% endblock %}
+                    {% block dialog_actions_cancel %}
+                        <div class="btn btn-secondary cancel"
+                             id="dialog_btn_cancel">
+                            {{ "dialog.cancel"|trans }}
+                        </div>
+                    {% endblock %}
+                {% endblock %}
+            </div>
+        {% endblock %}
+    </dialog>
+{% endblock %}

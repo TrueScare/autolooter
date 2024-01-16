@@ -31,14 +31,6 @@
         {% endblock %}
     </main>
 </section>
-
-<dialog id="dialog" class="card position-fixed">
-    <div id="dialog_content" class="card-body">
-    </div>
-    <div class="btn-group">
-        <div class="btn btn-primary confirm" id="dialog_btn_confirm">{{ "dialog.ok"|trans }}</div>
-        <div class="btn btn-secondary cancel" id="dialog_btn_cancel">{{ "dialog.cancel"|trans }}</div>
-    </div>
-</dialog>
+{% include 'components/dialog/index.html.twig' %}
 </body>
 </html>
