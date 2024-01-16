@@ -1,91 +1,106 @@
 {% block pagination %}
-<section class="pagination row">
-    {% block pagination_headline %}
-        <h1 class="pagination-headline col-12 text-center mb-5">
-            {{ "pagination.entities_found"|trans({'%count%': maxItemsFound}) }}
-        </h1>
-    {% endblock %}
-    {% block pagination_filter %}
-    <div class="col-12" aria-label="{{ "section.pagination"|trans }}">
-        <form class="pagination row align-items-center m-0"
-              method="GET"
-              href="{{ route }}">
-            {% block pagination_filter_searchbar %}
-                <div class="col-12 col-lg-6 pb-3">
-                    <div class="row searchbar">
-                        <div class="col-8 col-lg-10">
-                            <input name="searchTerm"
-                                   type="text"
-                                   placeholder="{{ "pagination.search_placeholder"|trans }}"
-                                   class="form-control" {% if searchTerm %}value="{{ searchTerm }}"{% endif %}
-                                   aria-label="{{ "pagination.search_placeholder"|trans }}">
+    <section class="pagination row"
+             data-controller="pagination"
+    >
+        {% block pagination_headline %}
+            <h1 class="pagination-headline col-12 text-center mb-5">
+                {{ "pagination.entities_found"|trans({'%count%': maxItemsFound}) }}
+            </h1>
+        {% endblock %}
+        {% block pagination_filter %}
+            <div class="col-12" aria-label="{{ "section.pagination"|trans }}">
+                <div class="pagination row align-items-center m-0"
+                      data-pagination-target="paginationForm"
+                >
+                    {% block pagination_filter_searchbar %}
+                        <div class="col-12 col-lg-6 pb-3">
+                            <div class="row searchbar">
+                                <div class="col-8 col-lg-10">
+                                    <input name="searchTerm"
+                                           type="text"
+                                           placeholder="{{ "pagination.search_placeholder"|trans }}"
+                                           class="form-control" {% if searchTerm %}value="{{ searchTerm }}"{% endif %}
+                                           aria-label="{{ "pagination.search_placeholder"|trans }}"
+                                           data-pagination-target="paginationSearchTerm"
+                                    >
+                                </div>
+                                <div class="col-4 col-lg-2">
+                                    <button class="w-100 btn btn-primary"
+                                            aria-label="{{ "pagination.search"|trans }}"
+                                    >
+                                        {{ "pagination.search"|trans }}
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-4 col-lg-2">
-                            <button type="submit"
-                                    class="w-100 btn btn-primary"
-                                    aria-label="{{ "pagination.search"|trans }}">
-                                {{ "pagination.search"|trans }}
-                            </button>
+                    {% endblock %}
+                    {% block pagination_filter_pagesize %}
+                        <div class="col-12 col-lg-6 pb-3">
+                            <div class="row">
+                                <div class="col-4">
+                                    <select name="pageSize"
+                                            class="form-select page-size"
+                                            onchange="this.form.submit()"
+                                            aria-label="{{ "pagination.pagesize_label"|trans }}"
+                                            data-pagination-target="paginationPageSize"
+                                    >
+                                        {% for value in [50, 25, 10] %}
+                                            <option value="{{ value }}"
+                                                    {% if value == pageSize %}selected{% endif %}>{{ value }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-8">
+                                    <select name="order"
+                                            class="form-select page-order"
+                                            onchange="this.form.submit()"
+                                            aria-label="{{ "pagination.ordering"|trans }}"
+                                            data-pagination-target="paginationOrder"
+                                    >
+                                        {% for orderOption in orderOptions %}
+                                            <option value="{{ orderOption.value }}"
+                                                    {% if orderOption == order %}selected{% endif %}>
+                                                {{ orderOption|trans }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    {% endblock %}
+                    {% block pagination_filter_pageselect %}
+                        <div class="col-12 col-lg-6 pb-3">
+                            <div class="row pe-lg-3">
+                                <div class="col-4">
+                                    <button name="page"
+                                            class="w-100 btn btn-primary previous {% if (page - 1) <= 0 %}disabled{% endif %}"
+                                            value="{{ page - 1 }}"
+                                            aria-label="{{ "pagination.previous"|trans }}"
+                                            data-pagination-target="paginationPrevious"
+                                            data-action="click->pagination#pagePrevious"
+                                    >
+                                        {{ "pagination.previous"|trans }}
+                                    </button>
+                                </div>
+                                <div class="page-display col-4 text-center">
+                                    {{ page }} / {{ (maxItemsFound/pageSize)|round(0,'ceil') }}
+                                </div>
+                                <div class="col-4">
+                                    <button name="page"
+                                            class="w-100 btn btn-primary next {% if (page + 1) > (maxItemsFound/pageSize)|round(0,'ceil') %}disabled{% endif %}"
+                                            value="{{ page + 1 }}"
+                                            aria-label="{{ "pagination.next"|trans }}"
+                                            data-pagination-target="paginationNext"
+                                            data-action="click->pagination#pageNext"
+                                    >
+                                        {{ "pagination.next"|trans }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endblock %}
                 </div>
-            {% endblock %}
-            {% block pagination_filter_pagesize %}
-                <div class="col-12 col-lg-6 pb-3">
-                    <div class="row">
-                        <div class="col-4">
-                            <select name="pageSize"
-                                    class="form-select page-size"
-                                    onchange="this.form.submit()"
-                                    aria-label="{{ "pagination.pagesize_label"|trans }}">
-                                {% for value in [50, 25, 10] %}
-                                    <option value="{{ value }}"
-                                            {% if value == pageSize %}selected{% endif %}>{{ value }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-8">
-                            <select name="order"
-                                    class="form-select page-size"
-                                    onchange="this.form.submit()"
-                                    aria-label="{{ "pagination.ordering"|trans }}">
-                                {% for orderOption in orderOptions %}
-                                    <option value="{{ orderOption.value }}" {% if orderOption == order %}selected{% endif %}>
-                                        {{ orderOption|trans }}
-                                    </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            {% endblock %}
-            {% block pagination_filter_pageselect %}
-                <div class="col-12 col-lg-6 pb-3">
-                    <div class="row pe-lg-3">
-                        <div class="col-4">
-                            <button name="page"
-                                    class="w-100 btn btn-primary previous {% if (page - 1) <= 0 %}disabled{% endif %}"
-                                    value="{{ page - 1 }}"
-                                    aria-label="{{ "pagination.previous"|trans }}">
-                                {{ "pagination.previous"|trans }}
-                            </button>
-                        </div>
-                        <div class="page-display col-4 text-center">
-                            {{ page }} / {{ (maxItemsFound/pageSize)|round(0,'ceil') }}
-                        </div>
-                        <div class="col-4">
-                            <button name="page"
-                                    class="w-100 btn btn-primary next {% if (page + 1) > (maxItemsFound/pageSize)|round(0,'ceil') %}disabled{% endif %}"
-                                    value="{{ page + 1 }}"
-                                    aria-label="{{ "pagination.next"|trans }}">
-                                {{ "pagination.next"|trans }}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            {% endblock %}
-        </form>
-    </div>
-    {% endblock %}
-</section>
+            </div>
+        {% endblock %}
+    </section>
 {% endblock %}

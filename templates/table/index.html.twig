@@ -3,5 +3,5 @@
 {% block title %}Tabellen{% endblock %}
 
 {% block body %}
-    {% include 'components/listing.html.twig' with {type: 'table', entities:tables, route: path('table_index')} %}
+    {% include 'components/listing.html.twig' with {type: 'table', entities:tables, route: path('table_pagination')} %}
 {% endblock %}

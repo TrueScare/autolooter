@@ -1,0 +1,17 @@
+{% block listing_content %}
+
+    {% block listing_header %}
+        <div class="col-12 listing-header"
+             data-listing-target="pagination"
+        >
+            {% include 'components/pagination.html.twig' %}
+        </div>
+    {% endblock %}
+    {% block listing_items %}
+        {% for entity in entities %}
+            {% block listing_item_include %}
+                {% include 'components/cards/card-'~type~'.html.twig' %}
+            {% endblock %}
+        {% endfor %}
+    {% endblock %}
+{% endblock %}

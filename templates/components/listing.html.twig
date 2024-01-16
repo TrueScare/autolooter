@@ -1,16 +1,13 @@
 {% block listing %}
-    <div class="listing row">
-        {% block listing_header %}
-            <div class="col-12">
-                {% include 'components/pagination.html.twig' %}
-            </div>
-        {% endblock %}
-        {% block listing_items %}
-            {% for entity in entities %}
-                {% block listing_item_include %}
-                    {% include 'components/cards/card-'~type~'.html.twig' %}
-                {% endblock %}
-            {% endfor %}
-        {% endblock %}
+    <div class="listing"
+         data-controller="listing"
+         data-action="pagination:reload->listing#reload"
+         data-listing-route-value="{{ route }}"
+    >
+        <div class="listing-content row"
+             data-listing-target="content"
+        >
+            {% include 'components/listing_content.html.twig' %}
+        </div>
     </div>
 {% endblock %}

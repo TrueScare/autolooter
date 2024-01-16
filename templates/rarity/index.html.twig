@@ -3,5 +3,5 @@
 {% block title %}Raritäten{% endblock %}
 
 {% block body %}
-    {% include 'components/listing.html.twig' with {type:'rarity', entities:rarities, route: path('rarity_index')} %}
+    {% include 'components/listing.html.twig' with {type:'rarity', entities:rarities, route: path('rarity_pagination')} %}
 {% endblock %}

@@ -157,4 +157,32 @@ class ItemController extends BaseController
 
         return $this->redirectToRoute('item_index');
     }
+
+    #[Route('/item/pagination',name:'item_pagination')]
+    public function paginationGetItems(Request $request): Response
+    {
+        $order = Order::tryFrom($request->query->get('order'));
+        $pageInfo = $this->paginationService->getPaginationInfoFromRequest($request);
+
+        $items = $this->itemRepository->getItemsByOwner($this->getUser(), $pageInfo, $order);
+        $maxItemsFound = $this->itemRepository->getItemsCountByOwner($this->getUser(), $pageInfo);
+
+        return $this->json($this->render('components/listing_content.html.twig', [
+            'entities' => $items,
+            'maxItemsFound' => $maxItemsFound,
+            'page' => $pageInfo->getPage(),
+            'pageSize' => $pageInfo->getPageSize(),
+            'orderOptions' => [
+                Order::NAME_ASC,
+                Order::NAME_DESC,
+                Order::RARITY_ASC,
+                Order::RARITY_DESC
+            ],
+            'order' => $order,
+            'headerActions' => $this->getHeaderActions(),
+            'searchTerm' => $pageInfo->getSearchTerm(),
+            'type' => 'item'
+        ])
+        ->getContent());
+    }
 }

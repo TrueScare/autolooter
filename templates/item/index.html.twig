@@ -3,5 +3,5 @@
 {% block title %}Items{% endblock %}
 
 {% block body %}
-    {% include 'components/listing.html.twig' with {type: 'item', entities:items, route: path('item_index')} %}
+    {% include 'components/listing.html.twig' with {type: 'item', entities:items, route: path('item_pagination')} %}
 {% endblock %}

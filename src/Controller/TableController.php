@@ -128,11 +128,39 @@ class TableController extends BaseController
             $this->entityManager->remove($table);
             $this->entityManager->flush();
             $this->addFlash('success', $translator->trans('success.delete'));
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             $this->addFlash('danger', $translator->trans('error.delete'));
             $this->logger->error($e);
         }
 
         return $this->redirectToRoute('table_index');
+    }
+
+    #[Route('/table/pagination', name: "table_pagination")]
+    public function paginationGetTables(Request $request): Response
+    {
+        $order = Order::tryFrom($request->query->get('order'));
+        $pageInfo = $this->paginationService->getPaginationInfoFromRequest($request);
+
+        $tables = $this->tableRepository->getTablesByOwner($this->getUser(), $pageInfo, $order);
+        $maxItemsFound = $this->tableRepository->getTableCountByOwner($this->getUser(), $pageInfo);
+
+        return $this->json($this->render('components/listing_content.html.twig', [
+            'entities' => $tables,
+            'maxItemsFound' => $maxItemsFound,
+            'page' => $pageInfo->getPage(),
+            'pageSize' => $pageInfo->getPageSize(),
+            'orderOptions' => [
+                Order::NAME_ASC,
+                Order::NAME_DESC,
+                Order::RARITY_ASC,
+                Order::RARITY_DESC
+            ],
+            'order' => $order,
+            'headerActions' => $this->getHeaderActions(),
+            'searchTerm' => $pageInfo->getSearchTerm(),
+            'type' => 'table'
+        ])->getContent()
+        );
     }
 }
