@@ -59,7 +59,7 @@ class TableRepository extends ServiceEntityRepository
         return new Paginator($qb, fetchJoinCollection: true);
     }
 
-    public function getTableCountByOwner(UserInterface $owner, PaginationInfo $paginationInfo)
+    public function getTableCountByOwner(UserInterface $owner, PaginationInfo $paginationInfo): float|bool|int|string|null
     {
         $qb = $this->getDefaultQueryBuilder($owner)
             ->select('count(t.id)');

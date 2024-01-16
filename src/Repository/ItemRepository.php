@@ -9,6 +9,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -42,8 +43,7 @@ class ItemRepository extends ServiceEntityRepository
         $qb = $this->handleOrder($qb, $order);
         $qb = $this->handleSearchTerm($qb, $paginationInfo);
 
-        return $qb->getQuery()
-            ->execute();
+        return new Paginator($qb,fetchJoinCollection: true);
     }
 
     /**
@@ -56,8 +56,6 @@ class ItemRepository extends ServiceEntityRepository
     public function getItemsCountByOwner(UserInterface $owner, PaginationInfo $paginationInfo): float|bool|int|string|null
     {
         $qb = $this->getDefaultQueryBuilder($owner)
-            ->setMaxResults($paginationInfo->getPageSize())
-            ->setFirstResult(($paginationInfo->getPage() - 1) * $paginationInfo->getPageSize())
             ->select('count(i.id)');
 
         $qb = $this->handleSearchTerm($qb, $paginationInfo);
@@ -78,6 +76,7 @@ class ItemRepository extends ServiceEntityRepository
             $qb->andWhere('i.name like :term OR i.description like :term')
                 ->setParameter('term', '%' . $paginationInfo->getSearchTerm() . '%');
         }
+
 
         return $qb;
     }
