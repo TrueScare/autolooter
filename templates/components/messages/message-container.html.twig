@@ -1,0 +1,9 @@
+{% block message_container %}
+    <div class="message-container"
+         aria-label="{{ "section.messages"|trans }}"
+         data-controller="message-container"
+         data-message-container-route-value="{{ path('api_messages_all') }}"
+    >
+        {% include 'components/messages/flash-message-binder.html.twig' %}
+    </div>
+{% endblock %}

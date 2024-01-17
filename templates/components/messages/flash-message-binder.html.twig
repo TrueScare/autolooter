@@ -1,0 +1,7 @@
+{% block flash_message_binder %}
+    {% for label, messages in app.flashes() %}
+        {% for message in messages %}
+            {% include 'components/messages/flash-messages.html.twig' %}
+        {% endfor %}
+    {% endfor %}
+{% endblock %}

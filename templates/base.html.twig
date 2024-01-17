@@ -19,13 +19,7 @@
 {% endblock %}
 
 <section class="container" aria-label="{{ "section.main"|trans }}">
-    <div class="message-container" aria-label="{{ "section.messages"|trans }}">
-        {% for label, messages in app.flashes() %}
-            {% for message in messages %}
-                {% include 'components/messages/flash-messages.html.twig' %}
-            {% endfor %}
-        {% endfor %}
-    </div>
+    {% include 'components/messages/message-container.html.twig' %}
     <main>
         {% block body %}
         {% endblock %}
