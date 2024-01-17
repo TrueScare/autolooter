@@ -20,12 +20,17 @@ export default class extends Controller {
         request.open('POST', route)
 
         request.responseType = 'json';
+        request.timeout = 5000;
+        request.ontimeout = () => {
+            alert('rip');
+            this.element.classList.toggle('loading');
+        };
         request.onreadystatechange = () => {
             if (request.readyState === 4 && request.status === 200) {
                 this.contentTarget.innerHTML = request.response;
                 this.element.classList.toggle('loading')
             }
-        }
+        };
 
         this.updateUrl(page, searchTerm, order, pageSize);
 

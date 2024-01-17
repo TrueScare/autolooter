@@ -10,15 +10,18 @@ export default class extends Controller {
         'paginationOrder'
     ];
 
-    pagePrevious() {
+    pagePrevious(Event) {
+        Event.preventDefault();
         this.dispatchReload(this.paginationPreviousTarget.value);
     }
 
-    pageNext() {
+    pageNext(Event) {
+        Event.preventDefault();
         this.dispatchReload(this.paginationNextTarget.value);
     }
 
-    update() {
+    update(Event) {
+        Event.preventDefault();
         this.dispatchReload(1,'');
     }
 

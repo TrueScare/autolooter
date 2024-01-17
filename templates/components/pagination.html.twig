@@ -41,7 +41,6 @@
                                 <div class="col-4">
                                     <select name="pageSize"
                                             class="form-select page-size"
-                                            onchange="this.form.submit()"
                                             aria-label="{{ "pagination.pagesize_label"|trans }}"
                                             data-pagination-target="paginationPageSize"
                                             data-action="change->pagination#update"
@@ -55,7 +54,6 @@
                                 <div class="col-8">
                                     <select name="order"
                                             class="form-select page-order"
-                                            onchange="this.form.submit()"
                                             aria-label="{{ "pagination.ordering"|trans }}"
                                             data-pagination-target="paginationOrder"
                                             data-action="change->pagination#update"
