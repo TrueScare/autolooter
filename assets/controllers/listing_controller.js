@@ -3,7 +3,8 @@ import {Controller} from "@hotwired/stimulus";
 export default class extends Controller {
     static targets = [
         'pagination',
-        'content'
+        'content',
+        'loader'
     ];
 
     static values = {
@@ -11,7 +12,7 @@ export default class extends Controller {
     }
 
     reload({detail: {page, searchTerm, order, pageSize}}) {
-        this.contentTarget.innerHTML = 'loading...'
+        this.element.classList.toggle('loading');
 
         let route = this.handleRoute(this.routeValue, page, searchTerm, order, pageSize);
 
@@ -22,6 +23,7 @@ export default class extends Controller {
         request.onreadystatechange = () => {
             if (request.readyState === 4 && request.status === 200) {
                 this.contentTarget.innerHTML = request.response;
+                this.element.classList.toggle('loading')
             }
         }
 

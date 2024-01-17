@@ -19,7 +19,7 @@ export default class extends Controller {
     }
 
     update() {
-        this.dispatchReload()
+        this.dispatchReload(1,'');
     }
 
     dispatchReload(page = null, searchTerm = null, order = null, pageSize = null) {
