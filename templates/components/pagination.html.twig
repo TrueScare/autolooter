@@ -10,7 +10,7 @@
         {% block pagination_filter %}
             <div class="col-12" aria-label="{{ "section.pagination"|trans }}">
                 <div class="pagination row align-items-center m-0"
-                      data-pagination-target="paginationForm"
+                     data-pagination-target="paginationForm"
                 >
                     {% block pagination_filter_searchbar %}
                         <div class="col-12 col-lg-6 pb-3">
@@ -27,6 +27,7 @@
                                 <div class="col-4 col-lg-2">
                                     <button class="w-100 btn btn-primary"
                                             aria-label="{{ "pagination.search"|trans }}"
+                                            data-action="click->pagination#update"
                                     >
                                         {{ "pagination.search"|trans }}
                                     </button>
@@ -43,6 +44,7 @@
                                             onchange="this.form.submit()"
                                             aria-label="{{ "pagination.pagesize_label"|trans }}"
                                             data-pagination-target="paginationPageSize"
+                                            data-action="change->pagination#update"
                                     >
                                         {% for value in [50, 25, 10] %}
                                             <option value="{{ value }}"
@@ -56,6 +58,7 @@
                                             onchange="this.form.submit()"
                                             aria-label="{{ "pagination.ordering"|trans }}"
                                             data-pagination-target="paginationOrder"
+                                            data-action="change->pagination#update"
                                     >
                                         {% for orderOption in orderOptions %}
                                             <option value="{{ orderOption.value }}"
@@ -85,6 +88,11 @@
                                 <div class="page-display col-4 text-center">
                                     {{ page }} / {{ (maxItemsFound/pageSize)|round(0,'ceil') }}
                                 </div>
+                                <input name="page_current"
+                                       type="hidden"
+                                       value="{{ page }}"
+                                       data-pagination-target="paginationCurrent"
+                                >
                                 <div class="col-4">
                                     <button name="page"
                                             class="w-100 btn btn-primary next {% if (page + 1) > (maxItemsFound/pageSize)|round(0,'ceil') %}disabled{% endif %}"

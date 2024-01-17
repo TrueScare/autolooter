@@ -1,7 +1,8 @@
 import {Controller} from "@hotwired/stimulus";
 
 export default class extends Controller {
-    static targets= [
+    static targets = [
+        'paginationCurrent',
         'paginationPrevious',
         'paginationNext',
         'paginationSearchTerm',
@@ -9,20 +10,25 @@ export default class extends Controller {
         'paginationOrder'
     ];
 
-    pagePrevious(){
+    pagePrevious() {
         this.dispatchReload(this.paginationPreviousTarget.value);
     }
-    pageNext(){
+
+    pageNext() {
         this.dispatchReload(this.paginationNextTarget.value);
     }
 
-    dispatchReload(page){
+    update() {
+        this.dispatchReload()
+    }
+
+    dispatchReload(page = null, searchTerm = null, order = null, pageSize = null) {
         this.dispatch('reload', {
             detail: {
-                page: page,
-                searchTerm:this.paginationSearchTermTarget.value,
-                order:this.paginationOrderTarget.value,
-                pageSize: this.paginationPageSizeTarget.value
+                page: page ?? this.paginationCurrentTarget.value,
+                searchTerm: searchTerm ?? this.paginationSearchTermTarget.value,
+                order: order ?? this.paginationOrderTarget.value,
+                pageSize: pageSize ?? this.paginationPageSizeTarget.value
             }
         });
     }
