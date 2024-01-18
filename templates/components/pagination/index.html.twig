@@ -1,6 +1,5 @@
 {% block pagination %}
     <section class="pagination row"
-             data-controller="pagination"
     >
         {% block pagination_headline %}
             <h1 class="pagination-headline col-12 text-center mb-5">
@@ -69,42 +68,7 @@
                             </div>
                         </div>
                     {% endblock %}
-                    {% block pagination_filter_pageselect %}
-                        <div class="col-12 col-lg-6 pb-3">
-                            <div class="row pe-lg-3">
-                                <div class="col-4">
-                                    <button name="page"
-                                            class="w-100 btn btn-primary previous {% if (page - 1) <= 0 %}disabled{% endif %}"
-                                            value="{{ page - 1 }}"
-                                            aria-label="{{ "pagination.previous"|trans }}"
-                                            data-pagination-target="paginationPrevious"
-                                            data-action="click->pagination#pagePrevious"
-                                    >
-                                        {{ "pagination.previous"|trans }}
-                                    </button>
-                                </div>
-                                <div class="page-display col-4 text-center">
-                                    {{ page }} / {{ (maxItemsFound/pageSize)|round(0,'ceil') }}
-                                </div>
-                                <input name="page_current"
-                                       type="hidden"
-                                       value="{{ page }}"
-                                       data-pagination-target="paginationCurrent"
-                                >
-                                <div class="col-4">
-                                    <button name="page"
-                                            class="w-100 btn btn-primary next {% if (page + 1) > (maxItemsFound/pageSize)|round(0,'ceil') %}disabled{% endif %}"
-                                            value="{{ page + 1 }}"
-                                            aria-label="{{ "pagination.next"|trans }}"
-                                            data-pagination-target="paginationNext"
-                                            data-action="click->pagination#pageNext"
-                                    >
-                                        {{ "pagination.next"|trans }}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    {% endblock %}
+                    {% include 'components/pagination/pagination.html.twig' %}
                 </div>
             </div>
         {% endblock %}
