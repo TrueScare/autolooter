@@ -1,0 +1,9 @@
+{% block form_basic %}
+    <div class="card">
+        <div class="card-body">
+            {% block form_basic_form_content %}
+                {{ form(form) }}
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}

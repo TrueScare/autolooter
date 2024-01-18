@@ -3,10 +3,6 @@
 {% block title %}Items {% if item is defined and item.name %}- {{ item.name }}{% endif %}{% endblock %}
 
 {% block body %}
-    <div class="card">
-        <div class="card-body">
-            {{ form(form) }}
-        </div>
-    </div>
+    {% include 'components/forms/form_basic.html.twig' %}
 {% endblock %}
 

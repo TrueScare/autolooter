@@ -4,7 +4,7 @@
         <div class="col-12 listing-header"
              data-listing-target="pagination"
         >
-            {% include 'components/pagination.html.twig' %}
+            {% include 'components/pagination/index.html.twig' %}
         </div>
     {% endblock %}
     {% block listing_items %}
@@ -14,4 +14,7 @@
             {% endblock %}
         {% endfor %}
     {% endblock %}
+    <div class="row">
+        {% include 'components/pagination/pagination.html.twig' %}
+    </div>
 {% endblock %}
