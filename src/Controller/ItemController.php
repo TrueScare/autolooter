@@ -10,6 +10,7 @@ use App\Service\PaginationService;
 use App\Struct\Order;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -139,9 +140,9 @@ class ItemController extends BaseController
      * @return Response
      */
     #[Route('/item/delete/{id}', name: 'item_delete')]
-    public function delete(Item $item,TranslatorInterface $translator):Response
+    public function delete(Item $item, TranslatorInterface $translator): Response
     {
-        if($this->getUser() !== $item->getOwner()){
+        if ($this->getUser() !== $item->getOwner()) {
             $this->addFlash('danger', $translator->trans('error.item.notfound'));
             return $this->redirectToRoute('item_index');
         }
@@ -150,7 +151,7 @@ class ItemController extends BaseController
             $this->entityManager->remove($item);
             $this->entityManager->flush();
             $this->addFlash('success', $translator->trans('success.delete'));
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             $this->addFlash('danger', $translator->trans('error.delete'));
             $this->logger->error($e);
         }
@@ -158,7 +159,7 @@ class ItemController extends BaseController
         return $this->redirectToRoute('item_index');
     }
 
-    #[Route('/item/pagination',name:'item_pagination')]
+    #[Route('/item/pagination', name: 'item_pagination')]
     public function paginationGetItems(Request $request): Response
     {
         $order = Order::tryFrom($request->query->get('order'));
@@ -183,6 +184,52 @@ class ItemController extends BaseController
             'searchTerm' => $pageInfo->getSearchTerm(),
             'type' => 'item'
         ])
-        ->getContent());
+            ->getContent());
+    }
+
+    #[Route('/api/item/edit/{id?}', name: 'api_item_edit')]
+    public function apiDetail(?Item $item, Request $request, TranslatorInterface $translator): JsonResponse
+    {
+        if ($item?->getOwner() !== $this->getUser()) {
+            $this->redirectToRoute('app_home');
+        }
+
+        if (empty($item)) {
+            $item = new Item();
+        }
+
+        /** @var User $owner */
+        $owner = $this->getUser();
+
+        $option = [
+            'tableChoices' => $owner->getTables(),
+            'rarityChoices' => $owner->getRarities(),
+            'route' => $this->generateUrl('item_edit', ['id' => $item?->getId() ?? null ])
+        ];
+
+        $form = $this->createForm(ItemFormType::class, $item, $option);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Item $item */
+            $item = $form->getData();
+            $item->setOwner($this->getUser());
+
+            try {
+                $this->entityManager->persist($item);
+                $this->entityManager->flush();
+                $this->addFlash('success', $translator->trans('success.save'));
+            } catch (\Exception $e) {
+                $this->logger->error($e);
+                $this->addFlash('danger', $translator->trans('error.save'));
+            }
+        }
+
+        return $this->json(
+            $this->render('components/forms/form_basic.html.twig', [
+                'item' => $item,
+                'form' => $form->createView()
+            ])->getContent()
+        );
     }
 }

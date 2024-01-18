@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Item;
 use App\Entity\Rarity;
 use App\Entity\Table;
+use PhpParser\Node\Scalar\String_;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -45,7 +46,8 @@ class ItemFormType extends AbstractType
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'label.save',
-            ]);
+            ])
+            ->setAction($options['route']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -53,7 +55,8 @@ class ItemFormType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Item::class,
             'tableChoices' => Table::class,
-            'rarityChoices' => Rarity::class
+            'rarityChoices' => Rarity::class,
+            'route' => ''
         ]);
     }
 }

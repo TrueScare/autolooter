@@ -9,6 +9,7 @@ export default class extends Controller {
     static values = {
         route: String,
     }
+
     connect() {
         this.dialog = document.querySelector('#dialog');
         this.dialogContent = document.querySelector('#dialog_content');
@@ -16,21 +17,38 @@ export default class extends Controller {
         this.dialogCancel = document.querySelector('#dialog_btn_cancel');
     }
 
-    show(event) {
-        this.dialogContent.innerHTML = event.params.message;
-        document.querySelector('body').style.overflow = 'hidden';
-        this.dialogConfirm.addEventListener('click', () => this.execRoute());
-        this.dialogCancel.addEventListener('click', () => this.close());
-        this.dialog.style.display = 'block';
-        this.dialog.showModal();
+    showMessage(event) {
+        this.prepareContent(event.params.message);
     }
-    close(){
+
+    showPage({detail: {content}}) {
+        this.prepareContent(content);
+    }
+
+    close() {
         this.dialogContent.innerHTML = '';
         document.querySelector('body').style.overflow = 'auto';
-        this.dialogConfirm.removeEventListener('click', () => this.execRoute())
+        if (this.hasRouteValue) {
+            this.dialogConfirm.removeEventListener('click', () => this.execRoute())
+        } else {
+            this.dialogConfirm.classList.toggle('d-none');
+        }
         this.dialogCancel.removeEventListener('click', () => this.close());
         this.dialog.style.display = 'none';
         this.dialog.close();
+    }
+
+    prepareContent(content) {
+        this.dialogContent.innerHTML = content;
+        document.querySelector('body').style.overflow = 'hidden';
+        if (this.hasRouteValue) {
+            this.dialogConfirm.addEventListener('click', () => this.execRoute());
+        } else {
+            this.dialogConfirm.classList.toggle('d-none');
+        }
+        this.dialogCancel.addEventListener('click', () => this.close());
+        this.dialog.style.display = 'block';
+        this.dialog.showModal();
     }
 
     execRoute() {
