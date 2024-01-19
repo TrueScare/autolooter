@@ -26,10 +26,11 @@ export default class extends Controller {
     }
 
     dispatchReload(page = null, searchTerm = null, order = null, pageSize = null) {
+        console.log(searchTerm ?? this.paginationSearchTermTarget.value);
         this.dispatch('reload', {
             detail: {
                 page: page ?? this.paginationCurrentTarget.value,
-                searchTerm: searchTerm ?? this.paginationSearchTermTarget.value,
+                searchTerm: (searchTerm.length > 0) ? searchTerm: this.paginationSearchTermTarget.value,
                 order: order ?? this.paginationOrderTarget.value,
                 pageSize: pageSize ?? this.paginationPageSizeTarget.value
             }

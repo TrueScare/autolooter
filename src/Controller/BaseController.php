@@ -40,7 +40,7 @@ class BaseController extends AbstractController
                 [
                     new HeaderAction(
                         'neue Seltenheit',
-                        $this->generateUrl('rarity_new')
+                        $this->generateUrl('api_rarity_edit')
                     )
                 ]
             ),
@@ -50,7 +50,7 @@ class BaseController extends AbstractController
                 [
                     new HeaderAction(
                         'neue Tabelle',
-                        $this->generateUrl('table_new')
+                        $this->generateUrl('api_table_edit')
                     )
                 ]
             ),
@@ -60,7 +60,7 @@ class BaseController extends AbstractController
                 [
                     new HeaderAction(
                         'neues Item',
-                        $this->generateUrl('item_new')
+                        $this->generateUrl('api_item_edit')
                     )
                 ]
             )

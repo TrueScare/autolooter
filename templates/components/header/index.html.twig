@@ -12,16 +12,22 @@
     </div>
 
     {% if hasActions %}
-        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0 me-3" aria-label="{{ "section.navigation"|trans }}">
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0 me-3"
+            aria-label="{{ "section.navigation"|trans }}">
             {% for action in headerActions %}
                 <li class="nav-item">
-                    <a href="{{ action.route }}" class="btn nav-link btn-secondary fw-bold nav-link px-2">{{ action.label }}</a>
+                    <a href="{{ action.route }}"
+                       class="btn nav-link btn-secondary fw-bold nav-link px-2">{{ action.label }}</a>
 
                     {% if action.subactions is defined and action.subactions|length > 0 %}
                         <ul class="list-unstyled sub-nav bg-secondary rounded-bottom-1">
                             {% for subaction in action.subactions %}
                                 <li>
-                                    <a href="{{ subaction.route }}" class="btn btn-secondary fw-bold nav-link px-2">{{ subaction.label }}</a>
+                                    <div class="btn btn-secondary fw-bold nav-link px-2"
+                                         data-controller="dialog modal-loader"
+                                         data-action="modal-loader:loaded->dialog#showPage click->modal-loader#request"
+                                         data-modal-loader-route-value="{{ subaction.route }}"
+                                    >{{ subaction.label }}</div>
                                 </li>
                             {% endfor %}
                         </ul>
