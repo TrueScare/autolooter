@@ -163,4 +163,57 @@ class TableController extends BaseController
         ])->getContent()
         );
     }
+
+    #[Route('/api/table/edit/{id?}', name: 'api_table_edit')]
+    public function apiDetail(?Table $table, Request $request, TranslatorInterface $translator): Response
+    {
+        if ($table?->getOwner() !== $this->getUser()) {
+            $this->redirectToRoute('app_home');
+        }
+
+        if (empty($table)) {
+            $table = new Table();
+        }
+
+        /** @var User $owner */
+        $owner = $this->getUser();
+
+        $table->setOwner($owner);
+
+        $choices = $owner->getTables()->filter(function ($element) use ($table) {
+            // do not be able to create circle references
+            /** @var Table $element */
+            return empty(($table?->getChildrenCollectionRecursive()[$element->getId()]));
+        });
+
+        $option = [
+            'tableChoices' => $choices,
+            'rarityChoices' => $owner->getRarities(),
+            'route' => $this->generateUrl('table_edit', ['id' => $table?->getId() ?? null])
+        ];
+
+        $form = $this->createForm(TableFormType::class, $table, $option);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Table $table */
+            $table = $form->getData();
+
+            try {
+                $this->entityManager->persist($table);
+                $this->entityManager->flush();
+                $this->addFlash('success', $translator->trans('success.save'));
+            } catch (\Exception $e) {
+                $this->logger->error($e);
+                $this->addFlash('danger', $translator->trans('error.save'));
+            }
+        }
+
+        return $this->json(
+            $this->render('components/forms/form_basic.html.twig', [
+                'table' => $table,
+                'form' => $form->createView()
+            ])->getContent()
+        );
+    }
 }

@@ -43,7 +43,8 @@ class TableFormType extends AbstractType
             ])
             ->add('submit', SubmitType::class,[
                 'label' => 'label.save'
-            ]);
+            ])
+        ->setAction($options['route']);
         ;
     }
 
@@ -52,7 +53,8 @@ class TableFormType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Table::class,
             'tableChoices' => Table::class,
-            'rarityChoices' => Rarity::class
+            'rarityChoices' => Rarity::class,
+            'route' => ''
         ]);
     }
 }

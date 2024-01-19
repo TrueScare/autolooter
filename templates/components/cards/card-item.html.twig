@@ -14,8 +14,9 @@
 {% endblock %}
 
 {% block card_footer %}
+    {
     <div class="btn-group">
-        {% include 'components/actions/edit-action.html.twig' with {route: path('item_edit', {id:entity.id})} %}
+        {% include 'components/actions/edit-action.html.twig' with {detailRoute:path('api_item_edit',{id:entity.id})} %}
         {% include 'components/actions/delete-action.html.twig' with {route: path('item_delete', {id: entity.id}), identifier: entity.name} %}
     </div>
 

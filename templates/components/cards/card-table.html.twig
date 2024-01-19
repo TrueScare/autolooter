@@ -23,7 +23,7 @@
 {% block card_text_inner %}{{ entity.description|u.truncate(180, '...') }}{% endblock %}
 {% block card_footer %}
     <div class="btn-group">
-        {% include 'components/actions/edit-action.html.twig' with {route: path('table_edit', {id:entity.id})} %}
+        {% include 'components/actions/edit-action.html.twig' with {detailRoute: path('api_table_edit', {id:entity.id})} %}
         {% include 'components/actions/delete-action.html.twig' with {route: path('table_delete', {id: entity.id}), identifier: entity.name} %}
     </div>
 

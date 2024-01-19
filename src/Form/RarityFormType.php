@@ -32,14 +32,15 @@ class RarityFormType extends AbstractType
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'label.save'
-            ]);
-        ;
+            ])
+        ->setAction($options['route']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Rarity::class,
+            'route' => ''
         ]);
     }
 }

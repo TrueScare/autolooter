@@ -3,7 +3,7 @@
             class="btn btn-secondary"
             data-controller="dialog modal-loader"
             data-action="modal-loader:loaded->dialog#showPage click->modal-loader#request"
-            data-modal-loader-route-value="{{ path('api_item_edit', {id: entity.id}) }}"
+            data-modal-loader-route-value="{{ detailRoute }}"
     >
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen"
              viewBox="0 0 16 16">

@@ -25,7 +25,7 @@
 
 {% block card_footer %}
     <div class="btn-group">
-        {% include 'components/actions/edit-action.html.twig' with {route: path('rarity_edit', {id:entity.id})} %}
+        {% include 'components/actions/edit-action.html.twig' with {detailRoute: path('api_rarity_edit', {id:entity.id})} %}
         {% include 'components/actions/delete-action.html.twig' with {route: path('rarity_delete', {id: entity.id}), identifier: entity.name} %}
     </div>
 

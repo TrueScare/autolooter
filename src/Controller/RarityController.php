@@ -146,4 +146,46 @@ class RarityController extends BaseController
         ])->getContent()
         );
     }
+
+    #[Route('/api/rarity/edit/{id?}', name: 'api_rarity_edit')]
+    public function apiDetail(?Rarity $rarity, Request $request, TranslatorInterface $translator): Response
+    {
+        if ($rarity?->getOwner() !== $this->getUser()) {
+            $this->redirectToRoute('app_home');
+        }
+
+        if (empty($rarity)) {
+            $rarity = new Rarity();
+        }
+
+        $rarity->setOwner($this->getUser());
+
+        $options=[
+            'route' => $this->generateUrl('rarity_edit', ['id' => $rarity?->getId() ?? null])
+        ];
+
+        $form = $this->createForm(RarityFormType::class, $rarity, $options);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Rarity $rarity */
+            $rarity = $form->getData();
+
+            try {
+                $this->entityManager->persist($rarity);
+                $this->entityManager->flush();
+                $this->addFlash('success', $translator->trans('success.save'));
+            } catch (\Exception $e) {
+                $this->logger->error($e);
+                $this->addFlash('danger', $translator->trans('error.save'));
+            }
+        }
+
+        return $this->json(
+            $this->render('components/forms/form_basic.html.twig', [
+                'rarity' => $rarity,
+                'form' => $form->createView()
+            ])->getContent()
+        );
+    }
 }
