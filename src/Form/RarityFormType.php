@@ -7,6 +7,7 @@ use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -21,14 +22,17 @@ class RarityFormType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => 'label.name'
             ])
-            ->add('value', TextType::class,[
-                'label' => 'label.value'
+            ->add('value', NumberType::class,[
+                'label' => 'label.value',
+
             ])
             ->add('description', TextareaType::class, [
-                'label' => 'label.description'
+                'label' => 'label.description',
+                'required' => false
             ])
             ->add('color', ColorType::class, [
-                'label' => 'label.color'
+                'label' => 'label.color',
+                'required' => false
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'label.save'

@@ -25,7 +25,8 @@ class TableFormType extends AbstractType
                 'label' => 'label.name'
             ])
             ->add('description', TextareaType::class,[
-                'label' => 'label.description'
+                'label' => 'label.description',
+                'required' => false
             ])
             ->add('parent', EntityType::class, [
                 'class' => Table::class,

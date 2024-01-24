@@ -24,7 +24,8 @@ class ItemFormType extends AbstractType
                 'label' => 'label.name'
             ])
             ->add('description', TextareaType::class, [
-                'label' => 'label.description'
+                'label' => 'label.description',
+                'required' => false
             ])
             ->add('value_start', NumberType::class, [
                 'label' => 'label.value_from'

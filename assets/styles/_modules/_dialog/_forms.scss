@@ -1,0 +1,9 @@
+dialog form {
+    @include media-breakpoint-up(md){
+        min-width: 500px;
+    }
+
+    @include media-breakpoint-up(lg){
+        min-width: 700px;
+    }
+}
