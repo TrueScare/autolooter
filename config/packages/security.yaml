@@ -37,12 +37,12 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        - { path: ^/$, roles: PUBLIC_ACCESS } # it's the homepage which anyone should have access to
+        - { path: ^/register, roles: PUBLIC_ACCESS } # registration should be open to anyone
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/logout, roles: ROLE_USER }
-        - { path: ^/register, roles: PUBLIC_ACCESS }
-        - { path: ^/home, roles: ROLE_USER_VERIFIED }
-        - { path: ^/, roles: PUBLIC_ACCESS }
+        - { path: ^/, roles: ROLE_USER_VERIFIED }
 
 when@test:
     security:
