@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Item;
 use App\Entity\Table;
 use App\Entity\User;
+use App\Form\MoveItemsType;
 use App\Form\TableFormType;
 use App\Repository\TableRepository;
 use App\Service\PaginationService;
@@ -168,7 +170,8 @@ class TableController extends BaseController
     public function apiDetail(?Table $table, Request $request, TranslatorInterface $translator): Response
     {
         if ($table?->getOwner() !== $this->getUser()) {
-            $this->redirectToRoute('app_home');
+            $this->addFlash('danger', $translator->trans('error.save'));
+            return $this->json("",status: 403);
         }
 
         if (empty($table)) {
@@ -213,6 +216,56 @@ class TableController extends BaseController
             $this->render('components/forms/form_basic.html.twig', [
                 'table' => $table,
                 'form' => $form->createView()
+            ])->getContent()
+        );
+    }
+
+    #[Route('/api/table/items/from/{from}', name: 'api_table_move_items')]
+    public function moveItemsBetweenTables(Request $request, Table $from, TranslatorInterface $translator): \Symfony\Component\HttpFoundation\JsonResponse
+    {
+        if (!($this->getUser() === $from->getOwner())) {
+            $this->addFlash('danger', $translator->trans('error.save'));
+            return $this->json("",status: 403);
+        }
+
+        /** @var User $owner */
+        $owner = $this->getUser();
+
+        $choices = $owner->getItems();
+
+        $options = [
+            'choices' => $choices,
+            'route' => $this->generateUrl('api_table_move_items', ['from' => $from])
+        ];
+
+        $form = $this->createForm(MoveItemsType::class, null, $options);
+        if($form->isSubmitted() && $form->isValid()) {
+            // get table by table id from form
+            /** @var Table $to */
+            $to = $this->tableRepository->find($request->query->get('parent'));
+
+            $from->getItems()->map(function ($item) use ($to) {
+                /** @var Item $item */
+                $item->setParent($to);
+            });
+            $from->getItems()->clear();
+
+            try {
+                $this->entityManager->persist($from);
+                $this->entityManager->persist($to);
+
+                $this->entityManager->flush();
+
+                $this->addFlash('success', $translator->trans('success.save'));
+            } catch (\Exception $e) {
+                $this->logger->error($e);
+                $this->addFlash('danger', $translator->trans('error.save'));
+            }
+        }
+
+        return $this->json(
+            $this->render('components/forms/form_basic.html.twig', [
+                'form' => $form,
             ])->getContent()
         );
     }
