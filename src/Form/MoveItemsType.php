@@ -17,7 +17,7 @@ class MoveItemsType extends AbstractType
             ->add('parent', EntityType::class, [
                 'class' => Table::class,
                 'choice_label' => 'name',
-                'choices' => $options['tableChoices'],
+                'choices' => $options['choices'],
                 'label' => 'label.parent'
             ])
             ->add('submit', SubmitType::class, [

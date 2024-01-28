@@ -14,9 +14,22 @@
 
     {% include 'components/forms/form_basic.html.twig' %}
 
+    <div
+            class="btn btn-primary"
+            data-controller="dialog modal-loader"
+            data-action="modal-loader:loaded->dialog#showPage:preventDefault click->modal-loader#request"
+            data-modal-loader-route-value="{{ path('api_table_move_items', {'id': table.id}) }}"
+    >
+        {{ 'move.items'|trans }}
+    </div>
+
     {% if table.items|length > 0 %}
         <details class="items-container card mt-3">
-            <summary class="card-title px-3 h2"><span>{{ "card.items.label"|trans }}</span></summary>
+            <summary class="card-title px-3 h2">
+                <span>
+                    {{ "card.items.label"|trans }}
+                </span>
+            </summary>
             <div class="card-body">
                 <div class="row">
                     {% for item in table.items %}
@@ -29,7 +42,9 @@
 
     {% if table.tables|length > 0 %}
         <details class="table-container card mt-3">
-            <summary class="card-title px-3 h2"><span>{{ "card.tables.label"|trans }}</span></summary>
+            <summary class="card-title px-3 h2">
+                <span>{{ "card.tables.label"|trans }}</span>
+            </summary>
             <div class="card-body">
                 <div class="row">
                     {% for table in table.tables %}

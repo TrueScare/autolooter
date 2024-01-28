@@ -100,3 +100,5 @@ edit:
 dialog:
   cancel: 'abbrechen'
   ok: 'Ok'
+move:
+  items: 'Items verschieben'

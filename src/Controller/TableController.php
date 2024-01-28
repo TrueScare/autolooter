@@ -171,7 +171,7 @@ class TableController extends BaseController
     {
         if ($table?->getOwner() !== $this->getUser()) {
             $this->addFlash('danger', $translator->trans('error.save'));
-            return $this->json("",status: 403);
+            return $this->json("", status: 403);
         }
 
         if (empty($table)) {
@@ -220,26 +220,30 @@ class TableController extends BaseController
         );
     }
 
-    #[Route('/api/table/items/from/{from}', name: 'api_table_move_items')]
+    #[Route('/api/table/items/from/{id}', name: 'api_table_move_items')]
     public function moveItemsBetweenTables(Request $request, Table $from, TranslatorInterface $translator): \Symfony\Component\HttpFoundation\JsonResponse
     {
         if (!($this->getUser() === $from->getOwner())) {
             $this->addFlash('danger', $translator->trans('error.save'));
-            return $this->json("",status: 403);
+            return $this->json("", status: 403);
         }
 
         /** @var User $owner */
         $owner = $this->getUser();
 
-        $choices = $owner->getItems();
+        $choices = $owner->getTables()->filter(function ($element) use ($from) {
+            // do not be able to create circle references
+            /** @var Table $element */
+            return empty(($from->getChildrenCollectionRecursive()[$element->getId()]));
+        });
 
         $options = [
             'choices' => $choices,
-            'route' => $this->generateUrl('api_table_move_items', ['from' => $from])
+            'route' => $this->generateUrl('api_table_move_items', ['id' => $from->getId()])
         ];
 
         $form = $this->createForm(MoveItemsType::class, null, $options);
-        if($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             // get table by table id from form
             /** @var Table $to */
             $to = $this->tableRepository->find($request->query->get('parent'));
@@ -257,6 +261,7 @@ class TableController extends BaseController
                 $this->entityManager->flush();
 
                 $this->addFlash('success', $translator->trans('success.save'));
+                return $this->json($to);
             } catch (\Exception $e) {
                 $this->logger->error($e);
                 $this->addFlash('danger', $translator->trans('error.save'));
