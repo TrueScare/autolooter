@@ -22,7 +22,7 @@ export default class extends Controller {
             }
         }
         document.body.classList.toggle('loading');
-        request.open('PUT', this.routeValue);
+        request.open('POST', this.routeValue);
         request.send();
     }
 
@@ -36,17 +36,9 @@ export default class extends Controller {
                 this.dispatch('modal-request-loaded');
             }
         }
-        request.open('PUT', this.modalRouteValue);
+        request.open('POST', this.modalRouteValue);
         request.setRequestHeader("Content-Type", "application/json");
-        request.send(this.convertFormToObject(form.formData));
+        request.send(new FormData(form));
         console.log(request);
-    }
-
-    convertFormToObject(formData){
-        let object = {}
-        formData.forEach(function(key, value){
-            object[key] = value;
-        });
-        return JSON.stringify(object);
     }
 }
