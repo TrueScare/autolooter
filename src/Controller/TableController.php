@@ -220,7 +220,7 @@ class TableController extends BaseController
         );
     }
 
-    #[Route('/api/table/items/from/{id}', name: 'api_table_move_items')]
+    #[Route('/api/table/items/from/{id}', name: 'api_table_move_items', methods: 'PUT')]
     public function moveItemsBetweenTables(Request $request, Table $from, TranslatorInterface $translator): \Symfony\Component\HttpFoundation\JsonResponse
     {
         if (!($this->getUser() === $from->getOwner())) {
@@ -243,10 +243,13 @@ class TableController extends BaseController
         ];
 
         $form = $this->createForm(MoveItemsType::class, null, $options);
+
+        $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             // get table by table id from form
+            $data = $form->getData();
             /** @var Table $to */
-            $to = $this->tableRepository->find($request->query->get('parent'));
+            $to = $this->tableRepository->find($data['parent']);
 
             $from->getItems()->map(function ($item) use ($to) {
                 /** @var Item $item */
@@ -269,7 +272,7 @@ class TableController extends BaseController
         }
 
         return $this->json(
-            $this->render('components/forms/form_basic.html.twig', [
+            $this->render('components/forms/move_item_form.html.twig', [
                 'form' => $form,
             ])->getContent()
         );

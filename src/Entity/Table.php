@@ -313,14 +313,17 @@ class Table
     {
         $parent = $this->getParent();
         // if parent is null the child tables will become new root tables, which is fine
-        if (!empty($tables = $this->getTables())) {
+        $tables = $this->getTables();
+        if ($tables->count() > 0) {
             foreach ($tables as $table) {
                 $table->setParent($parent);
             }
         }
 
+        $items = $this->getItems();
+
         // not so good with the items as they HAVE to have a parent defined
-        if(empty($parent)){
+        if(empty($parent) && $items->count() > 0){
             $parent = new Table();
             $parent->setName('Lost and Found');
             $parent->setDescription('Lost and Found');
@@ -328,12 +331,14 @@ class Table
             $parent->setOwner($this->getOwner());
         }
 
-        if (!empty($items = $this->getItems())) {
+        if ($items->count() > 0) {
             foreach ($items as $item) {
                 $item->setParent($parent);
             }
         }
 
-        $args->getObjectManager()->persist($parent);
+        if($parent !== null) {
+            $args->getObjectManager()->persist($parent);
+        }
     }
 }
