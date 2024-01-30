@@ -37,8 +37,6 @@ export default class extends Controller {
             }
         }
         request.open('POST', this.modalRouteValue);
-        request.setRequestHeader("Content-Type", "application/json");
         request.send(new FormData(form));
-        console.log(request);
     }
 }

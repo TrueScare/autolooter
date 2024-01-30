@@ -231,28 +231,20 @@ class TableController extends BaseController
         /** @var User $owner */
         $owner = $this->getUser();
 
-        $choices = $owner->getTables()->filter(function ($element) use ($from) {
-            // do not be able to create circle references
-            /** @var Table $element */
-            return empty(($from->getChildrenCollectionRecursive()[$element->getId()]));
-        });
+        $choices = $owner->getTables();
 
         $options = [
             'choices' => $choices,
             'route' => $this->generateUrl('api_table_move_items', ['id' => $from->getId()])
         ];
 
-        $json = json_decode($request->getContent(), true);
-
         $form = $this->createForm(MoveItemsType::class, null, $options);
-        $form->submit($json);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             // get table by table id from form
             $data = $form->getData();
-            /** @var Table $to */
-            $to = $this->tableRepository->find($data['parent']);
+            $to = $data['parent'];
 
             $from->getItems()->map(function ($item) use ($to) {
                 /** @var Item $item */
@@ -261,15 +253,15 @@ class TableController extends BaseController
             $from->getItems()->clear();
 
             try {
-                $this->entityManager->persist($from);
                 $this->entityManager->persist($to);
 
                 $this->entityManager->flush();
 
                 $this->addFlash('success', $translator->trans('success.save'));
-                return $this->json($to);
+                return $this->json("");
             } catch (\Exception $e) {
                 $this->logger->error($e);
+                dd($e);
                 $this->addFlash('danger', $translator->trans('error.save'));
             }
         }

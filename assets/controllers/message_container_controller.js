@@ -9,7 +9,7 @@ export default class extends Controller {
         let request = new XMLHttpRequest();
         request.onreadystatechange = () => {
             if (request.readyState === 4 && request.status === 200){
-                this.element.innerHTML = request.response;
+                this.element.innerHTML = JSON.parse(request.response);
             }
         }
 
