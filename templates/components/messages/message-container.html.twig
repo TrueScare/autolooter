@@ -3,6 +3,7 @@
          aria-label="{{ "section.messages"|trans }}"
          data-controller="message-container"
          data-message-container-route-value="{{ path('api_messages_all') }}"
+         data-action="modal-loader:modal-request-loaded@window->message-container#update"
     >
         {% include 'components/messages/flash-message-binder.html.twig' %}
     </div>
