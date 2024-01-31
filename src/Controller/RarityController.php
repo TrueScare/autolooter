@@ -150,8 +150,9 @@ class RarityController extends BaseController
     #[Route('/api/rarity/edit/{id?}', name: 'api_rarity_edit')]
     public function apiDetail(?Rarity $rarity, Request $request, TranslatorInterface $translator): Response
     {
-        if ($rarity?->getOwner() !== $this->getUser()) {
-            $this->redirectToRoute('app_home');
+        if ($rarity && $rarity->getOwner() !== $this->getUser()) {
+            $this->addFlash('danger', $translator->trans('error.save'));
+            return $this->json("", status: 403);
         }
 
         if (empty($rarity)) {
