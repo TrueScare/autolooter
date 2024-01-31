@@ -102,4 +102,4 @@ dialog:
   ok: 'Ok'
 move:
   items: 'Items verschieben'
-  tables: 'messages'
+  tables: 'Tabellen verschieben'
