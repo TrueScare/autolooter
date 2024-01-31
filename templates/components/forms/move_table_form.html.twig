@@ -1,0 +1,19 @@
+{% extends 'components/forms/form_basic.html.twig' %}
+
+{% block form_basic_form_content %}
+    {{ parent() }}
+{% endblock %}
+
+{% block form_basic_form_content_inner %}
+    {{ form_row(form.parent) }}
+    {{ form_row(form.submit, {
+        'attr':
+        {
+            'data-controller': 'modal-loader dialog message-container',
+            'data-modal-loader-modal-route-value': form.vars.action,
+            'data-modal-loader-modal-name-value': form.vars.name,
+            'data-message-container-route-value': path('api_messages_all'),
+            'data-action': 'modal-loader:modal-request-loaded->dialog#close click->modal-loader#modalRequest:prevent'
+        }
+    }) }}
+{% endblock %}

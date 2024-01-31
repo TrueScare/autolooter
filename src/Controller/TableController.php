@@ -5,7 +5,8 @@ namespace App\Controller;
 use App\Entity\Item;
 use App\Entity\Table;
 use App\Entity\User;
-use App\Form\MoveItemsType;
+use App\Form\MoveItemsBetweenTablesType;
+use App\Form\MoveTablesBetweenTablesType;
 use App\Form\TableFormType;
 use App\Repository\TableRepository;
 use App\Service\PaginationService;
@@ -169,7 +170,7 @@ class TableController extends BaseController
     #[Route('/api/table/edit/{id?}', name: 'api_table_edit')]
     public function apiDetail(?Table $table, Request $request, TranslatorInterface $translator): Response
     {
-        if ($table?->getOwner() !== $this->getUser()) {
+        if ($table && $table->getOwner() !== $this->getUser()) {
             $this->addFlash('danger', $translator->trans('error.save'));
             return $this->json("", status: 403);
         }
@@ -238,7 +239,7 @@ class TableController extends BaseController
             'route' => $this->generateUrl('api_table_move_items', ['id' => $from->getId()])
         ];
 
-        $form = $this->createForm(MoveItemsType::class, null, $options);
+        $form = $this->createForm(MoveItemsBetweenTablesType::class, null, $options);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -261,14 +262,69 @@ class TableController extends BaseController
                 return $this->json("");
             } catch (\Exception $e) {
                 $this->logger->error($e);
-                dd($e);
                 $this->addFlash('danger', $translator->trans('error.save'));
             }
         }
 
         return $this->json(
             $this->render('components/forms/move_item_form.html.twig', [
-                'form' => $form,
+                'form' => $form->createView(),
+            ])->getContent()
+        );
+    }
+
+    #[Route('/api/table/tables/from/{id}', name: 'api_table_move_tables', methods: 'POST')]
+    public function moveTablesBetweenTables(Request $request, Table $from, TranslatorInterface $translator)
+    {
+        if (!($this->getUser() === $from->getOwner())) {
+            $this->addFlash('danger', $translator->trans('error.save'));
+            return $this->json("", status: 403);
+        }
+
+        /** @var User $owner */
+        $owner = $this->getUser();
+
+        $choices = $owner->getTables()->filter(function ($element) use ($from) {
+            // do not be able to create circle references
+            /** @var Table $element */
+            return empty(($from->getChildrenCollectionRecursive()[$element->getId()]));
+        });
+
+        $options = [
+            'choices' => $choices,
+            'route' => $this->generateUrl('api_table_move_tables', ['id' => $from->getId()])
+        ];
+
+        $form = $this->createForm(MoveTablesBetweenTablesType::class, null, $options);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $to = $data['parent'];
+
+            $from->getTables()->map(function ($table) use ($to) {
+                /** @var Table $table */
+                $table->setParent($to);
+            });
+
+            $from->getTables()->clear();
+
+            try {
+                $this->entityManager->persist($to);
+                $this->entityManager->flush();
+
+                $this->addFlash('success', $translator->trans('success.save'));
+
+                return $this->json("");
+            } catch (\Exception $e) {
+                $this->logger->error($e);
+                $this->addFlash('danger', $translator->trans('error.save'));
+            }
+        }
+
+        return $this->json(
+            $this->render('components/forms/move_table_form.html.twig',[
+                'form' => $form->createView()
             ])->getContent()
         );
     }

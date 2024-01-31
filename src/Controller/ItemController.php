@@ -190,8 +190,9 @@ class ItemController extends BaseController
     #[Route('/api/item/edit/{id?}', name: 'api_item_edit')]
     public function apiDetail(?Item $item, Request $request, TranslatorInterface $translator): JsonResponse
     {
-        if ($item?->getOwner() !== $this->getUser()) {
-            $this->redirectToRoute('app_home');
+        if ($item && $item->getOwner() !== $this->getUser()) {
+            $this->addFlash('danger', $translator->trans('error.save'));
+            return $this->json("", status: 403);
         }
 
         if (empty($item)) {
