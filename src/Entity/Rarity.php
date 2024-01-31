@@ -191,17 +191,33 @@ class Rarity
         $rarity->setColor('#fff');
         $rarity->setOwner($this->getOwner());
 
-        if(!empty($items = $this->getItems())) {
+        $items = $this->getItems();
+        if($items->count() > 0) {
             foreach ($items as $item) {
                 $item->setRarity($rarity);
             }
         }
-        if(!empty($tables = $this->getTables())){
+
+        $tables = $this->getTables();
+        if($tables->count() > 0){
             foreach($tables as $table){
                 $table->setRarity($rarity);
             }
         }
 
         $args->getObjectManager()->persist($rarity);
+    }
+
+    public function getTableCollectionRecursive(array $tables = []){
+        if($this->getTables()->count() <= 0){
+            return $tables;
+        }
+
+        foreach ($this->getTables() as $child) {
+            $tables[$child->getId()] = $child;
+            $tables = $child->getChildrenCollectionRecursive($tables);
+        }
+
+        return $tables;
     }
 }
