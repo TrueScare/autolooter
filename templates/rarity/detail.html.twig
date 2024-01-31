@@ -4,5 +4,55 @@
 
 {% block body %}
     {% include 'components/forms/form_basic.html.twig' %}
+
+    <div
+            class="btn btn-primary"
+            data-controller="dialog modal-loader"
+            data-action="modal-loader:loaded->dialog#showPage:preventDefault click->modal-loader#request"
+            data-modal-loader-route-value="{{ path('api_rarity_move_items', {'id': table.id}) }}"
+    >
+        {{ 'move.items'|trans }}
+    </div>
+
+    <div
+            class="btn btn-primary"
+            data-controller="dialog modal-loader"
+            data-action="modal-loader:loaded->dialog#showPage:preventDefault click->modal-loader#request"
+            data-modal-loader-route-value="{{ path('api_rarity_move_tables', {'id': table.id}) }}"
+    >
+        {{ 'move.tables'|trans }}
+    </div>
+
+    {% if rarity.items|length > 0 %}
+        <details class="items-container card mt-3">
+            <summary class="card-title px-3 h2">
+                <span>
+                    {{ "card.items.label"|trans }}
+                </span>
+            </summary>
+            <div class="card-body">
+                <div class="row">
+                    {% for item in rarity.items %}
+                        {% include 'components/cards/card-item.html.twig' with {entity: item} %}
+                    {% endfor %}
+                </div>
+            </div>
+        </details>
+    {% endif %}
+
+    {% if rarity.tables|length > 0 %}
+        <details class="table-container card mt-3">
+            <summary class="card-title px-3 h2">
+                <span>{{ "card.tables.label"|trans }}</span>
+            </summary>
+            <div class="card-body">
+                <div class="row">
+                    {% for table in rarity.tables %}
+                        {% include 'components/cards/card-table.html.twig' with {entity: table} %}
+                    {% endfor %}
+                </div>
+            </div>
+        </details>
+    {% endif %}
 {% endblock %}
 

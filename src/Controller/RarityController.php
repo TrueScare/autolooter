@@ -2,7 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Item;
 use App\Entity\Rarity;
+use App\Entity\Table;
+use App\Entity\User;
+use App\Form\MoveItemsBetweenRarities;
+use App\Form\MoveItemsBetweenTablesType;
+use App\Form\MoveTablesBetweenRarities;
 use App\Form\RarityFormType;
 use App\Repository\RarityRepository;
 use App\Service\PaginationService;
@@ -187,6 +193,112 @@ class RarityController extends BaseController
                 'rarity' => $rarity,
                 'form' => $form->createView()
             ])->getContent()
+        );
+    }
+
+    #[Route('/api/rarity/tables/from/{id}', name: 'api_rarity_move_tables')]
+    public function moveTables(Request $request, Rarity $from, TranslatorInterface $translator) {
+        if(!($this->getUser() === $from->getOwner())){
+            $this->addFlash('danger', $translator->trans('error.save'));
+            return $this->json("", status: 403);
+        }
+
+        /** @var User $owner */
+        $owner = $this->getUser();
+
+        $choices = $owner->getTables()->filter(function($element) use ($from){
+            /** @var Table $element */
+            return empty(($from->getChildrenCollectionRecursive()[$element->getId()]));
+        });
+
+        $options = [
+            'choices' => $choices,
+            'route' => $this->generateUrl('api_rarity_move_tables', ['id' => $from->getId()])
+        ];
+
+        $form = $this->createForm(MoveTablesBetweenRarities::class, null, $options);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $data = $form->getData();
+            $to = $data['rarity'];
+
+            $from->getTables()->map(function($table) use ($to){
+                /** @var Table $table */
+                $table->setRarity($to);
+            });
+
+            $from->getTables()->clear();
+
+            try {
+                $this->entityManager->persist($to);
+                $this->entityManager->flush();
+
+                $this->addFlash('success', $translator->trans('success.save'));
+
+                return $this->json("");
+            } catch (\Exception $e) {
+                $this->logger->error($e);
+                $this->addFlash('danger', $translator->trans('error.save'));
+            }
+        }
+
+        return $this->json(
+            $this->render('components/forms/rarity_move.html.twig',[
+                'form' => $form->createView()
+            ])
+        );
+    }
+
+    #[Route('/api/rarity/items/from/{id}', name: 'api_rarity_move_items')]
+    public function moveItems(Request $request, Rarity $from, TranslatorInterface $translator) {
+        if (!($this->getUser() === $from->getOwner())) {
+            $this->addFlash('danger', $translator->trans('error.save'));
+            return $this->json("", status: 403);
+        }
+
+        /** @var User $owner */
+        $owner = $this->getUser();
+
+        $choices = $owner->getTables();
+
+        $options = [
+            'choices' => $choices,
+            'route' => $this->generateUrl('api_rarity_move_items', ['id' => $from->getId()])
+        ];
+
+        $form = $this->createForm(MoveItemsBetweenRarities::class, null, $options);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // get table by table id from form
+            $data = $form->getData();
+            $to = $data['parent'];
+
+            $from->getItems()->map(function ($item) use ($to) {
+                /** @var Item $item */
+                $item->setParent($to);
+            });
+            $from->getItems()->clear();
+
+            try {
+                $this->entityManager->persist($to);
+
+                $this->entityManager->flush();
+
+                $this->addFlash('success', $translator->trans('success.save'));
+                return $this->json("");
+            } catch (\Exception $e) {
+                $this->logger->error($e);
+                $this->addFlash('danger', $translator->trans('error.save'));
+            }
+        }
+
+        return $this->json(
+            $this->render('components/forms/rarity_move.html.twig',[
+                'form' => $form->createView()
+            ])
         );
     }
 }
