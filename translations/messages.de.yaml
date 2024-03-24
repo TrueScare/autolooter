@@ -103,3 +103,8 @@ dialog:
 move:
   items: 'Items verschieben'
   tables: 'Tabellen verschieben'
+
+login: 'Login'
+logout: 'Ausloggen'
+register: 'Registrieren'
+user_home: 'Zum Profil'

@@ -11,6 +11,20 @@
         </div>
     </div>
 
+    {% if app.user is not defined or app.user is null %}
+        <span>
+            <a href="{{ path('app_login') }}">{{ "login"|trans }}</a>
+            /
+            <a href="{{ path('app_register') }}">{{ "register"|trans }}</a>
+        </span>
+    {% else %}
+        <span>
+            <a href="{{ path("user_home") }}">{{ "user_home"|trans }}</a>
+            /
+            <a href="{{ path("app_logout") }}">{{ "logout"|trans }}</a>
+        </span>
+    {% endif %}
+
     {% if hasActions %}
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0 me-3"
             aria-label="{{ "section.navigation"|trans }}">
