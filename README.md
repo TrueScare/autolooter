@@ -28,22 +28,22 @@ The idea was to give the website all the tables and then have a button to get a 
 - Clone repo
 - ```composer install```
 - ``npm install``
-- ``npm run dev``
+- build files
+  - for development: ``npm run dev``
+  - for production:  ``npm run build``
 - best case create a .env.local file for your environment such as your **DATABASE_URL**
 
 # Setup Database
 
 ## Docker setup
 
--
-add ```DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=10.11.2-MariaDB&charset=utf8mb4"```
+- add ```DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=10.11.2-MariaDB&charset=utf8mb4"```
 to your .env.local (symfony adds the username/password/database).
 - turn on the container with ```docker-compose up``` to get the SQL-Container started.
 
 ## SQl Setup
 
--
-add ```DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=10.11.2-MariaDB&charset=utf8mb4"```
+- add ```DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=10.11.2-MariaDB&charset=utf8mb4"```
 to your .env.local
 - replace db_user/db_password/db_name with your credentials.
 
