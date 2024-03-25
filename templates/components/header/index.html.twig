@@ -1,6 +1,10 @@
 {% set hasActions = headerActions is defined and headerActions|length > 0 %}
 
 <header class="d-flex flex-wrap align-items-center {% if hasActions %}justify-content-between{% else %}justify-content-center{% endif %} py-3 mb-4 border-bottom" {{ "section.heading"|trans }}>
+    <span>
+        <a href="{{ path('information_impressum') }}">{{ 'information.impressum'|trans }}</a>
+    </span>
+
     <div class="d-flex align-items-center col col-md-3 mb-2 mb-md-0 text-dark text-decoration-none justify-content-center">
         <div class="logo-container rounded overflow-hidden" aria-label="{{ "section.headline.logocontainer"|trans }}">
             <a href="{{ path('app_home') }}">

@@ -15,7 +15,7 @@ label:
   mail: "E-Mail"
 
 pagination:
-  entities_found: "Insgesmat %count% gefunden."
+  entities_found: "Insgesamt %count% gefunden."
   previous: "vorherige"
   next: "nächste"
   search: "Suchen"
@@ -108,3 +108,5 @@ login: 'Login'
 logout: 'Ausloggen'
 register: 'Registrieren'
 user_home: 'Zum Profil'
+information:
+  impressum: 'Impressum'

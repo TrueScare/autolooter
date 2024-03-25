@@ -38,6 +38,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/$, roles: PUBLIC_ACCESS } # it's the homepage which anyone should have access to
+        - { path: ^/information, roles: PUBLIC_ACCESS }
         - { path: ^/register, roles: PUBLIC_ACCESS } # registration should be open to anyone
         - { path: ^/verify/email, roles: PUBLIC_ACCESS } # verifying the mail should be public as well
         - { path: ^/admin, roles: ROLE_ADMIN }
