@@ -81,6 +81,7 @@ class RarityController extends BaseController
                 $this->entityManager->persist($rarity);
                 $this->entityManager->flush();
                 $this->addFlash('success', $translator->trans('success.save'));
+                return $this->redirectToRoute('rarity_edit', ['id' => $rarity->getId()]);
             } catch (\Exception $e) {
                 $this->logger->error($e);
                 $this->addFlash('danger', $translator->trans('error.save'));
@@ -167,7 +168,7 @@ class RarityController extends BaseController
 
         $rarity->setOwner($this->getUser());
 
-        $options=[
+        $options = [
             'route' => $this->generateUrl('rarity_edit', ['id' => $rarity?->getId() ?? null])
         ];
 
@@ -197,8 +198,9 @@ class RarityController extends BaseController
     }
 
     #[Route('/api/rarity/tables/from/{id}', name: 'api_rarity_move_tables')]
-    public function moveTables(Request $request, Rarity $from, TranslatorInterface $translator) {
-        if(!($this->getUser() === $from->getOwner())){
+    public function moveTables(Request $request, Rarity $from, TranslatorInterface $translator)
+    {
+        if (!($this->getUser() === $from->getOwner())) {
             $this->addFlash('danger', $translator->trans('error.save'));
             return $this->json("", status: 403);
         }
@@ -206,7 +208,7 @@ class RarityController extends BaseController
         /** @var User $owner */
         $owner = $this->getUser();
 
-        $choices = $owner->getTables()->filter(function($element) use ($from){
+        $choices = $owner->getTables()->filter(function ($element) use ($from) {
             /** @var Table $element */
             return empty(($from->getChildrenCollectionRecursive()[$element->getId()]));
         });
@@ -220,11 +222,11 @@ class RarityController extends BaseController
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $to = $data['rarity'];
 
-            $from->getTables()->map(function($table) use ($to){
+            $from->getTables()->map(function ($table) use ($to) {
                 /** @var Table $table */
                 $table->setRarity($to);
             });
@@ -245,14 +247,15 @@ class RarityController extends BaseController
         }
 
         return $this->json(
-            $this->render('components/forms/rarity_move.html.twig',[
+            $this->render('components/forms/rarity_move.html.twig', [
                 'form' => $form->createView()
             ])
         );
     }
 
     #[Route('/api/rarity/items/from/{id}', name: 'api_rarity_move_items')]
-    public function moveItems(Request $request, Rarity $from, TranslatorInterface $translator) {
+    public function moveItems(Request $request, Rarity $from, TranslatorInterface $translator)
+    {
         if (!($this->getUser() === $from->getOwner())) {
             $this->addFlash('danger', $translator->trans('error.save'));
             return $this->json("", status: 403);
@@ -296,7 +299,7 @@ class RarityController extends BaseController
         }
 
         return $this->json(
-            $this->render('components/forms/rarity_move.html.twig',[
+            $this->render('components/forms/rarity_move.html.twig', [
                 'form' => $form->createView()
             ])
         );

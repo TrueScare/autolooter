@@ -220,6 +220,7 @@ class ItemController extends BaseController
                 $this->entityManager->persist($item);
                 $this->entityManager->flush();
                 $this->addFlash('success', $translator->trans('success.save'));
+                return $this->redirectToRoute('item_edit', ['id' => $item->getId()]);
             } catch (\Exception $e) {
                 $this->logger->error($e);
                 $this->addFlash('danger', $translator->trans('error.save'));
