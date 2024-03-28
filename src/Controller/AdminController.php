@@ -7,6 +7,7 @@ use App\Form\UserFormType;
 use App\Repository\UserRepository;
 use App\Service\PaginationService;
 use App\Struct\Order;
+use Doctrine\DBAL\TransactionIsolationLevel;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -33,7 +34,7 @@ class AdminController extends BaseController
     #[Route('/admin', name: "admin_index")]
     public function index(): Response
     {
-        return $this->render('admin/index.html.twig',[
+        return $this->render('admin/index.html.twig', [
             'headerActions' => $this->getAdminHeaderActions()
         ]);
     }
@@ -41,13 +42,15 @@ class AdminController extends BaseController
     #[Route('/admin/users', name: 'admin_users')]
     public function users(Request $request): Response
     {
-        $order = $request->query->get('order');
+        $order = Order::tryFrom($request->query->get('order'));
         $pageInfo = $this->paginationService->getPaginationInfoFromRequest($request);
+
         $users = $this->userRepository->getUsers($pageInfo, $order);
+        $maxUsersFound = $this->userRepository->getUserCount($pageInfo);
 
         return $this->render('admin/users/index.html.twig', [
             'users' => $users,
-            'maxItemsFound' => count($users),
+            'maxItemsFound' => $maxUsersFound,
             'orderOptions' => [
                 Order::NAME_ASC,
                 Order::NAME_DESC
@@ -60,21 +63,52 @@ class AdminController extends BaseController
         ]);
     }
 
-    #[Route('/admin/user/{id?}', name:'admin_user_edit')]
+    #[Route('/admin/users/pagination', name: 'admin_users_pagination')]
+    public function paginationUsers(Request $request): Response
+    {
+        $order = Order::tryFrom($request->query->get('order'));
+        $pageInfo = $this->paginationService->getPaginationInfoFromRequest($request);
+
+        $users = $this->userRepository->getUsers($pageInfo, $order);
+        $maxUsersFound = $this->userRepository->getUserCount($pageInfo);
+
+        return $this->json(
+            $this->render('components/listing_content.html.twig', [
+                'entities' => $users,
+                'maxItemsFound' => $maxUsersFound,
+                'orderOptions' => [
+                    Order::NAME_ASC,
+                    Order::NAME_DESC,
+                ],
+                'page' => $pageInfo->getPage(),
+                'pageSize' => $pageInfo->getPageSize(),
+                'order' => $order,
+                'searchTerm' => $pageInfo->getSearchTerm(),
+                'headerActions' => $this->getAdminHeaderActions(),
+                'type' => 'user'
+            ])->getContent()
+        );
+    }
+
+    #[Route('/admin/user/{id?}', name: 'admin_user_edit')]
     public function userEdit(?User $user, Request $request, UserPasswordHasherInterface $passwordHasher, TranslatorInterface $translator): Response
     {
         if (empty($user)) {
             $user = new User();
         }
 
-        $form = $this->createForm(UserFormType::class, $user);
+        $options = [
+            'route' => $this->generateUrl('admin_user_edit', ['id' => $user?->getId() ?? null])
+        ];
+
+        $form = $this->createForm(UserFormType::class, $user, $options);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            if(!empty($plainPassword = $form->get('plainPassword')->getData())){
+            if (!empty($plainPassword = $form->get('plainPassword')->getData())) {
                 $user->setPassword(
-                  $passwordHasher->hashPassword($user, $plainPassword)
+                    $passwordHasher->hashPassword($user, $plainPassword)
                 );
             }
 
@@ -102,18 +136,61 @@ class AdminController extends BaseController
      * @param TranslatorInterface $translator
      * @return RedirectResponse
      */
-    #[Route('/admin/user/delete/{id}',name: 'admin_user_delete')]
+    #[Route('/admin/user/delete/{id}', name: 'admin_user_delete')]
     public function deleteUser(User $user, TranslatorInterface $translator): RedirectResponse
     {
         try {
             $this->entityManager->remove($user);
             $this->entityManager->flush();
             $this->addFlash('success', $translator->trans('success.delete'));
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             $this->addFlash('danger', $translator->trans('error.delete'));
             $this->logger->error($e);
         }
 
         return $this->redirectToRoute('admin_users');
+    }
+
+    #[Route('/api/table/edit/{id?}', name: 'api_admin_user_edit')]
+    public function apiDetails(?User $user, Request $request, TranslatorInterface $translator, UserPasswordHasherInterface $passwordHasher): Response
+    {
+        if (empty($user)) {
+            $user = new User();
+        }
+
+        $options = [
+            'route' => $this->generateUrl('admin_user_edit', ['id' => $user?->getId() ?? null])
+        ];
+
+        $form = $this->createForm(UserFormType::class, $user, $options);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            if (!empty($plainPassword = $form->get('plainPassword')->getData())) {
+                $user->setPassword(
+                    $passwordHasher->hashPassword($user, $plainPassword)
+                );
+            }
+
+            $user = $form->getData();
+
+            try {
+                $this->entityManager->persist($user);
+                $this->entityManager->flush();
+
+                $this->addFlash('success', $translator->trans('success.save'));
+            } catch (\Exception $e) {
+                $this->logger->error($e);
+                $this->addFlash('danger', $translator->trans('error.save'));
+            }
+        }
+
+        return $this->json(
+            $this->render('components/forms/form_basic.html.twig', [
+                'user' => $user,
+                'form' => $form->createView()
+            ])->getContent()
+        );
     }
 }
