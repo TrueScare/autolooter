@@ -184,32 +184,37 @@ class Rarity
             return;
         }
 
-        $rarity = new Rarity();
-        $rarity->setName('Lost and Found');
-        $rarity->setDescription('Lost and Found');
-        $rarity->setValue(0);
-        $rarity->setColor('#fff');
-        $rarity->setOwner($this->getOwner());
-
-        $items = $this->getItems();
-        if($items->count() > 0) {
-            foreach ($items as $item) {
-                $item->setRarity($rarity);
-            }
-        }
-
         $tables = $this->getTables();
-        if($tables->count() > 0){
-            foreach($tables as $table){
-                $table->setRarity($rarity);
-            }
-        }
+        $items = $this->getItems();
 
-        $args->getObjectManager()->persist($rarity);
+        if ($tables->count() > 0 || $items->count() > 0) {
+            $rarity = new Rarity();
+            $rarity->setName('Lost and Found');
+            $rarity->setDescription('Lost and Found');
+            $rarity->setValue(0);
+            $rarity->setColor('#fff');
+            $rarity->setOwner($this->getOwner());
+
+
+            if ($items->count() > 0) {
+                foreach ($items as $item) {
+                    $item->setRarity($rarity);
+                }
+            }
+
+            if ($tables->count() > 0) {
+                foreach ($tables as $table) {
+                    $table->setRarity($rarity);
+                }
+            }
+
+            $args->getObjectManager()->persist($rarity);
+        }
     }
 
-    public function getTableCollectionRecursive(array $tables = []){
-        if($this->getTables()->count() <= 0){
+    public function getTableCollectionRecursive(array $tables = [])
+    {
+        if ($this->getTables()->count() <= 0) {
             return $tables;
         }
 
