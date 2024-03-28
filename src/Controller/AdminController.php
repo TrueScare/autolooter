@@ -119,6 +119,7 @@ class AdminController extends BaseController
                 $this->entityManager->flush();
 
                 $this->addFlash('success', $translator->trans('success.save'));
+                return $this->redirectToRoute('admin_user_edit', ['id' => $user->getId()]);
             } catch (\Exception $e) {
                 $this->logger->error($e);
                 $this->addFlash('danger', $translator->trans('error.save'));
@@ -151,7 +152,7 @@ class AdminController extends BaseController
         return $this->redirectToRoute('admin_users');
     }
 
-    #[Route('/api/table/edit/{id?}', name: 'api_admin_user_edit')]
+    #[Route('/api/user/edit/{id?}', name: 'api_admin_user_edit')]
     public function apiDetails(?User $user, Request $request, TranslatorInterface $translator, UserPasswordHasherInterface $passwordHasher): Response
     {
         if (empty($user)) {

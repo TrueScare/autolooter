@@ -94,6 +94,7 @@ class TableController extends BaseController
                 $this->entityManager->persist($table);
                 $this->entityManager->flush();
                 $this->addFlash('success', $translator->trans('success.save'));
+                return $this->redirectToRoute('table_edit', ['id' => $table->getId()]);
             } catch (\Exception $e) {
                 $this->logger->error($e);
                 $this->addFlash('danger', $translator->trans('error.save'));
@@ -323,7 +324,7 @@ class TableController extends BaseController
         }
 
         return $this->json(
-            $this->render('components/forms/move_table_form.html.twig',[
+            $this->render('components/forms/move_table_form.html.twig', [
                 'form' => $form->createView()
             ])->getContent()
         );
