@@ -6,6 +6,9 @@ use App\Entity\User;
 use App\Struct\Order;
 use App\Struct\PaginationInfo;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -13,7 +16,7 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 
 /**
  * @extends ServiceEntityRepository<User>
-* @implements PasswordUpgraderInterface<User>
+ * @implements PasswordUpgraderInterface<User>
  *
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
  * @method User|null findOneBy(array $criteria, array $orderBy = null)
@@ -41,9 +44,44 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
-    public function getUsers(PaginationInfo $paginationInfo, $order = Order::NAME_ASC){
-        $qb = $this->createQueryBuilder('u');
+    public function getUsers(PaginationInfo $paginationInfo, $order = Order::NAME_ASC)
+    {
+        $order = $order ?? Order::NAME_ASC;
 
+        $qb = $this->createQueryBuilder('u')
+            ->setMaxResults($paginationInfo->getPageSize())
+            ->setFirstResult(($paginationInfo->getPage() - 1) * $paginationInfo->getPageSize())
+           ;
+
+        $qb = $this->handleSearchTerm($qb, $paginationInfo);
+        $qb = $this->handleOrder($qb, $order);
+
+        return new Paginator($qb, fetchJoinCollection: true);
+    }
+
+    public function getUserCount(PaginationInfo $paginationInfo): float|bool|int|string|null
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->select('count(u.id)');
+
+        $qb = $this->handleSearchTerm($qb,$paginationInfo);
+
+        return $qb->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    private function handleSearchTerm(QueryBuilder $qb, PaginationInfo $paginationInfo): QueryBuilder
+    {
+        if (!empty($paginationInfo->getSearchTerm())) {
+            $qb->orWhere('u.username like :term')
+                ->setParameter('term', '%' . $paginationInfo->getSearchTerm() . '%');
+        }
+
+        return $qb;
+    }
+
+    private function handleOrder(QueryBuilder $qb, Order $order): QueryBuilder
+    {
         switch ($order) {
             case Order::NAME_DESC:
                 $qb->orderBy('u.username', 'DESC');
@@ -54,12 +92,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 break;
         }
 
-        if (!empty($paginationInfo->getSearchTerm())) {
-            $qb->orWhere('u.username like :term')
-                ->setParameter('term', '%' . $paginationInfo->getSearchTerm() . '%');
-        }
-
-        return $qb->getQuery()
-            ->execute();
+        return $qb;
     }
 }
