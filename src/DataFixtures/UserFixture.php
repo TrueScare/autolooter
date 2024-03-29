@@ -23,6 +23,7 @@ class UserFixture extends Fixture
 
     public function load(ObjectManager $manager): void
     {
+
         $user = new User();
 
         $user->setUsername('base_user');
@@ -34,7 +35,7 @@ class UserFixture extends Fixture
         );
         $user->setEmail('user@testmail.de');
         $user->setIsVerified(true);
-
+        $user->setLastLogin(new \DateTime());
         $admin = new User();
 
         $admin->setUsername('admin_user');
@@ -45,6 +46,7 @@ class UserFixture extends Fixture
         $admin->setRoles([Role::ADMIN]);
         $admin->setEmail('admin@testmail.de');
         $admin->setIsVerified(true);
+        $admin->setLastLogin(new \DateTime());
 
         $manager->persist($user);
         $manager->persist($admin);
