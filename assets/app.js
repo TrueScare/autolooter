@@ -1,4 +1,6 @@
 import './bootstrap.js';
+import 'bootstrap/js/dist/dropdown';
+import 'bootstrap/js/dist/collapse';
 /*
  * Welcome to your app's main JavaScript file!
  *

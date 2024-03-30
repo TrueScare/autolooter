@@ -7,7 +7,11 @@ use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use App\Security\LoginAuthenticator;
+use App\Service\HeaderActionService;
+use App\Service\PaginationService;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
+use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,12 +25,17 @@ use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
-class RegistrationController extends AbstractController
+class RegistrationController extends BaseController
 {
     private EmailVerifier $emailVerifier;
 
-    public function __construct(EmailVerifier $emailVerifier)
+    public function __construct(PaginationService      $paginationService,
+                                EntityManagerInterface $entityManager,
+                                LoggerInterface        $logger,
+                                HeaderActionService    $actionService,
+                                EmailVerifier          $emailVerifier)
     {
+        parent::__construct($paginationService, $entityManager, $logger, $actionService);
         $this->emailVerifier = $emailVerifier;
     }
 

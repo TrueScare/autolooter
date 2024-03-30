@@ -1,57 +1,31 @@
-{% set hasActions = headerActions is defined and headerActions|length > 0 %}
+{% set hasActions = headerActions is defined %}
 
-<header class="d-flex flex-wrap align-items-center {% if hasActions %}justify-content-between{% else %}justify-content-center{% endif %} py-3 mb-4 border-bottom" {{ "section.heading"|trans }}>
-    <span>
-        <a href="{{ path('information_impressum') }}">{{ 'information.impressum'|trans }}</a>
-    </span>
-
-    <div class="d-flex align-items-center col col-md-3 mb-2 mb-md-0 text-dark text-decoration-none justify-content-center">
-        <div class="logo-container rounded overflow-hidden" aria-label="{{ "section.headline.logocontainer"|trans }}">
-            <a href="{{ path('app_home') }}">
+<header aria-label="{{ "section.heading"|trans }}" class="mb-3">
+    <nav class="navbar navbar-expand-md border-bottom">
+        <div class="container-fluid" aria-label="{{ "section.headline.logocontainer"|trans }}">
+            <a class="navbar-brand" href="{{ path('app_home') }}">
                 <img alt="Autolooter" src="{{ asset('build/images/Autolooter-logos.jpeg') }}"
                      style="max-width: 150px; max-height: 150px;"
                 >
             </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation"
+                    aria-controls="navigation" aria-expanded="false">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navigation">
+                <ul class="navbar-nav">
+                    {% for action in headerActions.actions %}
+                        {% if action.actions is defined %}
+                            {% include 'components/header/action_group.html.twig' with {item:action} %}
+                        {% else %}
+                            {% include 'components/header/action.html.twig' %}
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+
+             {% include 'components/header/user_actions.html.twig' %}
         </div>
-    </div>
-
-    {% if app.user is not defined or app.user is null %}
-        <span>
-            <a href="{{ path('app_login') }}">{{ "login"|trans }}</a>
-            /
-            <a href="{{ path('app_register') }}">{{ "register"|trans }}</a>
-        </span>
-    {% else %}
-        <span>
-            <a href="{{ path("user_home") }}">{{ "user_home"|trans }}</a>
-            /
-            <a href="{{ path("app_logout") }}">{{ "logout"|trans }}</a>
-        </span>
-    {% endif %}
-
-    {% if hasActions %}
-        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0 me-3"
-            aria-label="{{ "section.navigation"|trans }}">
-            {% for action in headerActions %}
-                <li class="nav-item">
-                    <a href="{{ action.route }}"
-                       class="btn nav-link btn-secondary fw-bold nav-link px-2">{{ action.label }}</a>
-
-                    {% if action.subactions is defined and action.subactions|length > 0 %}
-                        <ul class="list-unstyled sub-nav bg-secondary rounded-bottom-1">
-                            {% for subaction in action.subactions %}
-                                <li>
-                                    <div class="btn btn-secondary fw-bold nav-link px-2"
-                                         data-controller="dialog modal-loader"
-                                         data-action="modal-loader:loaded->dialog#showPage click->modal-loader#request"
-                                         data-modal-loader-route-value="{{ subaction.route }}"
-                                    >{{ subaction.label }}</div>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+    </nav>
 </header>

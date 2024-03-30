@@ -9,6 +9,7 @@ use App\Form\MoveItemsBetweenTablesType;
 use App\Form\MoveTablesBetweenTablesType;
 use App\Form\TableFormType;
 use App\Repository\TableRepository;
+use App\Service\HeaderActionService;
 use App\Service\PaginationService;
 use App\Struct\Order;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,9 +25,13 @@ class TableController extends BaseController
 {
     private TableRepository $tableRepository;
 
-    public function __construct(TableRepository $tableRepository, PaginationService $paginationService, EntityManagerInterface $entityManager, LoggerInterface $logger)
+    public function __construct(TableRepository        $tableRepository,
+                                PaginationService      $paginationService,
+                                EntityManagerInterface $entityManager,
+                                LoggerInterface        $logger,
+                                HeaderActionService    $actionService)
     {
-        parent::__construct($paginationService, $entityManager, $logger);
+        parent::__construct($paginationService, $entityManager, $logger, $actionService);
         $this->tableRepository = $tableRepository;
     }
 
@@ -51,7 +56,6 @@ class TableController extends BaseController
                 Order::RARITY_DESC
             ],
             'order' => $order,
-            'headerActions' => $this->getHeaderActions(),
             'searchTerm' => $pageInfo->getSearchTerm()
         ]);
     }
@@ -104,7 +108,6 @@ class TableController extends BaseController
         return $this->render('table/detail.html.twig', [
             'table' => $table,
             'form' => $form->createView(),
-            'headerActions' => $this->getHeaderActions()
         ]);
     }
 
@@ -161,7 +164,6 @@ class TableController extends BaseController
                 Order::RARITY_DESC
             ],
             'order' => $order,
-            'headerActions' => $this->getHeaderActions(),
             'searchTerm' => $pageInfo->getSearchTerm(),
             'type' => 'table'
         ])->getContent()

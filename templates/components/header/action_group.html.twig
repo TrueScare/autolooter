@@ -1,0 +1,16 @@
+{% block header_action_group %}
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navDropDownToggle_{{ item.title }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ item.title }}
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navDropDownToggle_{{ item.title }}">
+            {% for action in item.actions %}
+                {% if action.actions is defined %}
+                    {% include 'components/header/action_group.html.twig' with {item:action} %}
+                {% else %}
+                    {% include 'components/header/action.html.twig' %}
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </li>
+{% endblock %}

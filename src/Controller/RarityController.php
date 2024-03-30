@@ -11,6 +11,7 @@ use App\Form\MoveItemsBetweenTablesType;
 use App\Form\MoveTablesBetweenRarities;
 use App\Form\RarityFormType;
 use App\Repository\RarityRepository;
+use App\Service\HeaderActionService;
 use App\Service\PaginationService;
 use App\Struct\Order;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,9 +26,13 @@ class RarityController extends BaseController
 {
     private RarityRepository $rarityRepository;
 
-    public function __construct(RarityRepository $rarityRepository, PaginationService $paginationService, EntityManagerInterface $entityManager, LoggerInterface $logger)
+    public function __construct(RarityRepository       $rarityRepository,
+                                PaginationService      $paginationService,
+                                EntityManagerInterface $entityManager,
+                                LoggerInterface        $logger,
+                                HeaderActionService    $actionService)
     {
-        parent::__construct($paginationService, $entityManager, $logger);
+        parent::__construct($paginationService, $entityManager, $logger, $actionService);
         $this->rarityRepository = $rarityRepository;
     }
 
@@ -52,7 +57,6 @@ class RarityController extends BaseController
                 Order::RARITY_DESC
             ],
             'order' => $order,
-            'headerActions' => $this->getHeaderActions(),
             'searchTerm' => $pageInfo->getSearchTerm()
         ]);
     }
@@ -91,7 +95,6 @@ class RarityController extends BaseController
         return $this->render('item/detail.html.twig', [
             'rarity' => $rarity,
             'form' => $form->createView(),
-            'headerActions' => $this->getHeaderActions()
         ]);
     }
 
@@ -147,7 +150,6 @@ class RarityController extends BaseController
                 Order::RARITY_DESC
             ],
             'order' => $order,
-            'headerActions' => $this->getHeaderActions(),
             'searchTerm' => $pageInfo->getSearchTerm(),
             'type' => 'rarity'
         ])->getContent()
