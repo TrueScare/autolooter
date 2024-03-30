@@ -62,5 +62,8 @@ class HeaderAction
         $this->subactions = $subactions;
     }
 
-
+    public function getType(): string
+    {
+        return self::class;
+    }
 }

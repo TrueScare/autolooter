@@ -13,6 +13,9 @@ label:
   password: "Passwort"
   roles: "Rollen"
   mail: "E-Mail"
+  table: 'Tabelle'
+  item: 'Item'
+  user: 'User'
 
 pagination:
   entities_found: "Insgesamt %count% gefunden."
@@ -110,3 +113,19 @@ register: 'Registrieren'
 user_home: 'Zum Profil'
 information:
   impressum: 'Impressum'
+  label: 'Informationen'
+menu: 'Menü'
+
+item:
+  random:
+    label: 'Loot me up!'
+goto:
+  rarity: 'Zu den Seltenheiten'
+  table: 'Zu den Tabellen'
+  item: 'Zu den Items'
+  user: 'Zu den Usern'
+new:
+  rarity: 'Neue Seltenheit'
+  table: 'Neue Tabelle'
+  item: 'Neues Item'
+  user: 'Neuer User'

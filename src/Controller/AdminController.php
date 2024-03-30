@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserFormType;
 use App\Repository\UserRepository;
+use App\Service\HeaderActionService;
 use App\Service\PaginationService;
 use App\Struct\Order;
 use Doctrine\DBAL\TransactionIsolationLevel;
@@ -25,9 +26,10 @@ class AdminController extends BaseController
     public function __construct(PaginationService      $paginationService,
                                 EntityManagerInterface $entityManager,
                                 LoggerInterface        $logger,
-                                UserRepository         $userRepository)
+                                UserRepository         $userRepository,
+                                HeaderActionService    $actionService)
     {
-        parent::__construct($paginationService, $entityManager, $logger);
+        parent::__construct($paginationService, $entityManager, $logger, $actionService);
         $this->userRepository = $userRepository;
     }
 
@@ -35,7 +37,7 @@ class AdminController extends BaseController
     public function index(): Response
     {
         return $this->render('admin/index.html.twig', [
-            'headerActions' => $this->getAdminHeaderActions()
+            'headerActions' => $this->getAdminHeaderActions(),
         ]);
     }
 
@@ -59,7 +61,7 @@ class AdminController extends BaseController
             'pageSize' => $pageInfo->getPageSize(),
             'order' => $order,
             'searchTerm' => $pageInfo->getSearchTerm(),
-            'headerActions' => $this->getAdminHeaderActions()
+            'headerActions' => $this->getAdminHeaderActions(),
         ]);
     }
 
@@ -84,8 +86,7 @@ class AdminController extends BaseController
                 'pageSize' => $pageInfo->getPageSize(),
                 'order' => $order,
                 'searchTerm' => $pageInfo->getSearchTerm(),
-                'headerActions' => $this->getAdminHeaderActions(),
-                'type' => 'user'
+                'type' => 'user',
             ])->getContent()
         );
     }
@@ -128,7 +129,8 @@ class AdminController extends BaseController
 
         return $this->render('admin/users/detail.html.twig', [
             'user' => $user,
-            'form' => $form
+            'form' => $form,
+            'headerActions' => $this->getAdminHeaderActions(),
         ]);
     }
 

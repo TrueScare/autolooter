@@ -6,6 +6,7 @@ use App\Entity\Item;
 use App\Entity\User;
 use App\Form\ItemFormType;
 use App\Repository\ItemRepository;
+use App\Service\HeaderActionService;
 use App\Service\PaginationService;
 use App\Struct\Order;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,9 +22,9 @@ class ItemController extends BaseController
 {
     private ItemRepository $itemRepository;
 
-    public function __construct(ItemRepository $itemRepository, PaginationService $paginationService, EntityManagerInterface $entityManager, LoggerInterface $logger)
+    public function __construct(ItemRepository $itemRepository, PaginationService $paginationService, EntityManagerInterface $entityManager, LoggerInterface $logger, HeaderActionService $actionService)
     {
-        parent::__construct($paginationService, $entityManager, $logger);
+        parent::__construct($paginationService, $entityManager, $logger, $actionService);
         $this->itemRepository = $itemRepository;
     }
 
@@ -48,7 +49,6 @@ class ItemController extends BaseController
                 Order::RARITY_DESC
             ],
             'order' => $order,
-            'headerActions' => $this->getHeaderActions(),
             'searchTerm' => $pageInfo->getSearchTerm()
         ]);
     }
@@ -93,7 +93,6 @@ class ItemController extends BaseController
         return $this->render('item/detail.html.twig', [
             'item' => $item,
             'form' => $form->createView(),
-            'headerActions' => $this->getHeaderActions()
         ]);
     }
 
@@ -115,7 +114,6 @@ class ItemController extends BaseController
 
         return $this->render('item/random.html.twig', [
             'item' => $pick,
-            'headerActions' => $this->getHeaderActions()
         ]);
     }
 
@@ -180,7 +178,6 @@ class ItemController extends BaseController
                 Order::RARITY_DESC
             ],
             'order' => $order,
-            'headerActions' => $this->getHeaderActions(),
             'searchTerm' => $pageInfo->getSearchTerm(),
             'type' => 'item'
         ])

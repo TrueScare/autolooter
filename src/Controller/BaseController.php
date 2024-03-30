@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use App\Service\HeaderActionService;
 use App\Service\PaginationService;
 use App\Struct\HeaderAction;
+use App\Struct\HeaderActionGroup;
 use Doctrine\ORM\EntityManagerInterface;
 use http\Header;
+use phpDocumentor\Reflection\Types\This;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,69 +18,54 @@ class BaseController extends AbstractController
     protected PaginationService $paginationService;
     protected EntityManagerInterface $entityManager;
     protected LoggerInterface $logger;
+    private HeaderActionService $actionService;
 
-    public function __construct(PaginationService $paginationService, EntityManagerInterface $entityManager, LoggerInterface $logger)
+    public function __construct(PaginationService      $paginationService,
+                                EntityManagerInterface $entityManager,
+                                LoggerInterface        $logger,
+                                HeaderActionService    $actionService)
     {
         $this->paginationService = $paginationService;
         $this->entityManager = $entityManager;
         $this->logger = $logger;
+        $this->actionService = $actionService;
     }
-
 
     /**
-     * @return HeaderAction[]
+     * @return HeaderActionGroup
      */
-    protected function getHeaderActions(): array
+    protected function getDefaultHeaderActions(): HeaderActionGroup
     {
-        return [
-            new HeaderAction(
-                'Loot me up!',
-                $this->generateUrl('item_random')
-            ),
-            new HeaderAction(
-                'Zu den Seltenheiten',
-                $this->generateUrl('rarity_index'),
-                [
-                    new HeaderAction(
-                        'neue Seltenheit',
-                        $this->generateUrl('api_rarity_edit')
-                    )
-                ]
-            ),
-            new HeaderAction(
-                'Zu den Tabellen',
-                $this->generateUrl('table_index'),
-                [
-                    new HeaderAction(
-                        'neue Tabelle',
-                        $this->generateUrl('api_table_edit')
-                    )
-                ]
-            ),
-            new HeaderAction(
-                'Zu den Items',
-                $this->generateUrl('item_index'),
-                [
-                    new HeaderAction(
-                        'neues Item',
-                        $this->generateUrl('api_item_edit')
-                    )
-                ]
-            )
-        ];
+        return $this->actionService->getDefaultHeaderActions();
     }
-
 
     /**
-     * @return HeaderAction[]
+     * @return HeaderActionGroup
      */
-    protected function getAdminHeaderActions(): array
+    protected function getHeaderActions(): HeaderActionGroup
     {
-        return [
-            new HeaderAction(
-                'Users',
-                $this->generateUrl('admin_users')
-            )
-        ];
+        return $this->actionService->getUserHeadeActions();
     }
+
+    /**
+     * @return HeaderActionGroup
+     */
+    protected function getAdminHeaderActions(): HeaderActionGroup
+    {
+        return $this->actionService->getAdminHeaderActions();
+    }
+
+    protected function render(string $view, array $parameters = [], Response $response = null): Response
+    {
+        if(empty($parameters['headerActions'])){
+            if($this->getUser()){
+                $parameters['headerActions'] = $this->getHeaderActions();
+            } else {
+                $parameters['headerActions'] = $this->getDefaultHeaderActions();
+            }
+        }
+        return parent::render($view, $parameters, $response);
+    }
+
+
 }

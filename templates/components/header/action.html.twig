@@ -1,0 +1,20 @@
+{% block header_action %}
+    {% if 'api/' in action.route %}
+        <li class="nav-item">
+            <div class="nav-link"
+                 role="button"
+                 data-controller="dialog modal-loader"
+                 data-action="modal-loader:loaded->dialog#showPage click->modal-loader#request"
+                 data-modal-loader-route-value="{{ action.route }}"
+            >
+                {{ action.label }}
+            </div>
+        </li>
+    {% else %}
+        <li class="nav-item">
+            <a class="nav-link" href="{{ action.route }}">
+                {{ action.label }}
+            </a>
+        </li>
+    {% endif %}
+{% endblock %}
