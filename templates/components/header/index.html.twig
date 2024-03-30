@@ -13,7 +13,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navigation">
+            <div class="collapse navbar-collapse justify-content-between" id="navigation">
                 <ul class="navbar-nav">
                     {% for action in headerActions.actions %}
                         {% if action.actions is defined %}
@@ -23,9 +23,9 @@
                         {% endif %}
                     {% endfor %}
                 </ul>
-            </div>
 
-             {% include 'components/header/user_actions.html.twig' %}
+                {% include 'components/header/user_actions.html.twig' %}
+            </div>
         </div>
     </nav>
 </header>
