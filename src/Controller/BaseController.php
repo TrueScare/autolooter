@@ -4,11 +4,8 @@ namespace App\Controller;
 
 use App\Service\HeaderActionService;
 use App\Service\PaginationService;
-use App\Struct\HeaderAction;
 use App\Struct\HeaderActionGroup;
 use Doctrine\ORM\EntityManagerInterface;
-use http\Header;
-use phpDocumentor\Reflection\Types\This;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;

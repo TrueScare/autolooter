@@ -13,7 +13,6 @@ use App\Service\HeaderActionService;
 use App\Service\PaginationService;
 use App\Struct\Order;
 use Doctrine\ORM\EntityManagerInterface;
-use mysql_xdevapi\Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;

@@ -6,10 +6,9 @@ use App\Entity\Item;
 use App\Entity\Table;
 use App\Repository\TableRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+
 ;
 
 class ItemFixture extends Fixture implements DependentFixtureInterface

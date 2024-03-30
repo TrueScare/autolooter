@@ -7,7 +7,6 @@ use App\Entity\Rarity;
 use App\Entity\Table;
 use App\Entity\User;
 use App\Form\MoveItemsBetweenRarities;
-use App\Form\MoveItemsBetweenTablesType;
 use App\Form\MoveTablesBetweenRarities;
 use App\Form\RarityFormType;
 use App\Repository\RarityRepository;

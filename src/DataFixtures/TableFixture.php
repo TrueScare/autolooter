@@ -6,6 +6,7 @@ use App\Entity\Table;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+
 ;
 
 class TableFixture extends Fixture implements DependentFixtureInterface

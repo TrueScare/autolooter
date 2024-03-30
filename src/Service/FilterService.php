@@ -2,8 +2,6 @@
 
 namespace App\Service;
 
-use Doctrine\Common\Collections\Collection;
-
 class FilterService
 {
     public static function getUniqueRaritiesFromTables($tables){

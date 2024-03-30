@@ -4,10 +4,6 @@ namespace App\Form;
 
 use App\Entity\Rarity;
 use App\Entity\Table;
-use App\Entity\User;
-use App\Repository\TableRepository;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
