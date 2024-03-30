@@ -8,7 +8,6 @@ use App\Repository\UserRepository;
 use App\Service\HeaderActionService;
 use App\Service\PaginationService;
 use App\Struct\Order;
-use Doctrine\DBAL\TransactionIsolationLevel;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
