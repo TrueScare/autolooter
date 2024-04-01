@@ -1,7 +1,10 @@
 {% block header_action %}
-    {% if 'api/' in action.route %}
-        <li class="nav-item">
-            <div class="nav-link"
+    {# used when linkClasses is not set #}
+    {% set linkClassesDefault = "nav-link px-sm-2" %}
+
+    <li class="nav-item">
+        {% if 'api/' in action.route %}
+            <div class="{{ linkClasses|default(linkClassesDefault) }}"
                  role="button"
                  data-controller="dialog modal-loader"
                  data-action="modal-loader:loaded->dialog#showPage click->modal-loader#request"
@@ -9,12 +12,10 @@
             >
                 {{ action.label }}
             </div>
-        </li>
-    {% else %}
-        <li class="nav-item">
-            <a class="nav-link" href="{{ action.route }}">
+        {% else %}
+            <a class="{{ linkClasses|default(linkClassesDefault) }}" href="{{ action.route }}">
                 {{ action.label }}
             </a>
-        </li>
-    {% endif %}
+        {% endif %}
+    </li>
 {% endblock %}
