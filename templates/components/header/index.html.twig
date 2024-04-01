@@ -1,7 +1,7 @@
 {% set hasActions = headerActions is defined %}
 
-<header aria-label="{{ "section.heading"|trans }}" class="mb-3">
-    <nav class="navbar navbar-expand-md border-bottom">
+<header aria-label="{{ "section.heading"|trans }}" class="mb-3 bg-dark">
+    <nav class="navbar navbar-dark navbar-expand-md border-bottom">
         <div class="container-fluid" aria-label="{{ "section.headline.logocontainer"|trans }}">
             <a class="navbar-brand" href="{{ path('app_home') }}">
                 <img alt="Autolooter" src="{{ asset('build/images/Autolooter-logos.jpeg') }}"
