@@ -37,15 +37,40 @@ The idea was to give the website all the tables and then have a button to get a 
 
 ## Docker setup
 
-- add ```DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=10.11.2-MariaDB&charset=utf8mb4"```
+- add DATABASE_URL to .env.local
+  ```
+  DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=10.11.2-MariaDB&charset=utf8mb4"
+  ```
 to your .env.local (symfony adds the username/password/database).
-- turn on the container with ```docker-compose up``` to get the SQL-Container started.
+- to get the SQL-Container started type: 
+  ```
+  docker-compose up
+  ```
 
-## SQl Setup
+## SQl Setup (MariaDB)
 
-- add ```DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=10.11.2-MariaDB&charset=utf8mb4"```
-to your .env.local
-- replace db_user/db_password/db_name with your credentials.
+- create a user for your database that handles the connection to the application
+  ```mariadb 
+  CREATE USER 'autolooter_admin'@'localhost' IDENTIFIED BY {YOUR PASSWORD};
+  ```
+  ```mariadb
+  GRANT ALL PRIVILEGES ON autolooter_db.* to 'autolooter_admin'@'localhost'; 
+  ```
+  ```mariadb
+  FLUSH ALL PRIVILEGES;
+  ```
+- add DATABASE_URL to .env.local 
+  ```
+  DATABASE_URL="mysql://autolooter_admin:{YOUR PASSWORD}@127.0.0.1:3306/autolooter_db?serverVersion=10.11.2-MariaDB&charset=utf8mb4"
+  ```
+- to set up the tables go to application home dir and type
+  ```
+  php bin/console doctrine:database:create 
+  ```
+- make sure that all migrations are loaded properly
+  ```
+  php bin/console doctrine:migrations:migrate
+  ```
 
 # Demo Data
 
@@ -60,7 +85,10 @@ Included are two users:
 The base user has all the rarities, tables and items from the fixtures.
 The admin user has access to the backend but no rarities, tables and items prepared.
 
-- if you want some demo data run ``symfony console doctrine:fixtures:load``
+- if you want some demo data run 
+  ```
+  php bin/console doctrine:fixtures:load
+  ```
 - I had some issues on my machine where the mysql-docker server shuts down sometimes. Repeating the statement above
   should result in success.
 
