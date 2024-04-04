@@ -32,6 +32,7 @@ class Item
     private ?float $value_end = null;
 
     #[ORM\ManyToOne(inversedBy: 'items')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Rarity $rarity = null;
 
     #[ORM\ManyToOne(inversedBy: 'items')]

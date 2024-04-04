@@ -39,6 +39,7 @@ class Table
     private Collection $items;
 
     #[ORM\ManyToOne(inversedBy: 'tables')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Rarity $rarity = null;
 
     public function __construct()

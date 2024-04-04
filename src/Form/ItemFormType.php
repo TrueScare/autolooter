@@ -42,7 +42,8 @@ class ItemFormType extends AbstractType
                 'class' => Rarity::class,
                 'choice_label' => 'name',
                 'choices' => $options['rarityChoices'],
-                'label' => 'label.rarity'
+                'label' => 'label.rarity',
+                'required' => true
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'label.save',
