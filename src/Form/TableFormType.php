@@ -37,6 +37,7 @@ class TableFormType extends AbstractType
                 'choice_label' => 'name',
                 'choices' => $options['rarityChoices'],
                 'label' => 'label.rarity',
+                'placeholder' => 'label.parent_placeholder',
                 'required' => true
             ])
             ->add('submit', SubmitType::class,[
