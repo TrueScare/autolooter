@@ -9,15 +9,17 @@
 {% block card_subtitle_inner %}{{ entity.parent.name }}{% endblock %}
 
 {% block card_text %}
-    {#<div class="probability">{{ (entity.probability * 100)|round(6) }}%</div>#}
+    {# <div class="probability">{{ (entity.probability * 100)|round(6) }}%</div> #}
     <p class="card-text">{{ entity.description|u.truncate(180, '...') }}</p>
 {% endblock %}
 
 {% block card_footer %}
-    <div class="btn-group">
-        {% include 'components/actions/edit-action.html.twig' with {detailRoute:path('api_item_edit',{id:entity.id})} %}
-        {% include 'components/actions/delete-action.html.twig' with {route: path('item_delete', {id: entity.id}), identifier: entity.name} %}
-    </div>
+    {% block card_footer_actions %}
+        <div class="btn-group">
+            {% include 'components/actions/edit-action.html.twig' with {detailRoute:path('api_item_edit',{id:entity.id})} %}
+            {% include 'components/actions/delete-action.html.twig' with {route: path('item_delete', {id: entity.id}), identifier: entity.name} %}
+        </div>
+    {% endblock %}
 
     <div class="card-footer" style="background-color: {{ color }}">
         {% block card_footer_inner %}

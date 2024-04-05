@@ -5,9 +5,10 @@
 {% block card_text_inner %}
     {{ entity.description }}
 {% endblock %}
+{% block card_footer_actions %}{% endblock %}
 
- {% block card_footer_inner %}
+{% block card_footer_inner %}
     <p class="card-text">
-            {{ (random(entity.valueStart * 100, entity.valueEnd * 100)/100)|replace({'.': ','}) }}G
+        {{ (random(entity.valueStart * 100, entity.valueEnd * 100)/100)|replace({'.': ','}) }}G
     </p>
 {% endblock %}
