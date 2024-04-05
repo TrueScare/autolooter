@@ -6,5 +6,7 @@
     <div class="more-button">
         <a href="{{ path('item_random') }}" class="btn btn-primary">Nochmal</a>
     </div>
-    {% include 'components/cards/card-item-random.html.twig' with {entity: item} %}
+    <div class="row justify-content-center my-5">
+        {% include 'components/cards/card-item-random.html.twig' with {entity: item, additionalClasses: 'glow', additionalStyles: 'color:' ~ item.rarity.color ~ 'bf'} %}
+    </div>
 {% endblock %}
