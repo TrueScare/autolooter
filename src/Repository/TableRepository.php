@@ -89,7 +89,7 @@ class TableRepository extends ServiceEntityRepository
                     from `table` t 
                         left join rarity r
                             on t.rarity_id = r.id
-                    and t.owner_id = ". $owner->getId() ."
+                    where t.owner_id = ". $owner->getId() ."
                     order by t.parent_id"
                     ;
         $stmt = $conn->prepare($sql);
