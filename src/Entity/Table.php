@@ -26,6 +26,11 @@ class Table
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $parent_id;
+
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $owner_id;
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 

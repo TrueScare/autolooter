@@ -6,6 +6,7 @@ use App\Entity\Table;
 use App\Struct\Order;
 use App\Struct\PaginationInfo;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
@@ -70,6 +71,33 @@ class TableRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    public function getAllTableIndividualRarities(UserInterface $owner, EntityManagerInterface $em): array
+    {
+        $conn = $em->getConnection();
+        $sql = "select 
+                    t.id, 
+                    t.parent_id, 
+                    t.name, 
+                    CONVERT(r.value / (select sum(r2.value) as rarity_sum 
+                               from `table` t2 
+                                   left join autolooter.rarity r2 
+                                       on t2.rarity_id = r2.id 
+                               where (t2.parent_id = t.parent_id
+                                   or (t2.parent_id is null and t.parent_id is null)) 
+                                 and t2.owner_id = ". $owner->getId() ." 
+                               group by t2.parent_id ), FLOAT) as individual_rarity 
+                    from `table` t 
+                        left join rarity r
+                            on t.rarity_id = r.id
+                    and t.owner_id = ". $owner->getId() ."
+                    order by t.parent_id"
+                    ;
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->executeQuery();
+
+        return $result->fetchAllAssociative();
+    }
+
     protected function getDefaultQueryBuilder(UserInterface $owner): QueryBuilder
     {
         return $this->createQueryBuilder('t')
@@ -107,6 +135,4 @@ class TableRepository extends ServiceEntityRepository
 
         return $qb;
     }
-
-
 }

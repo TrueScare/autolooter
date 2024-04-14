@@ -6,6 +6,7 @@ use App\Entity\Item;
 use App\Struct\Order;
 use App\Struct\PaginationInfo;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
@@ -61,6 +62,33 @@ class ItemRepository extends ServiceEntityRepository
         $qb = $this->handleSearchTerm($qb, $paginationInfo);
 
         return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function getAllItemIndividualRarities(UserInterface $owner, EntityManagerInterface $em): array
+    {
+        $conn = $em->getConnection();
+        $sql = "select 
+                    i.id, 
+                    i.parent_id, 
+                    i.name, 
+                    CONVERT(r.value / (select sum(r2.value) as rarity_sum 
+                               from `table` t 
+                                   left join autolooter.rarity r2 
+                                       on t.rarity_id = r2.id 
+                               where (i.parent_id = t.parent_id or 
+                                      (i.parent_id is null and t.parent_id is null)) 
+                                 and t.owner_id = ". $owner->getId() ." 
+                               group by i.parent_id ), FLOAT) as individual_rarity 
+                    from item i 
+                        left join rarity r
+                            on i.rarity_id = r.id
+                    and i.owner_id = ". $owner->getId() ."
+                    order by i.parent_id"
+        ;
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->executeQuery();
+
+        return $result->fetchAllAssociative();
     }
 
     protected function getDefaultQueryBuilder(UserInterface $owner): QueryBuilder

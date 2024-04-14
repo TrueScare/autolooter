@@ -8,6 +8,7 @@ use App\Form\ItemFormType;
 use App\Repository\ItemRepository;
 use App\Service\HeaderActionService;
 use App\Service\PaginationService;
+use App\Service\ProbabilityService;
 use App\Struct\Order;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -103,33 +104,35 @@ class ItemController extends BaseController
     }
 
     #[Route('/item/random', name: 'item_random')]
-    public function random(Request $request): Response
+    public function random(Request $request, ProbabilityService $probabilityService): Response
     {
+        $probabilities = $probabilityService->getItemProbabilities($this->getUser());
+
         /** @var User $owner */
         $owner = $this->getUser();
 
-        $items = $owner->getItems();
+        $pick = $this->getPickFromItems($probabilities);
 
-        $pick = $this->getPickFromItems($items);
+        $item = $this->itemRepository->findOneBy(['id' => $pick]);
 
         return $this->render('item/random.html.twig', [
-            'item' => $pick,
+            'item' => $item,
         ]);
     }
 
-    private function getPickFromItems($items)
+    private function getPickFromItems(array $probabilityMapping)
     {
         // the items probability ALWAYS has to add up to 1 (100%)
         $luckyPick = rand(0, 100) / 100;
 
-        foreach ($items as $item) {
-            $luckyPick -= $item->getProbability();
+        foreach ($probabilityMapping as $item) {
+            $luckyPick -= $item['individual_rarity'];
             if ($luckyPick <= 0) {
                 return $item;
             }
         }
         $this->addFlash('danger', "No item found... that's suspicious.");
-        return $items->last();
+        return end($probabilityMapping);
     }
 
     /**
