@@ -82,7 +82,7 @@ class ItemRepository extends ServiceEntityRepository
                     from item i 
                         left join rarity r
                             on i.rarity_id = r.id
-                    and i.owner_id = ". $owner->getId() ."
+                    where i.owner_id = ". $owner->getId() ."
                     order by i.parent_id"
         ;
         $stmt = $conn->prepare($sql);
