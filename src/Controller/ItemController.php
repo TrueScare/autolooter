@@ -104,20 +104,42 @@ class ItemController extends BaseController
     }
 
     #[Route('/item/random', name: 'item_random')]
-    public function random(Request $request, ProbabilityService $probabilityService): Response
+    public function random(Request $request, ProbabilityService $probabilityService, TranslatorInterface $translator): Response
     {
+        // needs to be set dynamically!
+        $amount = 1;
         $probabilities = $probabilityService->getItemProbabilities($this->getUser());
 
-        /** @var User $owner */
-        $owner = $this->getUser();
+        $picks = $this->pickMultipleFromItems($probabilities, $amount, $translator);
 
-        $pick = $this->getPickFromItems($probabilities);
-
-        $item = $this->itemRepository->findOneBy(['id' => $pick]);
+        $items = $this->itemRepository->getItemsById($this->getUser(),$picks);
 
         return $this->render('item/random.html.twig', [
-            'item' => $item,
+            'items' => $items,
         ]);
+    }
+
+    private function pickMultipleFromItems(array $probabilityMapping, int $amount, TranslatorInterface $translator, bool $uniqueItems = false)
+    {
+        $keys = [];
+        if(count($probabilityMapping) <= $amount && $uniqueItems){
+            //only way to return unique items... we may not get the wanted amount though...
+            $keys = array_keys($probabilityMapping);
+            $this->addFlash('info', $translator->trans('item.random.notEnoughItems'));
+            return $keys;
+
+        } else if (count($probabilityMapping) > $amount && $uniqueItems){
+            while(count($keys) < $amount){
+                $id = $this->getPickFromItems($probabilityMapping);
+                $keys[$id] = $this->getPickFromItems($probabilityMapping);
+            }
+        } else {
+            while(count($keys) < $amount){
+                $keys[] = $this->getPickFromItems($probabilityMapping);
+            }
+        }
+
+        return $keys;
     }
 
     private function getPickFromItems(array $probabilityMapping)
@@ -128,7 +150,7 @@ class ItemController extends BaseController
         foreach ($probabilityMapping as $item) {
             $luckyPick -= $item['individual_rarity'];
             if ($luckyPick <= 0) {
-                return $item;
+                return $item['id'];
             }
         }
         $this->addFlash('danger', "No item found... that's suspicious.");
@@ -205,7 +227,7 @@ class ItemController extends BaseController
         $option = [
             'tableChoices' => $owner->getTables(),
             'rarityChoices' => $owner->getRarities(),
-            'route' => $this->generateUrl('item_edit', ['id' => $item?->getId() ?? null ])
+            'route' => $this->generateUrl('item_edit', ['id' => $item?->getId() ?? null])
         ];
 
         $form = $this->createForm(ItemFormType::class, $item, $option);

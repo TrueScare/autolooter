@@ -44,7 +44,7 @@ class ItemRepository extends ServiceEntityRepository
         $qb = $this->handleOrder($qb, $order);
         $qb = $this->handleSearchTerm($qb, $paginationInfo);
 
-        return new Paginator($qb,fetchJoinCollection: true);
+        return new Paginator($qb, fetchJoinCollection: true);
     }
 
     /**
@@ -72,23 +72,33 @@ class ItemRepository extends ServiceEntityRepository
                     i.parent_id, 
                     i.name, 
                     CONVERT(r.value / (select sum(r2.value) as rarity_sum 
-                               from `table` t 
+                               from item i2 
                                    left join autolooter.rarity r2 
-                                       on t.rarity_id = r2.id 
-                               where (i.parent_id = t.parent_id or 
-                                      (i.parent_id is null and t.parent_id is null)) 
-                                 and t.owner_id = ". $owner->getId() ." 
+                                       on i2.rarity_id = r2.id 
+                               where (i.parent_id = i2.parent_id) 
+                                 and i2.owner_id = " . $owner->getId() . " 
                                group by i.parent_id ), FLOAT) as individual_rarity 
                     from item i 
                         left join rarity r
                             on i.rarity_id = r.id
-                    where i.owner_id = ". $owner->getId() ."
-                    order by i.parent_id"
-        ;
+                    where i.owner_id = " . $owner->getId() . "
+                    order by i.parent_id";
         $stmt = $conn->prepare($sql);
         $result = $stmt->executeQuery();
 
         return $result->fetchAllAssociative();
+    }
+
+    public function getItemsById(UserInterface $owner, array $ids)
+    {
+        $qb = $this->getDefaultQueryBuilder($owner)
+            ->addSelect('r')
+            ->leftJoin('i.rarity', 'r')
+            ->andWhere('i.id in (:ids)')
+            ->setParameter('ids', $ids);
+
+        return $qb->getQuery()
+            ->getResult();
     }
 
     protected function getDefaultQueryBuilder(UserInterface $owner): QueryBuilder
