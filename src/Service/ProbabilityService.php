@@ -85,9 +85,8 @@ class ProbabilityService
         $visited = [];
         while (!empty($current = array_shift($queue))) {
             $visited[] = $current['id'];
-
             foreach ($data as &$child) {
-                if ($child['parent_id'] == $current['id']) {
+                if ($child['parent_id'] == $current['id'] && !$this->checkIdInArray($child['id'], $queue)) {
                     $child['individual_rarity'] = $child['individual_rarity'] * $current['individual_rarity'];
                     array_push($queue, $child);
                 }
@@ -97,5 +96,15 @@ class ProbabilityService
         return array_filter($data, function ($item) use ($visited) {
             return in_array($item['id'], $visited);
         });
+    }
+
+    private function checkIdInArray(int $id, array $haystck)
+    {
+        foreach ($haystck as $item) {
+            if ($item['id'] == $id) {
+                return true;
+            }
+        }
+        return false;
     }
 }

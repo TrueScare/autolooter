@@ -5,11 +5,13 @@ namespace App\Controller;
 use App\Entity\Item;
 use App\Entity\User;
 use App\Form\ItemFormType;
+use App\Form\RandomItemConfigType;
 use App\Repository\ItemRepository;
 use App\Service\HeaderActionService;
 use App\Service\PaginationService;
 use App\Service\ProbabilityService;
 use App\Struct\Order;
+use App\Struct\RandomItemConfig;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -106,39 +108,78 @@ class ItemController extends BaseController
     #[Route('/item/random', name: 'item_random')]
     public function random(Request $request, ProbabilityService $probabilityService, TranslatorInterface $translator): Response
     {
-        $table_probabilities = $probabilityService->getTableProbabilities($this->getUser());
 
-        $probabilities = $probabilityService->getItemProbabilities($this->getUser(), $table_probabilities);
+        $itemConfig = new RandomItemConfig();
+        /** @var User $user */
+        $user = $this->getUser();
+        $options = [
+            'tableChoices' => $user->getTables()
+        ];
+        $form = $this->createForm(RandomItemConfigType::class, $itemConfig, $options);
+        $form->handleRequest($request);
+        $items = [];
+        $picks = [];
+        if ($form->isSubmitted() && $form->isValid()) {
+            $ids = [];
+            foreach ($itemConfig->getTables() as $table) {
+                $ids[] = $table->getId();
+            }
 
-        $probabilities = array_filter($probabilities, function ($item) {
-            return $item['individual_rarity'] > 0;
-        });
+            $table_probabilities = $probabilityService->getTableProbabilities(
+                $this->getUser(),
+                $ids
+            );
 
-        $picks = $this->pickMultipleFromItems($probabilities, $translator);
+            $probabilities = $probabilityService->getItemProbabilities($this->getUser(), $table_probabilities);
 
-        $items = $this->itemRepository->getItemsById($this->getUser(),$picks);
+            $probabilities = array_filter($probabilities, function ($item) {
+                return $item['individual_rarity'] > 0;
+            });
+
+            $picks = $this->pickMultipleFromItems(
+                $probabilities,
+                $translator,
+                $itemConfig->getAmount() > 0 ? $itemConfig->getAmount() : 1,
+                $itemConfig->isUniqueTables()
+            );
+
+            $items = $this->itemRepository->getItemsById($this->getUser(), $picks);
+
+            $quantityMapping = array_count_values($picks);
+
+            $quantityItems = [];
+            foreach ($items as $item) {
+                $count = $quantityMapping[$item->getId()];
+                foreach(range(1, $count)as $i) {
+                    $quantityItems[] = $item;
+                }
+            }
+        }
 
         return $this->render('item/random.html.twig', [
-            'items' => $items,
+            'items' => $quantityItems?? [],
+            'form' => $form->createView(),
         ]);
     }
 
-    private function pickMultipleFromItems(array $probabilityMapping, TranslatorInterface $translator,int $amount = 1, bool $uniqueItems = false)
+    private function pickMultipleFromItems(array $probabilityMapping, TranslatorInterface $translator, int $amount = 1, bool $uniqueItems = false)
     {
         $keys = [];
-        if(count($probabilityMapping) <= $amount && $uniqueItems){
+        if (count($probabilityMapping) <= $amount && $uniqueItems) {
+            if (count($probabilityMapping) < $amount) {
+                $this->addFlash('info', $translator->trans('item.random.notEnoughItems'));
+            }
             //only way to return unique items... we may not get the wanted amount though...
             $keys = array_keys($probabilityMapping);
-            $this->addFlash('info', $translator->trans('item.random.notEnoughItems'));
             return $keys;
 
-        } else if (count($probabilityMapping) > $amount && $uniqueItems){
-            while(count($keys) < $amount){
+        } else if (count($probabilityMapping) > $amount && $uniqueItems) {
+            while (count($keys) < $amount) {
                 $id = $this->getPickFromItems($probabilityMapping);
                 $keys[$id] = $this->getPickFromItems($probabilityMapping);
             }
         } else {
-            while(count($keys) < $amount){
+            while (count($keys) < $amount) {
                 $keys[] = $this->getPickFromItems($probabilityMapping);
             }
         }
