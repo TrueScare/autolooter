@@ -70,7 +70,8 @@ class ItemRepository extends ServiceEntityRepository
         $sql = "select 
                     i.id, 
                     i.parent_id, 
-                    i.name, 
+                    i.name,
+                    r.value,
                     CONVERT(r.value / (select sum(r2.value) as rarity_sum 
                                from item i2 
                                    left join autolooter.rarity r2 

@@ -106,11 +106,15 @@ class ItemController extends BaseController
     #[Route('/item/random', name: 'item_random')]
     public function random(Request $request, ProbabilityService $probabilityService, TranslatorInterface $translator): Response
     {
-        // needs to be set dynamically!
-        $amount = 1;
-        $probabilities = $probabilityService->getItemProbabilities($this->getUser());
+        $table_probabilities = $probabilityService->getTableProbabilities($this->getUser());
 
-        $picks = $this->pickMultipleFromItems($probabilities, $amount, $translator);
+        $probabilities = $probabilityService->getItemProbabilities($this->getUser(), $table_probabilities);
+
+        $probabilities = array_filter($probabilities, function ($item) {
+            return $item['individual_rarity'] > 0;
+        });
+
+        $picks = $this->pickMultipleFromItems($probabilities, $translator);
 
         $items = $this->itemRepository->getItemsById($this->getUser(),$picks);
 
@@ -119,7 +123,7 @@ class ItemController extends BaseController
         ]);
     }
 
-    private function pickMultipleFromItems(array $probabilityMapping, int $amount, TranslatorInterface $translator, bool $uniqueItems = false)
+    private function pickMultipleFromItems(array $probabilityMapping, TranslatorInterface $translator,int $amount = 1, bool $uniqueItems = false)
     {
         $keys = [];
         if(count($probabilityMapping) <= $amount && $uniqueItems){
