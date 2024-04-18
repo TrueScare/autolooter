@@ -26,27 +26,48 @@ class ProbabilityService
         $this->itemRepository = $itemRepository;
     }
 
-    public function getTableProbabilities(User $owner)
+    public function getTableProbabilities(User $owner, array $subsetIds = [])
     {
         $data = $this->tableRepository->getAllTableIndividualRarities($owner, $this->entityManager);
         $data = $this->mapResultArray($data);
 
-        $queue = array_filter($data, function ($item) {
-            return $item['parent_id'] == null;
-        });
+        if (empty($subsetIds)) {
+            $queue = array_filter($data, function ($item) {
+                return $item['parent_id'] == null;
+            });
+        } else {
+            $queue = array_filter($data, function ($item) use ($subsetIds) {
+                return in_array($item['id'], $subsetIds);
+            });
+
+            $sum = 0;
+            foreach ($queue as $item) {
+                $sum += $item['value'];
+            }
+
+            foreach ($data as &$item) {
+                if (in_array($item['id'], $subsetIds)) {
+                    $item['individual_rarity'] = $item['value'] / $sum;
+                }
+            }
+        }
 
         return $this->prepareProbabilities($data, $queue);
     }
 
-    public function getItemProbabilities(User $owner)
+    public function getItemProbabilities(User $owner, array $probabilityMapping)
     {
         $data = $this->itemRepository->getAllItemIndividualRarities($owner, $this->entityManager);
         $data = $this->mapResultArray($data);
-        $table_data = $this->getTableProbabilities($owner);
 
-        foreach($data as &$item){
-            $item['individual_rarity'] = $item['individual_rarity'] * $table_data[$item['parent_id']]['individual_rarity'];
+        foreach ($data as &$item) {
+            if (!empty($probabilityMapping[$item['parent_id']])) {
+                $item['individual_rarity'] = $item['individual_rarity'] * $probabilityMapping[$item['parent_id']]['individual_rarity'];
+            } else {
+                $item['individual_rarity'] = 0;
+            }
         }
+
         return $data;
     }
 
@@ -61,14 +82,29 @@ class ProbabilityService
 
     private function prepareProbabilities(array $data, array $queue): array
     {
+        $visited = [];
         while (!empty($current = array_shift($queue))) {
+            $visited[] = $current['id'];
             foreach ($data as &$child) {
-                if ($child['parent_id'] == $current['id']) {
+                if ($child['parent_id'] == $current['id'] && !$this->checkIdInArray($child['id'], $queue)) {
                     $child['individual_rarity'] = $child['individual_rarity'] * $current['individual_rarity'];
                     array_push($queue, $child);
                 }
             }
         }
-        return $data;
+
+        return array_filter($data, function ($item) use ($visited) {
+            return in_array($item['id'], $visited);
+        });
+    }
+
+    private function checkIdInArray(int $id, array $haystck)
+    {
+        foreach ($haystck as $item) {
+            if ($item['id'] == $id) {
+                return true;
+            }
+        }
+        return false;
     }
 }

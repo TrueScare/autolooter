@@ -1,12 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Random Item - {{ item.name }}{% endblock %}
+{% block title %}Random Item{% endblock %}
 
 {% block body %}
     <div class="more-button">
         <a href="{{ path('item_random') }}" class="btn btn-primary">Nochmal</a>
     </div>
+    {{ form(form) }}
     <div class="row justify-content-center my-5">
-        {% include 'components/cards/card-item-random.html.twig' with {entity: item, additionalClasses: 'glow', additionalStyles: 'color:' ~ item.rarity.color ~ 'bf'} %}
+        {% for item in items %}
+            {% include 'components/cards/card-item-random.html.twig' with {entity: item} %}
+        {% endfor %}
     </div>
 {% endblock %}

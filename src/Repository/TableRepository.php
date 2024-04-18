@@ -77,7 +77,8 @@ class TableRepository extends ServiceEntityRepository
         $sql = "select 
                     t.id, 
                     t.parent_id, 
-                    t.name, 
+                    t.name,
+                    r.value,
                     CONVERT(r.value / (select sum(r2.value) as rarity_sum 
                                from `table` t2 
                                    left join autolooter.rarity r2 

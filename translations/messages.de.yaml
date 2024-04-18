@@ -119,6 +119,7 @@ menu: 'Menü'
 item:
   random:
     label: 'Loot me up!'
+    notEnoughItems: 'Nicht genügend Items Konfiguriert für die gewünschte Anzahl!'
 goto:
   rarity: 'Zu den Seltenheiten'
   table: 'Zu den Tabellen'
