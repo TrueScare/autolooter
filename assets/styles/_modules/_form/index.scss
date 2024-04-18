@@ -1,0 +1,18 @@
+.ss-main,
+.ss-content {
+    &.form-select {
+        background-image: none;
+    }
+}
+
+.ss-main,
+.ss-content .ss-search input:focus {
+    box-shadow: 0 0 5px $primary;
+}
+
+.ss-content .ss-list .ss-option:not(.ss-disabled):hover,
+.ss-content .ss-list .ss-option:not(.ss-disabled).ss-selected,
+.ss-main .ss-values .ss-value {
+    background-color: $primary;
+}
+

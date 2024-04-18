@@ -6,7 +6,14 @@
     <div class="more-button">
         <a href="{{ path('item_random') }}" class="btn btn-primary">Nochmal</a>
     </div>
-    {{ form(form) }}
+    {{ form_start(form) }}
+    {{ form_row(form.amount) }}
+    {{ form_row(form.tables, {
+        id: 'slim-select-flag'
+    }) }}
+    {{ form_row(form.unique_tables) }}
+    {{ form_row(form.submit) }}
+    {{ form_end(form) }}
     <div class="row justify-content-center my-5">
         {% for item in items %}
             {% include 'components/cards/card-item-random.html.twig' with {entity: item} %}

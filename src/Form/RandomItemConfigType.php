@@ -29,8 +29,7 @@ class RandomItemConfigType extends AbstractType
                 'choice_value' => function(?Table $table): int{
                   return $table ? $table->getId(): '';
                 },
-                'multiple' => true,
-                'expanded' => true
+                'multiple' => true
             ])
             ->add('submit', SubmitType::class);
     }
