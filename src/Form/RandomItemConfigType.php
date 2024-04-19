@@ -24,6 +24,7 @@ class RandomItemConfigType extends AbstractType
                 'required' => false
             ])
             ->add('tables', ChoiceType::class, [
+                'required' => false,
                 'choices' => $options['tableChoices'],
                 'choice_label' => 'name',
                 'choice_value' => function(?Table $table): int{
