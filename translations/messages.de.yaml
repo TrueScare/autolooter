@@ -16,6 +16,12 @@ label:
   table: 'Tabelle'
   item: 'Item'
   user: 'User'
+  unique:
+    items: 'Keine Duplikate'
+  amount:
+    items: 'Anzahl der Items'
+  choice:
+    tables: 'Zu nutzende Tabellen'
 
 pagination:
   entities_found: "Insgesamt %count% gefunden."

@@ -3,9 +3,6 @@
 {% block title %}Random Item{% endblock %}
 
 {% block body %}
-    <div class="more-button">
-        <a href="{{ path('item_random') }}" class="btn btn-primary">Nochmal</a>
-    </div>
     {{ form_start(form) }}
     {{ form_row(form.amount) }}
     {{ form_row(form.tables, {

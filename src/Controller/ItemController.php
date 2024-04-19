@@ -14,6 +14,7 @@ use App\Struct\Order;
 use App\Struct\RandomItemConfig;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Random\Randomizer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -144,20 +145,21 @@ class ItemController extends BaseController
             );
 
             $items = $this->itemRepository->getItemsById($this->getUser(), $picks);
+            if(!$itemConfig->isUniqueTables()) {
+                $quantityMapping = array_count_values($picks);
 
-            $quantityMapping = array_count_values($picks);
-
-            $quantityItems = [];
-            foreach ($items as $item) {
-                $count = $quantityMapping[$item->getId()];
-                foreach(range(1, $count)as $i) {
-                    $quantityItems[] = $item;
+                $quantityItems = [];
+                foreach ($items as $item) {
+                    $count = $quantityMapping[$item->getId()];
+                    foreach (range(1, $count) as $i) {
+                        $quantityItems[] = $item;
+                    }
                 }
             }
         }
 
         return $this->render('item/random.html.twig', [
-            'items' => $quantityItems?? [],
+            'items' => $quantityItems ?? $items,
             'form' => $form->createView(),
         ]);
     }
@@ -171,13 +173,8 @@ class ItemController extends BaseController
             }
             //only way to return unique items... we may not get the wanted amount though...
             $keys = array_keys($probabilityMapping);
-            return $keys;
-
         } else if (count($probabilityMapping) > $amount && $uniqueItems) {
-            while (count($keys) < $amount) {
-                $id = $this->getPickFromItems($probabilityMapping);
-                $keys[$id] = $this->getPickFromItems($probabilityMapping);
-            }
+            $keys = $this->getPickFromItemsUnique($probabilityMapping, $amount);
         } else {
             while (count($keys) < $amount) {
                 $keys[] = $this->getPickFromItems($probabilityMapping);
@@ -190,7 +187,7 @@ class ItemController extends BaseController
     private function getPickFromItems(array $probabilityMapping)
     {
         // the items probability ALWAYS has to add up to 1 (100%)
-        $luckyPick = rand(0, 100) / 100;
+        $luckyPick = (mt_rand() / mt_getrandmax());
 
         foreach ($probabilityMapping as $item) {
             $luckyPick -= $item['individual_rarity'];
@@ -198,8 +195,38 @@ class ItemController extends BaseController
                 return $item['id'];
             }
         }
+
         $this->addFlash('danger', "No item found... that's suspicious.");
         return end($probabilityMapping);
+    }
+
+    private function getPickFromItemsUnique(array $probabilityMapping, $amount)
+    {
+        $baseProbability = 1;
+        $picks = [];
+
+        for ($i = 0; $i < $amount; $i++) {
+
+            $luckyPick = (mt_rand() / mt_getrandmax()) * $baseProbability;
+
+            foreach ($probabilityMapping as $key => $item) {
+                $luckyPick = $luckyPick - $item['individual_rarity'];
+
+                if ($luckyPick <= 0) {
+                    $picks[$item['id']] = $item['id'];
+                    $baseProbability = $baseProbability - $item['individual_rarity'];
+                    unset($probabilityMapping[$key]);
+                    break;
+                }
+            }
+        }
+
+        if (count($picks) <= 0) {
+            $this->addFlash('danger', "No item found... that's suspicious.");
+            return end($probabilityMapping[])['id'];
+        }
+
+        return $picks;
     }
 
     /**

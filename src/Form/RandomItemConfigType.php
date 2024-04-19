@@ -8,6 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\ResetType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -18,10 +19,12 @@ class RandomItemConfigType extends AbstractType
     {
         $builder
             ->add('unique_tables', CheckboxType::class, [
-                'required' => false
+                'required' => false,
+                'label' => 'label.unique.items'
             ])
             ->add('amount', NumberType::class,[
-                'required' => false
+                'required' => false,
+                'label' => 'label.amount.items'
             ])
             ->add('tables', ChoiceType::class, [
                 'required' => false,
@@ -30,9 +33,12 @@ class RandomItemConfigType extends AbstractType
                 'choice_value' => function(?Table $table): int{
                   return $table ? $table->getId(): '';
                 },
-                'multiple' => true
+                'multiple' => true,
+                'label' => 'label.choice.tables'
             ])
-            ->add('submit', SubmitType::class);
+            ->add('submit', SubmitType::class, [
+                'label'=> 'item.random.label'
+                ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
