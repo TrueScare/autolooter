@@ -144,3 +144,4 @@ user:
   mail: 'E-Mail'
   verified: 'Verifiziert'
   lastlogin: 'letzter Login'
+  admin: 'Admin'
