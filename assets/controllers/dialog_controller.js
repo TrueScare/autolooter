@@ -31,7 +31,9 @@ export default class extends Controller {
         if (this.hasRouteValue) {
             this.dialogConfirm.removeEventListener('click', () => this.execRoute())
         } else {
-            this.dialogConfirm.classList.toggle('d-none');
+            if(this.dialogConfirm.classList.contains('d-none')){
+                this.dialogConfirm.classList.remove('d-none');
+            }
         }
         this.dialogCancel.removeEventListener('click', () => this.close());
         this.dialog.style.display = 'none';
@@ -44,7 +46,9 @@ export default class extends Controller {
         if (this.hasRouteValue) {
             this.dialogConfirm.addEventListener('click', () => this.execRoute());
         } else {
-            this.dialogConfirm.classList.toggle('d-none');
+            if(!this.dialogConfirm.classList.contains('d-none')){
+                this.dialogConfirm.classList.add('d-none');
+            }
         }
         this.dialogCancel.addEventListener('click', () => this.close());
         this.dialog.style.display = 'block';
