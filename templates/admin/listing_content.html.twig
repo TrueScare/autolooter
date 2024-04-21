@@ -8,6 +8,7 @@
                 <th scope="col">{{ 'user.id'|trans }}</th>
                 <th scope="col">{{ 'user.username'|trans }}</th>
                 <th scope="col">{{ 'user.mail'|trans }}</th>
+                <th scope="col">{{ 'user.lastlogin'|trans }}</th>
                 <th scope="col" class="text-center">{{ 'user.verified'|trans }}</th>
                 <th scope="col"></th>
             </tr>
@@ -28,6 +29,9 @@
                         <a href="mailto:{{ user.email }}" class="link-light">
                             {{ user.email }}
                         </a>
+                    </td>
+                    <td>
+                        {{ user.lastLogin|date('d.m.Y h:m:s') }}
                     </td>
                     <td class="text-center">
                         {% if user.isVerified %}

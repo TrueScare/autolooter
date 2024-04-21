@@ -54,7 +54,9 @@ class AdminController extends BaseController
             'maxItemsFound' => $maxUsersFound,
             'orderOptions' => [
                 Order::NAME_ASC,
-                Order::NAME_DESC
+                Order::NAME_DESC,
+                Order::LOGIN_ASC,
+                Order::LOGIN_DESC
             ],
             'page' => $pageInfo->getPage(),
             'pageSize' => $pageInfo->getPageSize(),
@@ -80,6 +82,8 @@ class AdminController extends BaseController
                 'orderOptions' => [
                     Order::NAME_ASC,
                     Order::NAME_DESC,
+                    Order::LOGIN_ASC,
+                    Order::LOGIN_DESC
                 ],
                 'page' => $pageInfo->getPage(),
                 'pageSize' => $pageInfo->getPageSize(),

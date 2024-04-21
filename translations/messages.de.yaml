@@ -76,6 +76,8 @@ enum:
     rarity_asc: 'Seltenheit aufsteigend'
     name_desc: 'Name absteigend'
     name_asc: 'Name aufsteigend'
+    login_asc: 'Letzter Login aufsteigend'
+    login_desc: 'Letzter Login absteigend'
 
 path:
   goto:
@@ -141,3 +143,4 @@ user:
   username: 'Username'
   mail: 'E-Mail'
   verified: 'Verifiziert'
+  lastlogin: 'letzter Login'

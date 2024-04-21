@@ -85,6 +85,12 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             case Order::NAME_DESC:
                 $qb->orderBy('u.username', 'DESC');
                 break;
+            case Order::LOGIN_ASC:
+                $qb->orderBy('u.last_login', 'ASC');
+                break;
+            case Order::LOGIN_DESC:
+                $qb->orderBy('u.last_login', 'DESC');
+                break;
             case Order::NAME_ASC:
             default:
                 $qb->orderBy('u.username', 'ASC');
