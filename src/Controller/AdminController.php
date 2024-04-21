@@ -54,7 +54,9 @@ class AdminController extends BaseController
             'maxItemsFound' => $maxUsersFound,
             'orderOptions' => [
                 Order::NAME_ASC,
-                Order::NAME_DESC
+                Order::NAME_DESC,
+                Order::LOGIN_ASC,
+                Order::LOGIN_DESC
             ],
             'page' => $pageInfo->getPage(),
             'pageSize' => $pageInfo->getPageSize(),
@@ -74,12 +76,14 @@ class AdminController extends BaseController
         $maxUsersFound = $this->userRepository->getUserCount($pageInfo);
 
         return $this->json(
-            $this->render('components/listing_content.html.twig', [
+            $this->render('admin/listing_content.html.twig', [
                 'entities' => $users,
                 'maxItemsFound' => $maxUsersFound,
                 'orderOptions' => [
                     Order::NAME_ASC,
                     Order::NAME_DESC,
+                    Order::LOGIN_ASC,
+                    Order::LOGIN_DESC
                 ],
                 'page' => $pageInfo->getPage(),
                 'pageSize' => $pageInfo->getPageSize(),
