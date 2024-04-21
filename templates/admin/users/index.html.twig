@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {% include 'components/listing.html.twig' with {route: path('admin_users_pagination'), entities: users, type:'user'} %}
+    {% include 'admin/listing.html.twig' with {route: path('admin_users_pagination'), entities: users} %}
 {% endblock %}

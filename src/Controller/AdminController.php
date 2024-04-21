@@ -74,7 +74,7 @@ class AdminController extends BaseController
         $maxUsersFound = $this->userRepository->getUserCount($pageInfo);
 
         return $this->json(
-            $this->render('components/listing_content.html.twig', [
+            $this->render('admin/listing_content.html.twig', [
                 'entities' => $users,
                 'maxItemsFound' => $maxUsersFound,
                 'orderOptions' => [

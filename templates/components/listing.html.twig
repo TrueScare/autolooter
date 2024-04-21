@@ -8,10 +8,12 @@
              data-listing-target="content"
              data-controller="pagination"
         >
-            {% include 'components/listing_content.html.twig' %}
+            {% block listing_content %}
+                {% include 'components/listing_content.html.twig' %}
+            {% endblock %}
         </div>
         <div class="page_loader"
-            data-listing-target="loader"
+             data-listing-target="loader"
         >
             {% include 'components/page_loader.html.twig' %}
         </div>

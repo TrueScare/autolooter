@@ -136,3 +136,8 @@ new:
   table: 'Neue Tabelle'
   item: 'Neues Item'
   user: 'Neuer User'
+user:
+  id: '#'
+  username: 'Username'
+  mail: 'E-Mail'
+  verified: 'Verifiziert'
