@@ -32,7 +32,9 @@
                         </a>
                     </td>
                     <td>
-                        {{ user.lastLogin|date('d.m.Y h:m:s') }}
+                        {% if user.lastLogin is not null %}
+                            {{ user.lastLogin|date('d.m.Y H:i:s', 'Europe/Berlin') }}
+                        {% endif %}
                     </td>
                     <td class="text-center">
                         {% if user.isVerified %}
