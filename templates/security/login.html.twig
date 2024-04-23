@@ -34,6 +34,10 @@
                    autocomplete="current-password"
                    required>
         </div>
+        <label>
+            <input type="checkbox" name="_remember_me">
+            {{ 'rememberMe'|trans }}
+        </label>
         <input class="form-control"
                type="hidden"
                name="_csrf_token"
