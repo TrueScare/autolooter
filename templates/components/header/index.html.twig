@@ -1,31 +1,34 @@
 {% set hasActions = headerActions is defined %}
 
 <header aria-label="{{ "section.heading"|trans }}" class="mb-3 bg-dark">
-    <nav class="navbar navbar-dark navbar-expand-md border-bottom">
-        <div class="container-fluid" aria-label="{{ "section.headline.logocontainer"|trans }}">
-            <a class="navbar-brand" href="{{ path('app_home') }}">
-                <img alt="Autolooter" src="{{ asset('build/images/Autolooter-logos.jpeg') }}"
+    <div class="container">
+        <nav class="navbar navbar-dark navbar-expand-md border-bottom row">
+            <div class="container-fluid" aria-label="{{ "section.headline.logocontainer"|trans }}">
+                <a class="btn btn-primary navbar-brand" href="{{ path('app_home') }}">
+                    {# <img alt="Autolooter" src="{{ asset('build/images/Autolooter-logos.jpeg') }}"
                      style="max-width: 150px; max-height: 150px;"
-                >
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation"
-                    aria-controls="navigation" aria-expanded="false">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+                > #}
+                    Autolooter
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation"
+                        aria-controls="navigation" aria-expanded="false">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <div class="collapse navbar-collapse justify-content-between" id="navigation">
-                <ul class="navbar-nav">
-                    {% for action in headerActions.actions %}
-                        {% if action.actions is defined %}
-                            {% include 'components/header/action_group.html.twig' with {item:action} %}
-                        {% else %}
-                            {% include 'components/header/action.html.twig' %}
-                        {% endif %}
-                    {% endfor %}
-                </ul>
+                <div class="collapse navbar-collapse justify-content-between" id="navigation">
+                    <ul class="navbar-nav">
+                        {% for action in headerActions.actions %}
+                            {% if action.actions is defined %}
+                                {% include 'components/header/action_group.html.twig' with {item:action} %}
+                            {% else %}
+                                {% include 'components/header/action.html.twig' %}
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
 
-                {% include 'components/header/user_actions.html.twig' %}
+                    {% include 'components/header/user_actions.html.twig' %}
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+    </div>
 </header>
