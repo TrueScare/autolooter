@@ -2,3 +2,5 @@ framework:
     mailer:
         dsn: '%env(MAILER_DSN)%'
         message_bus: false
+        envelope:
+            sender: "%info_mail_name% <%info_mail%>"
