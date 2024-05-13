@@ -1,0 +1,9 @@
+<h1>Heya!</h1>
+
+<p>Um Ihr Passwort zurückzusetzen, folgen Sie bitte dem Link:</p>
+
+<a href="{{ url('app_reset_password', {token: resetToken.token}) }}">{{ url('app_reset_password', {token: resetToken.token}) }}</a>
+
+<p>Dieser Link läuft in {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }} ab.</p>
+
+<p>Dankööö!</p>
