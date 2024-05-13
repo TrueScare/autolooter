@@ -43,6 +43,7 @@
                name="_csrf_token"
                value="{{ csrf_token('authenticate') }}"
         >
+        <span><a href="{{ path('app_forgot_password_request') }}">Passowort vergessen?</a></span>
         <div class="form-group mt-3">
             <button class="btn btn-lg btn-primary"
                     type="submit">

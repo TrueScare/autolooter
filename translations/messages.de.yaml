@@ -22,6 +22,9 @@ label:
     items: 'Anzahl der Items'
   choice:
     tables: 'Zu nutzende Tabellen'
+  password_reset: 'Passwort zurücksetzten'
+  password_new: 'Neues Passwort'
+  password_repeat: 'Passwort wiederholen'
 
 pagination:
   entities_found: "Insgesamt %count% gefunden."
@@ -65,6 +68,7 @@ error:
   rarity:
     notfound: 'Seltenheit konnte nicht gefunden werden.'
   delete: 'Beim löschen ist ein Fehler aufgetreten.'
+  blank_mail: 'Bitte geben Sie eine E-Mail an.'
 
 success:
   save: "Speichern erfolgreich!"
@@ -146,3 +150,7 @@ user:
   lastlogin: 'letzter Login'
   admin: 'Admin'
 rememberMe: 'eingeloogt bleiben'
+
+message:
+  password:
+    mismatch: 'Die Passwörter stimmen nicht überein, bitte überprüfen sie Ihre eingabe.'
