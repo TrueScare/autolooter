@@ -71,3 +71,4 @@ user:
   lastlogin: 'letzter Login'
   admin: 'Admin'
 
+login_headline: 'Bitte, log dich ein'

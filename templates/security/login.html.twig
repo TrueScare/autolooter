@@ -13,9 +13,9 @@
                 Du bist eingeloggt als {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
             </div>
         {% endif %}
-        <h1 class="h3 mb-3 font-weight-normal">Bitte, log dich ein</h1>
+        <h1 class="h3 mb-3 font-weight-normal">{{ 'login_headline'|trans }}</h1>
         <div class="form-group">
-            <label for="inputUsername">Username</label>
+            <label for="inputUsername">{{ 'user.name'|trans({}, 'labels') }}</label>
             <input type="text"
                    value="{{ last_username }}"
                    name="username"
@@ -26,7 +26,7 @@
                    autofocus>
         </div>
         <div class="form-group">
-            <label for="inputPassword">Passwort</label>
+            <label for="inputPassword">{{ 'password.self'|trans({}, 'labels') }}</label>
             <input type="password"
                    name="password"
                    id="inputPassword"
@@ -43,7 +43,7 @@
                name="_csrf_token"
                value="{{ csrf_token('authenticate') }}"
         >
-        <span><a href="{{ path('app_forgot_password_request') }}">Passowort vergessen?</a></span>
+        <span><a href="{{ path('app_forgot_password_request') }}">{{ 'password.forgot'|trans({}, 'labels') }}</a></span>
         <div class="form-group mt-3">
             <button class="btn btn-lg btn-primary"
                     type="submit">

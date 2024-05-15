@@ -6,3 +6,5 @@ controllers:
     prefix:
         de: ''
         en: '/en'
+    requirements:
+        prefix: '%locales%'

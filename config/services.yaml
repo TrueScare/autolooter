@@ -6,6 +6,7 @@
 parameters:
     info_mail: 'info.autolooter@gmail.com'
     info_mail_name: 'Autolooter'
+    locales: de|en
 
 services:
     # default configuration for services in *this* file

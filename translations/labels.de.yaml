@@ -51,6 +51,7 @@ password:
   reset: 'Passwort zurücksetzten'
   new: 'Neues Passwort'
   repeat: 'Passwort wiederholen'
+  forgot: 'Passwort vergessen?'
 
 information:
   impressum: 'Impressum'

@@ -70,3 +70,5 @@ user:
   verified: 'verified'
   lastlogin: 'last Login'
   admin: 'Admin'
+
+login_headline: 'Please log in'

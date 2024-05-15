@@ -51,6 +51,7 @@ password:
   reset: 'reset password'
   new: 'new password'
   repeat: 'repeat password'
+  forgot: 'reset password?'
 
 information:
   impressum: 'Legals'
