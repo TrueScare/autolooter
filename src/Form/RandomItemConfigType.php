@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\ResetType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatableMessage;
 
 class RandomItemConfigType extends AbstractType
 {
@@ -20,11 +21,11 @@ class RandomItemConfigType extends AbstractType
         $builder
             ->add('unique_tables', CheckboxType::class, [
                 'required' => false,
-                'label' => 'label.unique.items'
+                'label' => new TranslatableMessage('unique.items', domain: 'labels')
             ])
             ->add('amount', NumberType::class,[
                 'required' => false,
-                'label' => 'label.amount.items'
+                'label' => new TranslatableMessage('amount.items', domain: 'labels')
             ])
             ->add('tables', ChoiceType::class, [
                 'required' => false,
@@ -34,10 +35,10 @@ class RandomItemConfigType extends AbstractType
                   return $table ? $table->getId(): '';
                 },
                 'multiple' => true,
-                'label' => 'label.choice.tables'
+                'label' => new TranslatableMessage('choice.tables', domain: 'labels')
             ])
             ->add('submit', SubmitType::class, [
-                'label'=> 'item.random.label'
+                'label'=> new TranslatableMessage('item.random', domain: 'labels')
                 ]);
     }
 

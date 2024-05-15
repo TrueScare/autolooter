@@ -1,0 +1,7 @@
+order:
+  rarity_desc: 'rarity descending'
+  rarity_asc: 'rarity ascending'
+  name_desc: 'name descending'
+  name_asc: 'name ascending'
+  login_asc: 'last login ascending'
+  login_desc: 'last login descending'

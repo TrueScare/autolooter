@@ -9,18 +9,18 @@
             class="btn btn-primary"
             data-controller="dialog modal-loader"
             data-action="modal-loader:loaded->dialog#showPage:preventDefault click->modal-loader#request"
-            data-modal-loader-route-value="{{ path('api_rarity_move_items', {'id': table.id}) }}"
+            data-modal-loader-route-value="{{ path('api_rarity_move_items', {'id': rarity.id}) }}"
     >
-        {{ 'move.items'|trans }}
+        {{ 'item.move'|trans({}, 'labels') }}
     </div>
 
     <div
             class="btn btn-primary"
             data-controller="dialog modal-loader"
             data-action="modal-loader:loaded->dialog#showPage:preventDefault click->modal-loader#request"
-            data-modal-loader-route-value="{{ path('api_rarity_move_tables', {'id': table.id}) }}"
+            data-modal-loader-route-value="{{ path('api_rarity_move_tables', {'id': rarity.id}) }}"
     >
-        {{ 'move.tables'|trans }}
+        {{ 'table.move'|trans({}, 'labels') }}
     </div>
 
     {% if rarity.items|length > 0 %}

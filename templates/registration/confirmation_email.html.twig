@@ -1,11 +1,12 @@
-<h1>{{ 'mail.registration_confirm.title'|trans }}</h1>
+{% trans_default_domain 'mails' %}
+<h1>{{ 'registration_confirm.title'|trans }}</h1>
 
 <p>
-    {{ 'mail.registration_confirm.please_confirm'|trans }}<br><br>
-    <a href="{{ signedUrl|raw }}">{{ 'mail.registration_confirm.button_label'|trans }}</a>.
-    {{ 'mail.registration_confirm.expires_note'|trans({'%time%': expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }) }}
+    {{ 'registration_confirm.please_confirm'|trans }}<br><br>
+    <a href="{{ signedUrl|raw }}">{{ 'registration_confirm.button_label'|trans }}</a>.
+    {{ 'registration_confirm.expires_note'|trans({'%time%': expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }) }}
 </p>
 
 <p>
-    {{ 'mail.registration_confirm.greetings'|trans }}
+    {{ 'registration_confirm.greetings'|trans }}
 </p>

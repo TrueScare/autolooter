@@ -1,0 +1,14 @@
+password:
+    blank: 'Das Passwort darf nicht leer sein!'
+    min_len: 'Das Passwort muss mindestens 6 Zeichen Lang sein.'
+    mismatch: 'Die Passwörter stimmen nicht überein, bitte überprüfen sie Ihre eingabe.'
+save: "FEHLER: Speichern fehlgeschlagen."
+table:
+  notfound: 'Tabelle konnte nicht gefunden werden.'
+item:
+  notfound: 'Item konnte nicht gefunden werden.'
+rarity:
+  notfound: 'Seltenheit konnte nicht gefunden werden.'
+delete: 'Beim löschen ist ein Fehler aufgetreten.'
+mail:
+  blank: 'Bitte geben Sie eine E-Mail an.'

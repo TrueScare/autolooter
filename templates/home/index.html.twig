@@ -1,48 +1,30 @@
 {% extends 'base.html.twig' %}
 
+{% trans_default_domain 'contents' %}
+
 {% block body %}
     <section aria-labelledby="welcome">
-        <h1 id="welcome">Willkommen bei Autolooter!</h1>
-        <p>
-            Hier entsteht eine Plattform für TTRPGs, die dich dabei unterstützen soll deine Loot-Tabellen zu
-            organisieren und darauf automatisch zu würfeln.
-        </p>
+        <h1 id="welcome">
+            {{ 'homepage.welcome.title'|trans }}
+        </h1>
+        {{ 'homepage.welcome.content'|trans|raw }}
     </section>
     <section aria-labelledby="how-does-it-work">
-        <h2 id="how-does-it-work">Aber wie funktioniert das Ganze?</h2>
-        <p>
-            Autolooter funktioniert auf der Basis von <a href="{{ path('table_index') }}">Tabellen</a>.
-            In den Tabellen stecken wiederum andere Tabellen oder <a href="{{ path('item_index') }}">Items</a>.
-        </p>
-        <p>
-            Den Tabellen und Items werden von dir erstellte <a href="{{ path('rarity_index') }}">Seltenheiten</a>
-            zugeschrieben. Das Prinzip erkennst du eventuell von Computerspielen wie World of Warcraft oder Borderlands.
-            Jede Seltenheit bekommt von dir einen Wert zugeschrieben. Dieser wird später dafür genutzt die
-            Wahrscheinlichkeit zu errechnen, ein Item zu ziehen. Das ganze basiert auf dem
-            <a href="https://de.wikipedia.org/wiki/Urnenmodell" target="_blank">Urnenmodell</a>.
-        </p>
+        <h2 id="how-does-it-work">
+            {{ 'homepage.howto.title'|trans }}
+        </h2>
+        {{ 'homepage.howto.content'|trans|raw }}
     </section>
     <section aria-labelledby="where-to-start">
-        <h2>Und wo fange ich am besten an?</h2>
-        <p>
-            Wenn du noch keinen Account hast, <a href="{{ path('app_register') }}">registriere</a> dich eben. Das Ganze
-            ist zu 100% kostenlos, werbefrei und mit deinen Daten passiert hier auch nichts.
-        </p>
-        <p>
-            Am besten startest du mit den <a href="{{ path('rarity_index') }}">Seltenheiten</a>. Diese werden sowohl bei
-            den Tabellen als auch den Items benötigt bzw. vorausgesetzt. Danach erstellst du dir deine erste
-            <a href="{{ path('table_index') }}">Tabelle</a>. Jedes Item muss nämlich einer Tabelle zugeordnet sein.
-            Zum Schluss kannst du dann einfach deine <a href="{{ path('item_index') }}">Items</a> erstellen.
-        </p>
-        <p>Viel Spaß!</p>
+        <h2 id="where-to-start">
+            {{ 'homepage.wherestart.title'|trans }}
+        </h2>
+        {{ 'homepage.wherestart.content'|trans|raw }}
     </section>
     <section aria-labelledby="contact">
-        <h2 id="contact">Und wenn ich euch erreichen will?</h2>
-        <p>
-            Bei Fragen oder Anmerkungen schick doch gerne eine Mail an
-            <a href="mailto:info.autolooter@gmail.com">info.autolooter@gmail.com</a>. Solltest du einen Bug gefunden
-            haben, oder dich über ein bestimmtes verhalten wundern, wäre es schön, wenn du alle Schritte in deiner Mail
-            aufzählst, die zu dem Verhalten führen. Screenshots sind dabei auch immer sehr hilfreich!
-        </p>
+        <h2 id="contact">
+            {{ 'homepage.contact.title'|trans|raw }}
+        </h2>
+        {{ 'homepage.contact.content'|trans|raw }}
     </section>
 {% endblock %}

@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatableMessage;
 
 class RarityFormType extends AbstractType
 {
@@ -18,22 +19,22 @@ class RarityFormType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'label.name'
+                'label' => new TranslatableMessage('name', domain: 'labels')
             ])
             ->add('value', NumberType::class,[
-                'label' => 'label.value',
+                'label' => new TranslatableMessage('value', domain: 'labels'),
 
             ])
             ->add('description', TextareaType::class, [
-                'label' => 'label.description',
+                'label' => new TranslatableMessage('description', domain: 'labels'),
                 'required' => false
             ])
             ->add('color', ColorType::class, [
-                'label' => 'label.color',
+                'label' => new TranslatableMessage('color', domain: 'labels'),
                 'required' => false
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'label.save'
+                'label' => new TranslatableMessage('save', domain: 'labels')
             ])
         ->setAction($options['route']);
     }

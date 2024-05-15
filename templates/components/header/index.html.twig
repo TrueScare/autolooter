@@ -10,13 +10,33 @@
                 > #}
                     Autolooter
                 </a>
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation"
                         aria-controls="navigation" aria-expanded="false">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div class="collapse navbar-collapse justify-content-between" id="navigation">
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav locale-picker">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="dropdown-language" role="button"
+                               data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{ app.request.locale|trans({}, 'flags')|raw }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right position-absolute" aria-labelledby="dropdown-language">
+                                <li>
+                                    <a class="dropdown-item" href="{{ path('app_home', {_locale: 'de'}) }}">
+                                        {{ 'de'|trans({}, 'flags')|raw }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ path('app_home', {_locale: 'en'}) }}">
+                                        {{ 'en'|trans({}, 'flags')|raw }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
                         {% for action in headerActions.actions %}
                             {% if action.actions is defined %}
                                 {% include 'components/header/action_group.html.twig' with {item:action} %}

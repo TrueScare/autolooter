@@ -1,0 +1,59 @@
+name: 'Name'
+description: 'Beschreibung'
+value: 'Wert'
+value_from: 'Wert von...'
+value_to: 'Wert bis...'
+parent:
+  self: 'Übergeordnete Tabelle'
+  placeholder: '...'
+
+save: 'Speichern'
+color: 'Farbe'
+
+user:
+  self: 'User'
+  name: 'Username'
+  goto: 'Zu den Usern'
+  new: 'Neuer User'
+  home: 'Zum Profil'
+
+roles: 'Rollen'
+mail: 'E-Mail'
+
+rarity:
+  self: 'Seltenheit'
+  goto: 'Zu den Seltenheiten'
+  new: 'Neue Seltenheit'
+
+table:
+  self: 'Tabelle'
+  goto: 'Zu den Tabellen'
+  new: 'Neue Tabelle'
+  move: 'Tabellen verschieben'
+
+item:
+  self: 'Item'
+  random: 'Loot me up!'
+  goto: 'Zu den Items'
+  new: 'Neues Item'
+  move: 'Items verschieben'
+
+placeholder: '...'
+
+unique:
+  items: 'Keine Duplikate'
+amount:
+  items: 'Anzahl der Items'
+choice:
+  tables: 'Zu nutzende Tabellen'
+password:
+  self: 'Passwort'
+  reset: 'Passwort zurücksetzten'
+  new: 'Neues Passwort'
+  repeat: 'Passwort wiederholen'
+
+information:
+  impressum: 'Impressum'
+  self: 'Informationen'
+
+menu: 'Menü'

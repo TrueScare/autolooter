@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatableMessage;
 
 class ItemFormType extends AbstractType
 {
@@ -20,34 +21,34 @@ class ItemFormType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'label.name'
+                'label' => new TranslatableMessage('name', domain: 'labels')
             ])
             ->add('description', TextareaType::class, [
-                'label' => 'label.description',
+                'label' => new TranslatableMessage('description', domain: 'labels'),
                 'required' => false
             ])
             ->add('value_start', NumberType::class, [
-                'label' => 'label.value_from'
+                'label' => new TranslatableMessage('value_from', domain: 'labels')
             ])
             ->add('value_end', NumberType::class, [
-                'label' => 'label.value_to'
+                'label' => new TranslatableMessage('value_to', domain: 'labels')
             ])
             ->add('parent', EntityType::class, [
                 'class' => Table::class,
                 'choice_label' => 'name',
                 'choices' => $options['tableChoices'],
-                'label' => 'label.parent'
+                'label' => new TranslatableMessage('parent.self', domain: 'labels')
             ])
             ->add('rarity', EntityType::class, [
                 'class' => Rarity::class,
                 'choice_label' => 'name',
                 'choices' => $options['rarityChoices'],
-                'label' => 'label.rarity',
-                'placeholder' => 'label.parent_placeholder',
+                'label' => new TranslatableMessage('rarity.self', domain: 'labels'),
+                'placeholder' => new TranslatableMessage('placeholder', domain: 'labels'),
                 'required' => true
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'label.save',
+                'label' => new TranslatableMessage('save', domain: 'labels'),
             ])
             ->setAction($options['route']);
     }

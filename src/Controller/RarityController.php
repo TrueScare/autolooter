@@ -83,15 +83,15 @@ class RarityController extends BaseController
             try {
                 $this->entityManager->persist($rarity);
                 $this->entityManager->flush();
-                $this->addFlash('success', $translator->trans('success.save'));
+                $this->addFlash('success', $translator->trans('save', domain: 'successes'));
                 return $this->redirectToRoute('rarity_edit', ['id' => $rarity->getId()]);
             } catch (\Exception $e) {
                 $this->logger->error($e);
-                $this->addFlash('danger', $translator->trans('error.save'));
+                $this->addFlash('danger', $translator->trans('save', domain: 'errors'));
             }
         }
 
-        return $this->render('item/detail.html.twig', [
+        return $this->render('rarity/detail.html.twig', [
             'rarity' => $rarity,
             'form' => $form->createView(),
         ]);
@@ -159,7 +159,7 @@ class RarityController extends BaseController
     public function apiDetail(?Rarity $rarity, Request $request, TranslatorInterface $translator): Response
     {
         if ($rarity && $rarity->getOwner() !== $this->getUser()) {
-            $this->addFlash('danger', $translator->trans('error.save'));
+            $this->addFlash('danger', $translator->trans('save', domain: 'errors'));
             return $this->json("", status: 403);
         }
 
@@ -183,10 +183,10 @@ class RarityController extends BaseController
             try {
                 $this->entityManager->persist($rarity);
                 $this->entityManager->flush();
-                $this->addFlash('success', $translator->trans('success.save'));
+                $this->addFlash('success', $translator->trans('save', domain: 'successes'));
             } catch (\Exception $e) {
                 $this->logger->error($e);
-                $this->addFlash('danger', $translator->trans('error.save'));
+                $this->addFlash('danger', $translator->trans('save', domain: 'errors'));
             }
         }
 
@@ -202,17 +202,14 @@ class RarityController extends BaseController
     public function moveTables(Request $request, Rarity $from, TranslatorInterface $translator)
     {
         if (!($this->getUser() === $from->getOwner())) {
-            $this->addFlash('danger', $translator->trans('error.save'));
+            $this->addFlash('danger', $translator->trans('save', domain: 'errors'));
             return $this->json("", status: 403);
         }
 
         /** @var User $owner */
         $owner = $this->getUser();
 
-        $choices = $owner->getTables()->filter(function ($element) use ($from) {
-            /** @var Table $element */
-            return empty(($from->getChildrenCollectionRecursive()[$element->getId()]));
-        });
+        $choices = $owner->getRarities();
 
         $options = [
             'choices' => $choices,
@@ -238,12 +235,12 @@ class RarityController extends BaseController
                 $this->entityManager->persist($to);
                 $this->entityManager->flush();
 
-                $this->addFlash('success', $translator->trans('success.save'));
+                $this->addFlash('success', $translator->trans('save', domain: 'successes'));
 
                 return $this->json("");
             } catch (\Exception $e) {
                 $this->logger->error($e);
-                $this->addFlash('danger', $translator->trans('error.save'));
+                $this->addFlash('danger', $translator->trans('save', domain: 'errors'));
             }
         }
 
@@ -258,7 +255,7 @@ class RarityController extends BaseController
     public function moveItems(Request $request, Rarity $from, TranslatorInterface $translator)
     {
         if (!($this->getUser() === $from->getOwner())) {
-            $this->addFlash('danger', $translator->trans('error.save'));
+            $this->addFlash('danger', $translator->trans('save', domain: 'errors'));
             return $this->json("", status: 403);
         }
 
@@ -291,11 +288,11 @@ class RarityController extends BaseController
 
                 $this->entityManager->flush();
 
-                $this->addFlash('success', $translator->trans('success.save'));
+                $this->addFlash('success', $translator->trans('save', domain: 'successes'));
                 return $this->json("");
             } catch (\Exception $e) {
                 $this->logger->error($e);
-                $this->addFlash('danger', $translator->trans('error.save'));
+                $this->addFlash('danger', $translator->trans('save', domain: 'errors'));
             }
         }
 

@@ -1,0 +1,59 @@
+name: 'Name'
+description: 'Description'
+value: 'Value'
+value_from: 'value from...'
+value_to: 'value to...'
+parent:
+  self: 'Parent Table'
+  placeholder: '...'
+
+save: 'save'
+color: 'color'
+
+user:
+  self: 'User'
+  name: 'Username'
+  goto: 'List Users'
+  new: 'New User'
+  home: 'Profile'
+
+roles: 'rolls'
+mail: 'E-Mail'
+
+rarity:
+  self: 'Rarity'
+  goto: 'List Rarities'
+  new: 'New Rarity'
+
+table:
+  self: 'Table'
+  goto: 'List Tables'
+  new: 'New Table'
+  move: 'Move Tables'
+
+item:
+  self: 'Item'
+  random: 'Loot me up!'
+  goto: 'List Items'
+  new: 'New Item'
+  move: 'Move Items'
+
+placeholder: '...'
+
+unique:
+  items: 'No Duplicates'
+amount:
+  items: 'Total Items'
+choice:
+  tables: 'What Tables'
+password:
+  self: 'Password'
+  reset: 'reset password'
+  new: 'new password'
+  repeat: 'repeat password'
+
+information:
+  impressum: 'Legals'
+  self: 'Information'
+
+menu: 'menu'

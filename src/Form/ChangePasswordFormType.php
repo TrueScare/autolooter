@@ -7,18 +7,13 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ChangePasswordFormType extends AbstractType
 {
-    private TranslatorInterface $translator;
-
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
-    }
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -32,21 +27,21 @@ class ChangePasswordFormType extends AbstractType
                 'first_options' => [
                     'constraints' => [
                         new NotBlank([
-                            'message' => $this->translator->trans('error.blank_pw'),
+                            'message' => new TranslatableMessage('password.blank', domain:'errors'),
                         ]),
                         new Length([
                             'min' => 6,
-                            'minMessage' => $this->translator->trans('error.min_len_pw'),
+                            'minMessage' => new TranslatableMessage('password.min_len', domain: 'errors'),
                             // max length allowed by Symfony for security reasons
                             'max' => 4096,
                         ]),
                     ],
-                    'label' => 'label.password_new',
+                    'label' => new TranslatableMessage('password.new', domain: 'labels')
                 ],
                 'second_options' => [
-                    'label' => 'label.password_repeat',
+                    'label' => new TranslatableMessage('password.repeat', domain: 'labels'),
                 ],
-                'invalid_message' => 'message.password_mismatch',
+                'invalid_message' => new TranslatableMessage('password.mismatch', domain: 'errors'),
                 // Instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'mapped' => false,

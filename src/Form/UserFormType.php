@@ -10,43 +10,38 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UserFormType extends AbstractType
 {
-    private TranslatorInterface $translator;
-
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
-    }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('username', TextType::class, [
-                'label' => 'label.username'
+                'label' => new TranslatableMessage('user.name', domain: 'labels')
             ])
             ->add('email', EmailType::class, [
-                'label' => 'label.mail'
+                'label' => new TranslatableMessage('mail', domain: 'labels')
             ])
             ->add('plainPassword', PasswordType::class, [
-                'label' => 'label.password',
+                'label' => new TranslatableMessage('password.self', domain: 'labels'),
                 'mapped' => false,
                 'constraints' => [
                     new NotBlank(                        [
-                         'message' => $this->translator->trans('error.blank_pw')
+                         'message' => new TranslatableMessage('password.blank', domain: 'errors')
                         ]),
                     new Length([
                         'min' => 6,
-                        'minMessage' => $this->translator->trans('error.min_len_pw')
+                        'minMessage' => new TranslatableMessage('password.min_len', domain: 'errors')
                     ])
                 ]
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'label.save'
+                'label' => new TranslatableMessage('save', domain: 'labels')
             ])
             ->setAction($options['route']);
     }

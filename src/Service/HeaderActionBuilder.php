@@ -19,7 +19,7 @@ class HeaderActionBuilder
         $this->translator = $translator;
 
         $this->actions = new HeaderActionGroup(
-            $this->translator->trans('menu')
+            $this->translator->trans('menu', domain: 'labels')
         );
     }
 

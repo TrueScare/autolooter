@@ -31,34 +31,34 @@ class HeaderActionService
         $builder = $this->builder
             ->addAction(
                 new HeaderAction(
-                    $this->translator->trans('item.random.label'),
+                    $this->translator->trans('item.random', domain: 'labels'),
                     $this->urlGenerator->generate('item_random')
                 )
             )
             ->addGroup(
                 new HeaderActionGroup(
-                    $this->translator->trans('label.rarity'),
+                    $this->translator->trans('rarity.self', domain: 'labels'),
                     [
                         new HeaderAction(
-                            $this->translator->trans('goto.rarity'),
+                            $this->translator->trans('rarity.goto', domain: 'labels'),
                             $this->urlGenerator->generate('rarity_index')
                         ),
                         new HeaderAction(
-                            $this->translator->trans('new.rarity'),
+                            $this->translator->trans('rarity.new', domain: 'labels'),
                             $this->urlGenerator->generate('api_rarity_edit')
                         )
                     ])
             )
             ->addGroup(
                 new HeaderActionGroup(
-                    $this->translator->trans('label.table'),
+                    $this->translator->trans('table.self', domain: 'labels'),
                     [
                         new HeaderAction(
-                            $this->translator->trans('goto.table'),
+                            $this->translator->trans('table.goto', domain: 'labels'),
                             $this->urlGenerator->generate('table_index')
                         ),
                         new HeaderAction(
-                            $this->translator->trans('new.table'),
+                            $this->translator->trans('table.new', domain: 'labels'),
                             $this->urlGenerator->generate('api_table_edit')
                         )
                     ]
@@ -66,14 +66,14 @@ class HeaderActionService
             )
             ->addGroup(
                 new HeaderActionGroup(
-                    $this->translator->trans('label.item'),
+                    $this->translator->trans('item.self', domain: 'labels'),
                     [
                         new HeaderAction(
-                            $this->translator->trans('goto.item'),
+                            $this->translator->trans('item.goto', domain: 'labels'),
                             $this->urlGenerator->generate('item_index')
                         ),
                         new HeaderAction(
-                            $this->translator->trans('new.item'),
+                            $this->translator->trans('item.new', domain: 'labels'),
                             $this->urlGenerator->generate('api_item_edit')
                         )
                     ]
@@ -87,14 +87,14 @@ class HeaderActionService
     {
         $builder = $this->builder->addGroup(
             new HeaderActionGroup(
-                $this->translator->trans('label.user'),
+                $this->translator->trans('user.self', domain: 'labels'),
                 [
                     new HeaderAction(
-                        $this->translator->trans('goto.user'),
+                        $this->translator->trans('user.goto', domain: 'labels'),
                         $this->urlGenerator->generate('admin_users')
                     ),
                     new HeaderAction(
-                        $this->translator->trans('new.user'),
+                        $this->translator->trans('user.new', domain: 'labels'),
                         $this->urlGenerator->generate('api_admin_user_edit')
                     )
                 ]
@@ -107,10 +107,10 @@ class HeaderActionService
     {
         $builder->addGroup(
             new HeaderActionGroup(
-                $this->translator->trans('information.label'),
+                $this->translator->trans('information.self', domain: 'labels'),
                 [
                     new HeaderAction(
-                        $this->translator->trans('information.impressum'),
+                        $this->translator->trans('information.impressum', domain: 'labels'),
                         $this->urlGenerator->generate('information_impressum')
                     )
                 ]
