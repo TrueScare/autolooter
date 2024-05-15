@@ -87,10 +87,10 @@ class ItemController extends BaseController
             try {
                 $this->entityManager->persist($item);
                 $this->entityManager->flush();
-                $this->addFlash('success', $translator->trans('success.save'));
+                $this->addFlash('success', $translator->trans('save', domain: 'successes'));
             } catch (\Exception $e) {
                 $this->logger->error($e);
-                $this->addFlash('danger', $translator->trans('error.save'));
+                $this->addFlash('danger', $translator->trans('save', domain: 'errors'));
             }
         }
 
@@ -285,7 +285,7 @@ class ItemController extends BaseController
     public function apiDetail(?Item $item, Request $request, TranslatorInterface $translator): JsonResponse
     {
         if ($item && $item->getOwner() !== $this->getUser()) {
-            $this->addFlash('danger', $translator->trans('error.save'));
+            $this->addFlash('danger', $translator->trans('save', domain: 'errors'));
             return $this->json("", status: 403);
         }
 
@@ -313,11 +313,10 @@ class ItemController extends BaseController
             try {
                 $this->entityManager->persist($item);
                 $this->entityManager->flush();
-                $this->addFlash('success', $translator->trans('success.save'));
-                return $this->redirectToRoute('item_edit', ['id' => $item->getId()]);
+                $this->addFlash('success', $translator->trans('save', domain: 'successes'));
             } catch (\Exception $e) {
                 $this->logger->error($e);
-                $this->addFlash('danger', $translator->trans('error.save'));
+                $this->addFlash('danger', $translator->trans('save', domain: 'errors'));
             }
         }
 

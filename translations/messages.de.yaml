@@ -1,31 +1,3 @@
-label:
-  name: "Name"
-  description: "Beschreibung"
-  value: "Wert"
-  value_from: "Wert von..."
-  value_to: "Wert bis..."
-  parent: "Übergeordnete Tabelle"
-  parent_placeholder: "..."
-  rarity: "Seltenheit"
-  save: "Speichern"
-  color: "Farbe"
-  username: "Username"
-  password: "Passwort"
-  roles: "Rollen"
-  mail: "E-Mail"
-  table: 'Tabelle'
-  item: 'Item'
-  user: 'User'
-  unique:
-    items: 'Keine Duplikate'
-  amount:
-    items: 'Anzahl der Items'
-  choice:
-    tables: 'Zu nutzende Tabellen'
-  password_reset: 'Passwort zurücksetzten'
-  password_new: 'Neues Passwort'
-  password_repeat: 'Passwort wiederholen'
-
 pagination:
   entities_found: "Insgesamt %count% gefunden."
   previous: "vorherige"
@@ -57,32 +29,6 @@ card:
     items: 'Items'
     table: 'Tabellen'
 
-error:
-  blank_pw: 'Das Passwort darf nicht leer sein!'
-  min_len_pw: 'Das Passwort muss mindestens 6 Zeichen Lang sein.'
-  save: "FEHLER: Speichern fehlgeschlagen."
-  table:
-    notfound: 'Tabelle konnte nicht gefunden werden.'
-  item:
-    notfound: 'Item konnte nicht gefunden werden.'
-  rarity:
-    notfound: 'Seltenheit konnte nicht gefunden werden.'
-  delete: 'Beim löschen ist ein Fehler aufgetreten.'
-  blank_mail: 'Bitte geben Sie eine E-Mail an.'
-
-success:
-  save: "Speichern erfolgreich!"
-  delete: 'Löschen erfolgreich!'
-
-enum:
-  order:
-    rarity_desc: 'Seltenheit absteigend'
-    rarity_asc: 'Seltenheit aufsteigend'
-    name_desc: 'Name absteigend'
-    name_asc: 'Name aufsteigend'
-    login_asc: 'Letzter Login aufsteigend'
-    login_desc: 'Letzter Login absteigend'
-
 path:
   goto:
     parent: 'Gehe zur übergeordneten Tabelle'
@@ -94,54 +40,29 @@ registration:
   mail:
     verified: 'Deine E-Mail Adresse wurde erfolgreich bestätigt. Viel spaß!'
 
-mail:
-  registration_confirm:
-    title: 'Hi! Bitte Bestätige deine E-Mail!'
-    please_confirm: 'Bitte bestätige deine E-Mail indem du auf den Link klickst:'
-    button_label: 'Meine E-Mail bestätigen'
-    expires_note: 'Dieser Link läuft ab in %time%.'
-    greetings: 'Cheers!'
-
 lostAndFound:
   entity:
     name: 'Systemtabelle: Verloren geganges'
     description: 'Diese Tabelle wurde erstellt da Items bei dem versuch eine Tabelle zu löschen keiner neuen Tabelle zugeordnet werden konnten.'
+
 delete:
   label: 'löschen'
   message: 'Soll "%identifier%" wirklich gelöscht werden?'
 edit:
   label: 'bearbeiten'
-
 dialog:
   cancel: 'abbrechen'
   ok: 'Ok'
-move:
-  items: 'Items verschieben'
-  tables: 'Tabellen verschieben'
 
 login: 'Login'
 logout: 'Ausloggen'
 register: 'Registrieren'
-user_home: 'Zum Profil'
-information:
-  impressum: 'Impressum'
-  label: 'Informationen'
-menu: 'Menü'
+rememberMe: 'eingeloogt bleiben'
 
 item:
   random:
-    label: 'Loot me up!'
     notEnoughItems: 'Nicht genügend Items Konfiguriert für die gewünschte Anzahl!'
-goto:
-  rarity: 'Zu den Seltenheiten'
-  table: 'Zu den Tabellen'
-  item: 'Zu den Items'
-  user: 'Zu den Usern'
-new:
-  rarity: 'Neue Seltenheit'
-  table: 'Neue Tabelle'
-  item: 'Neues Item'
-  user: 'Neuer User'
+
 user:
   id: '#'
   username: 'Username'
@@ -149,8 +70,4 @@ user:
   verified: 'Verifiziert'
   lastlogin: 'letzter Login'
   admin: 'Admin'
-rememberMe: 'eingeloogt bleiben'
 
-message:
-  password:
-    mismatch: 'Die Passwörter stimmen nicht überein, bitte überprüfen sie Ihre eingabe.'

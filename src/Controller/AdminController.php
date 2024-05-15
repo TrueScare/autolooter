@@ -122,11 +122,11 @@ class AdminController extends BaseController
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();
 
-                $this->addFlash('success', $translator->trans('success.save'));
+                $this->addFlash('success', $translator->trans('save', domain: 'successes'));
                 return $this->redirectToRoute('admin_user_edit', ['id' => $user->getId()]);
             } catch (\Exception $e) {
                 $this->logger->error($e);
-                $this->addFlash('danger', $translator->trans('error.save'));
+                $this->addFlash('danger', $translator->trans('save', domain: 'errors'));
             }
         }
 
@@ -185,10 +185,10 @@ class AdminController extends BaseController
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();
 
-                $this->addFlash('success', $translator->trans('success.save'));
+                $this->addFlash('success', $translator->trans('save', domain: 'successes'));
             } catch (\Exception $e) {
                 $this->logger->error($e);
-                $this->addFlash('danger', $translator->trans('error.save'));
+                $this->addFlash('danger', $translator->trans('save', domain: 'errors'));
             }
         }
 

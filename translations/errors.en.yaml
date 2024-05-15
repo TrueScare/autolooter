@@ -1,0 +1,14 @@
+password:
+    blank: 'The password must not be empty!'
+    min_len: 'The password must be at least 6 characters long.'
+    mismatch: 'The passwords do not match, please check your input.'
+save: "ERROR: Save failed."
+table:
+  notfound: 'Table could not be found.'
+item:
+  notfound: 'Item could not be found.'
+rarity:
+  notfound: 'Rarity could not be found.'
+delete: 'An error occurred while deleting.'
+mail:
+  blank: 'Please enter an e-mail address.'

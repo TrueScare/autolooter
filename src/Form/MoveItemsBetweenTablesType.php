@@ -8,6 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatableMessage;
 
 class MoveItemsBetweenTablesType extends AbstractType
 {
@@ -18,10 +19,10 @@ class MoveItemsBetweenTablesType extends AbstractType
                 'class' => Table::class,
                 'choice_label' => 'name',
                 'choices' => $options['choices'],
-                'label' => 'label.parent'
+                'label' => new TranslatableMessage('parent.self', domain: 'labels')
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'label.save',
+                'label' => new TranslatableMessage('save', domain: 'labels'),
             ])
             ->setAction($options['route']);
     }

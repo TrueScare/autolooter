@@ -9,7 +9,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
+#[Route(path: '/{_locale}')]
 class BaseController extends AbstractController
 {
     protected PaginationService $paginationService;

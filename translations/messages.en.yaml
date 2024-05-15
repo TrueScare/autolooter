@@ -1,0 +1,72 @@
+pagination:
+  entities_found: "Found a total of %count%"
+  previous: "previous"
+  next: "next"
+  search: "search"
+  search_placeholder: "search..."
+  pagesize_label: "Total found"
+  ordering: 'Order'
+
+section:
+  main: "Content"
+  messages: 'Messages'
+  heading: 'Header'
+  headline:
+    logocontainer: 'Logo Container'
+  navigation: 'Navigation'
+  pagination: 'Pagination'
+
+card:
+  role:
+    label: 'Roles:'
+  items:
+    label: 'Items:'
+  tables:
+    label: 'Tables:'
+  rarities:
+    label: 'Rarities:'
+  badge:
+    items: 'Items'
+    table: 'Tables'
+
+path:
+  goto:
+    parent: 'Go to the parent table'
+
+registration:
+  complete:
+    title: 'Registration complete'
+    sendto: 'We have sent you a confirmation link to %mail%. Please check your mailbox for our message. The link will then take you back to us.'
+  mail:
+    verified: 'Your e-mail address has been successfully confirmed. Have fun!'
+
+lostAndFound:
+  entity:
+    name: 'System table: Lost stuff'
+    description: 'This table was created because items could not be assigned to a new table when trying to delete a table.'
+
+delete:
+  label: 'delete'
+  message: 'Do you really want to delete "%identifier%"?'
+edit:
+  label: 'edit'
+dialog:
+  cancel: 'cancel'
+  ok: 'Ok'
+
+login: 'Login'
+logout: 'Logout'
+register: 'Register'
+rememberMe: 'remember me'
+
+item:
+  random:
+    notEnoughItems: 'Not enough items configured for the desired number!'
+
+user:
+  id: '#'
+  username: 'Username'
+  mail: 'E-Mail'
+  verified: 'verified'
+  lastlogin: 'last Login'
+  admin: 'Admin'

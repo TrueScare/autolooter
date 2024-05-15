@@ -1,0 +1,6 @@
+registration_confirm:
+  title: 'Hi! Bitte Bestätige deine E-Mail!'
+  please_confirm: 'Bitte bestätige deine E-Mail indem du auf den Link klickst:'
+  button_label: 'Meine E-Mail bestätigen'
+  expires_note: 'Dieser Link läuft ab in %time%.'
+  greetings: 'Cheers!'

@@ -1,41 +1,43 @@
 {% extends 'base.html.twig' %}
 
+{%trans_default_domain 'labels' %}
+
 {% block body %}
     <div class="container pt-3">
         <div class="section mb-5">
             <div class="row justify-content-center">
                 <div class="col-12 col-md-6">
-                    <a class="btn btn-primary p-5 w-100" href="{{ path('item_random') }}">LOOOOOOT!</a>
+                    <a class="btn btn-primary p-5 w-100" href="{{ path('item_random') }}">{{ 'item.random'|trans }}</a>
                 </div>
             </div>
         </div>
         <div class="section mb-5">
             <div class="row justify-content-center">
                 <div class="col-12 col-md-6 mb-3">
-                    <a class="btn btn-primary p-5 w-100" href="{{ path('rarity_index') }}">Zu den Raritäten</a>
+                    <a class="btn btn-primary p-5 w-100" href="{{ path('rarity_index') }}">{{ 'rarity.goto'|trans }}</a>
                 </div>
                 <div class="col-12 col-md-6 mb-3">
-                    <a class="btn btn-primary p-5 w-100" href="{{ path('rarity_new') }}">Neue Raritäten</a>
-                </div>
-            </div>
-        </div>
-        <div class="section mb-5">
-            <div class="row justify-content-center">
-                <div class="col-12 col-md-6 mb-3">
-                    <a class="btn btn-primary p-5 w-100" href="{{ path('table_index') }}">Zu den Tabellen</a>
-                </div>
-                <div class="col-12 col-md-6 mb-3">
-                    <a class="btn btn-primary p-5 w-100" href="{{ path('table_new') }}">Neue Tabelle</a>
+                    <a class="btn btn-primary p-5 w-100" href="{{ path('rarity_new') }}">{{ 'rarity.new'|trans }}</a>
                 </div>
             </div>
         </div>
         <div class="section mb-5">
             <div class="row justify-content-center">
                 <div class="col-12 col-md-6 mb-3">
-                    <a class="btn btn-primary p-5 w-100" href="{{ path('item_index') }}">Zu den Items</a>
+                    <a class="btn btn-primary p-5 w-100" href="{{ path('table_index') }}">{{ 'table.goto'|trans }}</a>
                 </div>
                 <div class="col-12 col-md-6 mb-3">
-                    <a class="btn btn-primary p-5 w-100" href="{{ path('item_new') }}">Neues Item</a>
+                    <a class="btn btn-primary p-5 w-100" href="{{ path('table_new') }}">{{ 'table.goto'|trans }}</a>
+                </div>
+            </div>
+        </div>
+        <div class="section mb-5">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-6 mb-3">
+                    <a class="btn btn-primary p-5 w-100" href="{{ path('item_index') }}">{{ 'item.goto'|trans }}</a>
+                </div>
+                <div class="col-12 col-md-6 mb-3">
+                    <a class="btn btn-primary p-5 w-100" href="{{ path('item_new') }}">{{ 'item.new'|trans }}</a>
                 </div>
             </div>
         </div>

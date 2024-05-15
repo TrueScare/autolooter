@@ -96,11 +96,11 @@ class TableController extends BaseController
             try {
                 $this->entityManager->persist($table);
                 $this->entityManager->flush();
-                $this->addFlash('success', $translator->trans('success.save'));
+                $this->addFlash('success', $translator->trans('save', domain: 'successes'));
                 return $this->redirectToRoute('table_edit', ['id' => $table->getId()]);
             } catch (\Exception $e) {
                 $this->logger->error($e);
-                $this->addFlash('danger', $translator->trans('error.save'));
+                $this->addFlash('danger', $translator->trans('save', domain: 'errors'));
             }
         }
 
@@ -173,7 +173,7 @@ class TableController extends BaseController
     public function apiDetail(?Table $table, Request $request, TranslatorInterface $translator): Response
     {
         if ($table && $table->getOwner() !== $this->getUser()) {
-            $this->addFlash('danger', $translator->trans('error.save'));
+            $this->addFlash('danger', $translator->trans('save', domain: 'errors'));
             return $this->json("", status: 403);
         }
 
@@ -208,10 +208,10 @@ class TableController extends BaseController
             try {
                 $this->entityManager->persist($table);
                 $this->entityManager->flush();
-                $this->addFlash('success', $translator->trans('success.save'));
+                $this->addFlash('success', $translator->trans('save', domain: 'successes'));
             } catch (\Exception $e) {
                 $this->logger->error($e);
-                $this->addFlash('danger', $translator->trans('error.save'));
+                $this->addFlash('danger', $translator->trans('save', domain: 'errors'));
             }
         }
 
@@ -227,7 +227,7 @@ class TableController extends BaseController
     public function moveItemsBetweenTables(Request $request, Table $from, TranslatorInterface $translator): \Symfony\Component\HttpFoundation\JsonResponse
     {
         if (!($this->getUser() === $from->getOwner())) {
-            $this->addFlash('danger', $translator->trans('error.save'));
+            $this->addFlash('danger', $translator->trans('save', domain: 'errors'));
             return $this->json("", status: 403);
         }
 
@@ -260,11 +260,11 @@ class TableController extends BaseController
 
                 $this->entityManager->flush();
 
-                $this->addFlash('success', $translator->trans('success.save'));
+                $this->addFlash('success', $translator->trans('save', domain: 'successes'));
                 return $this->json("");
             } catch (\Exception $e) {
                 $this->logger->error($e);
-                $this->addFlash('danger', $translator->trans('error.save'));
+                $this->addFlash('danger', $translator->trans('save', domain: 'errors'));
             }
         }
 
@@ -279,7 +279,7 @@ class TableController extends BaseController
     public function moveTablesBetweenTables(Request $request, Table $from, TranslatorInterface $translator)
     {
         if (!($this->getUser() === $from->getOwner())) {
-            $this->addFlash('danger', $translator->trans('error.save'));
+            $this->addFlash('danger', $translator->trans('save', domain: 'errors'));
             return $this->json("", status: 403);
         }
 
@@ -315,12 +315,12 @@ class TableController extends BaseController
                 $this->entityManager->persist($to);
                 $this->entityManager->flush();
 
-                $this->addFlash('success', $translator->trans('success.save'));
+                $this->addFlash('success', $translator->trans('save', domain: 'successes'));
 
                 return $this->json("");
             } catch (\Exception $e) {
                 $this->logger->error($e);
-                $this->addFlash('danger', $translator->trans('error.save'));
+                $this->addFlash('danger', $translator->trans('save', domain: 'errors'));
             }
         }
 

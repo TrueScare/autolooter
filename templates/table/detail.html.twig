@@ -20,7 +20,7 @@
                 data-action="modal-loader:loaded->dialog#showPage:preventDefault click->modal-loader#request"
                 data-modal-loader-route-value="{{ path('api_table_move_items', {'id': table.id}) }}"
         >
-            {{ 'move.items'|trans }}
+            {{ 'item.move'|trans({},'labels') }}
         </div>
 
         <div
@@ -29,7 +29,7 @@
                 data-action="modal-loader:loaded->dialog#showPage:preventDefault click->modal-loader#request"
                 data-modal-loader-route-value="{{ path('api_table_move_tables', {'id': table.id}) }}"
         >
-            {{ 'move.tables'|trans }}
+            {{ 'table.move'|trans({}, 'labels') }}
         </div>
     {% endif %}
     {% if table.items|length > 0 %}

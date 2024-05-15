@@ -8,6 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatableMessage;
 
 class MoveTablesBetweenRarities extends AbstractType
 {
@@ -18,10 +19,10 @@ class MoveTablesBetweenRarities extends AbstractType
                 'class' => Rarity::class,
                 'choice_label' => 'name',
                 'choices' => $options['rarityChoices'],
-                'label' => 'label.rarity'
+                'label' => new TranslatableMessage('rarity.self', domain: 'labels')
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'label.save',
+                'label' => new TranslatableMessage('save', domain: 'labels'),
             ])
             ->setAction($options['route']);
     }

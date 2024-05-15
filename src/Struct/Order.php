@@ -16,13 +16,13 @@ enum Order: string implements TranslatableInterface
 
     public function trans(TranslatorInterface $translator, string $locale = null): string
     {
-        return match($this){
-            self::NAME_ASC => $translator->trans('enum.order.name_asc', locale: $locale),
-            self::NAME_DESC => $translator->trans('enum.order.name_desc', locale: $locale),
-            self::RARITY_ASC => $translator->trans('enum.order.rarity_asc', locale: $locale),
-            self::RARITY_DESC => $translator->trans('enum.order.rarity_desc', locale: $locale),
-            self::LOGIN_ASC => $translator->trans('enum.order.login_asc', locale: $locale),
-            self::LOGIN_DESC => $translator->trans('enum.order.login_desc', locale: $locale),
+        return match ($this) {
+            self::NAME_ASC => $translator->trans('order.name_asc', domain: 'enums', locale: $locale),
+            self::NAME_DESC => $translator->trans('order.name_desc', domain: 'enums', locale: $locale),
+            self::RARITY_ASC => $translator->trans('order.rarity_asc', domain: 'enums', locale: $locale),
+            self::RARITY_DESC => $translator->trans('order.rarity_desc', domain: 'enums', locale: $locale),
+            self::LOGIN_ASC => $translator->trans('order.login_asc', domain: 'enums', locale: $locale),
+            self::LOGIN_DESC => $translator->trans('order.login_desc', domain: 'enums', locale: $locale),
         };
     }
 }
