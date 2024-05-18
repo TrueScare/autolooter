@@ -42,7 +42,7 @@ registration:
 
 lostAndFound:
   entity:
-    name: 'Systemtabelle: Verloren geganges'
+    name: 'Systemtabelle: Verloren gegangenes'
     description: 'Diese Tabelle wurde erstellt da Items bei dem versuch eine Tabelle zu löschen keiner neuen Tabelle zugeordnet werden konnten.'
 
 delete:
@@ -57,7 +57,7 @@ dialog:
 login: 'Login'
 logout: 'Ausloggen'
 register: 'Registrieren'
-rememberMe: 'eingeloogt bleiben'
+rememberMe: 'eingeloggt bleiben'
 
 item:
   random:
