@@ -18,19 +18,8 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 
-class AdminController extends BaseController
+class AdminController extends EntityController
 {
-    private UserRepository $userRepository;
-
-    public function __construct(PaginationService      $paginationService,
-                                EntityManagerInterface $entityManager,
-                                LoggerInterface        $logger,
-                                UserRepository         $userRepository,
-                                HeaderActionService    $actionService)
-    {
-        parent::__construct($paginationService, $entityManager, $logger, $actionService);
-        $this->userRepository = $userRepository;
-    }
 
     #[Route('/admin', name: "admin_index")]
     public function index(): Response
@@ -46,8 +35,8 @@ class AdminController extends BaseController
         $order = Order::tryFrom($request->query->get('order'));
         $pageInfo = $this->paginationService->getPaginationInfoFromRequest($request);
 
-        $users = $this->userRepository->getUsers($pageInfo, $order);
-        $maxUsersFound = $this->userRepository->getUserCount($pageInfo);
+        $users = $this->getEntityRepository()->getUsers($pageInfo, $order);
+        $maxUsersFound = $this->getEntityRepository()->getUserCount($pageInfo);
 
         return $this->render('admin/users/index.html.twig', [
             'users' => $users,
@@ -72,8 +61,8 @@ class AdminController extends BaseController
         $order = Order::tryFrom($request->query->get('order'));
         $pageInfo = $this->paginationService->getPaginationInfoFromRequest($request);
 
-        $users = $this->userRepository->getUsers($pageInfo, $order);
-        $maxUsersFound = $this->userRepository->getUserCount($pageInfo);
+        $users = $this->getEntityRepository()->getUsers($pageInfo, $order);
+        $maxUsersFound = $this->getEntityRepository()->getUserCount($pageInfo);
 
         return $this->json(
             $this->render('admin/listing_content.html.twig', [
@@ -148,9 +137,9 @@ class AdminController extends BaseController
         try {
             $this->entityManager->remove($user);
             $this->entityManager->flush();
-            $this->addFlash('success', $translator->trans('success.delete'));
+            $this->addFlash('success', $translator->trans('delete', domain: 'successes'));
         } catch (\Exception $e) {
-            $this->addFlash('danger', $translator->trans('error.delete'));
+            $this->addFlash('danger', $translator->trans('delete', domain: 'errors'));
             $this->logger->error($e);
         }
 
@@ -198,5 +187,10 @@ class AdminController extends BaseController
                 'form' => $form->createView()
             ])->getContent()
         );
+    }
+
+    protected function getControllerEntityClass(): string
+    {
+        return User::class;
     }
 }

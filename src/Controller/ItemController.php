@@ -22,24 +22,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ItemController extends BaseController
+class ItemController extends EntityController
 {
-    private ItemRepository $itemRepository;
-
-    public function __construct(ItemRepository $itemRepository, PaginationService $paginationService, EntityManagerInterface $entityManager, LoggerInterface $logger, HeaderActionService $actionService)
-    {
-        parent::__construct($paginationService, $entityManager, $logger, $actionService);
-        $this->itemRepository = $itemRepository;
-    }
-
     #[Route('/item', name: 'item_index')]
     public function index(Request $request): Response
     {
         $order = Order::tryFrom($request->query->get('order'));
         $pageInfo = $this->paginationService->getPaginationInfoFromRequest($request);
 
-        $items = $this->itemRepository->getItemsByOwner($this->getUser(), $pageInfo, $order);
-        $maxItemsFound = $this->itemRepository->getItemsCountByOwner($this->getUser(), $pageInfo);
+        $items = $this->getEntityRepository()->getItemsByOwner($this->getUser(), $pageInfo, $order);
+        $maxItemsFound = $this->getEntityRepository()->getItemsCountByOwner($this->getUser(), $pageInfo);
 
         return $this->render('/item/index.html.twig', [
             'items' => $items,
@@ -144,7 +136,7 @@ class ItemController extends BaseController
                 $itemConfig->isUniqueTables()
             );
 
-            $items = $this->itemRepository->getItemsById($this->getUser(), $picks);
+            $items = $this->getEntityRepository()->getItemsById($this->getUser(), $picks);
             if(!$itemConfig->isUniqueTables()) {
                 $quantityMapping = array_count_values($picks);
 
@@ -238,16 +230,16 @@ class ItemController extends BaseController
     public function delete(Item $item, TranslatorInterface $translator): Response
     {
         if ($this->getUser() !== $item->getOwner()) {
-            $this->addFlash('danger', $translator->trans('error.item.notfound'));
+            $this->addFlash('danger', $translator->trans('item.notfound', domain: 'errors'));
             return $this->redirectToRoute('item_index');
         }
 
         try {
             $this->entityManager->remove($item);
             $this->entityManager->flush();
-            $this->addFlash('success', $translator->trans('success.delete'));
+            $this->addFlash('success', $translator->trans('delete', domain: 'successes'));
         } catch (\Exception $e) {
-            $this->addFlash('danger', $translator->trans('error.delete'));
+            $this->addFlash('danger', $translator->trans('delete', domain: 'errors'));
             $this->logger->error($e);
         }
 
@@ -260,8 +252,8 @@ class ItemController extends BaseController
         $order = Order::tryFrom($request->query->get('order'));
         $pageInfo = $this->paginationService->getPaginationInfoFromRequest($request);
 
-        $items = $this->itemRepository->getItemsByOwner($this->getUser(), $pageInfo, $order);
-        $maxItemsFound = $this->itemRepository->getItemsCountByOwner($this->getUser(), $pageInfo);
+        $items = $this->getEntityRepository()->getItemsByOwner($this->getUser(), $pageInfo, $order);
+        $maxItemsFound = $this->getEntityRepository()->getItemsCountByOwner($this->getUser(), $pageInfo);
 
         return $this->json($this->render('components/listing_content.html.twig', [
             'entities' => $items,
@@ -326,5 +318,10 @@ class ItemController extends BaseController
                 'form' => $form->createView()
             ])->getContent()
         );
+    }
+
+    protected function getControllerEntityClass(): string
+    {
+        return Item::class;
     }
 }

@@ -6,14 +6,16 @@ use App\Service\HeaderActionService;
 use App\Service\PaginationService;
 use App\Struct\HeaderActionGroup;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/{_locale}')]
-class BaseController extends AbstractController
+abstract class BaseController extends AbstractController
 {
+    protected EntityRepository $entityRepository;
     protected PaginationService $paginationService;
     protected EntityManagerInterface $entityManager;
     protected LoggerInterface $logger;
@@ -56,8 +58,8 @@ class BaseController extends AbstractController
 
     protected function render(string $view, array $parameters = [], Response $response = null): Response
     {
-        if(empty($parameters['headerActions'])){
-            if($this->getUser()){
+        if (empty($parameters['headerActions'])) {
+            if ($this->getUser()) {
                 $parameters['headerActions'] = $this->getHeaderActions();
             } else {
                 $parameters['headerActions'] = $this->getDefaultHeaderActions();
@@ -65,6 +67,4 @@ class BaseController extends AbstractController
         }
         return parent::render($view, $parameters, $response);
     }
-
-
 }

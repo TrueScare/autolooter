@@ -21,28 +21,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class RarityController extends BaseController
+class RarityController extends EntityController
 {
-    private RarityRepository $rarityRepository;
-
-    public function __construct(RarityRepository       $rarityRepository,
-                                PaginationService      $paginationService,
-                                EntityManagerInterface $entityManager,
-                                LoggerInterface        $logger,
-                                HeaderActionService    $actionService)
-    {
-        parent::__construct($paginationService, $entityManager, $logger, $actionService);
-        $this->rarityRepository = $rarityRepository;
-    }
-
     #[Route('/rarity', name: 'rarity_index')]
     public function index(Request $request): Response
     {
         $order = Order::tryFrom($request->query->get('order'));
         $pageInfo = $this->paginationService->getPaginationInfoFromRequest($request);
 
-        $rarities = $this->rarityRepository->getRaritiesByOwner($this->getUser(), $pageInfo, $order);
-        $maxItemsFound = $this->rarityRepository->getRarityCountByOwner($this->getUser(), $pageInfo);
+        $rarities = $this->getEntityRepository()->getRaritiesByOwner($this->getUser(), $pageInfo, $order);
+        $maxItemsFound = $this->getEntityRepository()->getRarityCountByOwner($this->getUser(), $pageInfo);
 
         return $this->render('/rarity/index.html.twig', [
             'rarities' => $rarities,
@@ -112,16 +100,16 @@ class RarityController extends BaseController
     public function delete(Rarity $rarity, TranslatorInterface $translator): RedirectResponse
     {
         if ($this->getUser() !== $rarity->getOwner()) {
-            $this->addFlash('danger', $translator->trans('error.rarity.notfound'));
+            $this->addFlash('danger', $translator->trans('rarity.notfound', domain: 'errors'));
             return $this->redirectToRoute('item_index');
         }
 
         try {
             $this->entityManager->remove($rarity);
             $this->entityManager->flush();
-            $this->addFlash('success', $translator->trans('success.delete'));
+            $this->addFlash('success', $translator->trans('delete',domain: 'successes'));
         } catch (\Exception $e) {
-            $this->addFlash('danger', $translator->trans('error.delete') . $e);
+            $this->addFlash('danger', $translator->trans('delete', domain: 'errors') . $e);
             $this->logger->error($e);
         }
 
@@ -134,8 +122,8 @@ class RarityController extends BaseController
         $order = Order::tryFrom($request->query->get('order'));
         $pageInfo = $this->paginationService->getPaginationInfoFromRequest($request);
 
-        $rarities = $this->rarityRepository->getRaritiesByOwner($this->getUser(), $pageInfo, $order);
-        $maxItemsFound = $this->rarityRepository->getRarityCountByOwner($this->getUser(), $pageInfo);
+        $rarities = $this->getEntityRepository()->getRaritiesByOwner($this->getUser(), $pageInfo, $order);
+        $maxItemsFound = $this->getEntityRepository()->getRarityCountByOwner($this->getUser(), $pageInfo);
 
         return $this->json($this->render('components/listing_content.html.twig', [
             'entities' => $rarities,
@@ -301,5 +289,10 @@ class RarityController extends BaseController
                 'form' => $form->createView()
             ])
         );
+    }
+
+    protected function getControllerEntityClass(): string
+    {
+        return Rarity::class;
     }
 }
