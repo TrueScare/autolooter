@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Form\UserFormType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,9 +11,9 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class UserController extends BaseController
+class UserController extends EntityController
 {
-    #[Route('/user', name:'user_edit_self')]
+    #[Route('/user', name: 'user_edit_self')]
     public function userEdit(Request $request, TranslatorInterface $translator, UserPasswordHasherInterface $passwordHasher): RedirectResponse|Response
     {
         $user = $this->getUser();
@@ -46,5 +47,10 @@ class UserController extends BaseController
             'form' => $form,
             'headerActions' => $this->getHeaderActions(),
         ]);
+    }
+
+    protected function getControllerEntityClass(): string
+    {
+        return User::class;
     }
 }

@@ -13,6 +13,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Translation\TranslatableMessage;
+use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class RandomItemConfigType extends AbstractType
 {
@@ -24,8 +26,13 @@ class RandomItemConfigType extends AbstractType
                 'label' => new TranslatableMessage('unique.items', domain: 'labels')
             ])
             ->add('amount', NumberType::class,[
-                'required' => false,
-                'label' => new TranslatableMessage('amount.items', domain: 'labels')
+                'required' => true,
+                'label' => new TranslatableMessage('amount.items', domain: 'labels'),
+                'constraints' => [
+                    new GreaterThan([
+                        'value' => 0
+                        ])
+                ]
             ])
             ->add('tables', ChoiceType::class, [
                 'required' => false,

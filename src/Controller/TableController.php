@@ -8,40 +8,23 @@ use App\Entity\User;
 use App\Form\MoveItemsBetweenTablesType;
 use App\Form\MoveTablesBetweenTablesType;
 use App\Form\TableFormType;
-use App\Repository\TableRepository;
-use App\Service\HeaderActionService;
-use App\Service\PaginationService;
 use App\Struct\Order;
-use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class TableController extends BaseController
+class TableController extends EntityController
 {
-    private TableRepository $tableRepository;
-
-    public function __construct(TableRepository        $tableRepository,
-                                PaginationService      $paginationService,
-                                EntityManagerInterface $entityManager,
-                                LoggerInterface        $logger,
-                                HeaderActionService    $actionService)
-    {
-        parent::__construct($paginationService, $entityManager, $logger, $actionService);
-        $this->tableRepository = $tableRepository;
-    }
-
     #[Route('/table', name: "table_index")]
     public function index(Request $request): Response
     {
         $order = Order::tryFrom($request->query->get('order'));
         $pageInfo = $this->paginationService->getPaginationInfoFromRequest($request);
 
-        $tables = $this->tableRepository->getTablesByOwner($this->getUser(), $pageInfo, $order);
-        $maxItemsFound = $this->tableRepository->getTableCountByOwner($this->getUser(), $pageInfo);
+        $tables = $this->getEntityRepository()->getTablesByOwner($this->getUser(), $pageInfo, $order);
+        $maxItemsFound = $this->getEntityRepository()->getTableCountByOwner($this->getUser(), $pageInfo);
 
         return $this->render('/table/index.html.twig', [
             'tables' => $tables,
@@ -126,16 +109,16 @@ class TableController extends BaseController
     public function delete(Table $table, Request $request, TranslatorInterface $translator): RedirectResponse
     {
         if ($this->getUser() !== $table->getOwner()) {
-            $this->addFlash('danger', $translator->trans('error.table.notfound'));
+            $this->addFlash('danger', $translator->trans('table.notfound', domain: 'errors'));
             return $this->redirectToRoute('user_home');
         }
 
         try {
             $this->entityManager->remove($table);
             $this->entityManager->flush();
-            $this->addFlash('success', $translator->trans('success.delete'));
+            $this->addFlash('success', $translator->trans('delete', domain: 'successes'));
         } catch (\Exception $e) {
-            $this->addFlash('danger', $translator->trans('error.delete'));
+            $this->addFlash('danger', $translator->trans('delete', domain: 'errors'));
             $this->logger->error($e);
         }
 
@@ -148,8 +131,8 @@ class TableController extends BaseController
         $order = Order::tryFrom($request->query->get('order'));
         $pageInfo = $this->paginationService->getPaginationInfoFromRequest($request);
 
-        $tables = $this->tableRepository->getTablesByOwner($this->getUser(), $pageInfo, $order);
-        $maxItemsFound = $this->tableRepository->getTableCountByOwner($this->getUser(), $pageInfo);
+        $tables = $this->getEntityRepository()->getTablesByOwner($this->getUser(), $pageInfo, $order);
+        $maxItemsFound = $this->getEntityRepository()->getTableCountByOwner($this->getUser(), $pageInfo);
 
         return $this->json($this->render('components/listing_content.html.twig', [
             'entities' => $tables,
@@ -329,5 +312,10 @@ class TableController extends BaseController
                 'form' => $form->createView()
             ])->getContent()
         );
+    }
+
+    protected function getControllerEntityClass(): string
+    {
+        return Table::class;
     }
 }
