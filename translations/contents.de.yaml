@@ -8,11 +8,11 @@ homepage:
   howto:
     title: 'Aber wie funktioniert das Ganze?'
     content: "<p>
-      Autolooter funktioniert auf der Basis von <a href='{{ path('table_index') }}'>Tabellen</a>.
-      In den Tabellen stecken wiederum andere Tabellen oder <a href='{{ path('item_index') }}'>Items</a>.
+      Autolooter funktioniert auf der Basis von <a href='%table_link%'>Tabellen</a>.
+      In den Tabellen stecken wiederum andere Tabellen oder <a href='%item_link%'>Items</a>.
       </p>
       <p>
-      Den Tabellen und Items werden von dir erstellte <a href='{{ path('rarity_index') }}'>Seltenheiten</a>
+      Den Tabellen und Items werden von dir erstellte <a href='%rarity_link%'>Seltenheiten</a>
       zugeschrieben. Das Prinzip erkennst du eventuell von Computerspielen wie World of Warcraft oder Borderlands.
       Jede Seltenheit bekommt von dir einen Wert zugeschrieben. Dieser wird später dafür genutzt die
       Wahrscheinlichkeit zu errechnen, ein Item zu ziehen. Das ganze basiert auf dem
@@ -21,14 +21,14 @@ homepage:
   wherestart:
     title: 'Und wo fange ich am besten an?'
     content: "<p>
-            Wenn du noch keinen Account hast, <a href='{{ path('app_register') }}'>registriere</a> dich eben. Das Ganze
+            Wenn du noch keinen Account hast, <a href='%register_link%'>registriere</a> dich eben. Das Ganze
             ist zu 100% kostenlos, werbefrei und mit deinen Daten passiert hier auch nichts.
         </p>
         <p>
-            Am besten startest du mit den <a href='{{ path('rarity_index') }}'>Seltenheiten</a>. Diese werden sowohl bei
+            Am besten startest du mit den <a href='%rarity_link%'>Seltenheiten</a>. Diese werden sowohl bei
             den Tabellen als auch den Items benötigt bzw. vorausgesetzt. Danach erstellst du dir deine erste
-            <a href='{{ path('table_index') }}'>Tabelle</a>. Jedes Item muss nämlich einer Tabelle zugeordnet sein.
-            Zum Schluss kannst du dann einfach deine <a href='{{ path('item_index') }}'>Items</a> erstellen.
+            <a href='%table_link%'>Tabelle</a>. Jedes Item muss nämlich einer Tabelle zugeordnet sein.
+            Zum Schluss kannst du dann einfach deine <a href='%item_link%'>Items</a> erstellen.
         </p>
         <p>Viel Spaß!</p>"
   contact:
