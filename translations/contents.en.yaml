@@ -7,12 +7,12 @@ homepage:
   howto:
     title: 'But how does it all work?'
     content: "<p>
-      Autolooter works on the basis of  <a href='{{ path('table_index') }}'>tables</a>.
-      The tables in turn contain other table or <a href='{{ path('item_index') }}'>items</a>.
+      Autolooter works on the basis of  <a href='%table_link%'>tables</a>.
+      The tables in turn contain other table or <a href='%item_link%'>items</a>.
       </p>
       <p>
       
-      The tables and items are assigned <a href='{{ path('rarity_index') }}'>rarities</a>
+      The tables and items are assigned <a href='%rarity_link%'>rarities</a>
       created by you. You may recognize the principle from computer games such as World of Warcraft or Borderlands.
       Jede Seltenheit bekommt von dir einen Wert zugeschrieben. You assign a value to each rarity. This is later used to 
       calculate the probability of drawing an item. The whole thing is based on the  
@@ -21,14 +21,14 @@ homepage:
   wherestart:
     title: 'And where is the best place to start?'
     content: "<p>
-            If you don't have an account yet, just <a href='{{ path('app_register') }}'>register</a>. The whole thing
+            If you don't have an account yet, just <a href='%register_link%'>register</a>. The whole thing
             is 100% cost and ad-free and nothing happens to your data here.
         </p>
         <p>
-            The best place to start is with the <a href='{{ path('rarity_index') }}'>rarities</a>. These are required 
-            for both the tables and the items. Then create your first <a href='{{ path('table_index') }}'>table</a>. 
+            The best place to start is with the <a href='%rarity_link%'>rarities</a>. These are required 
+            for both the tables and the items. Then create your first <a href='%table_link%'>table</a>. 
             Each item must be assigned to a table.Finally, you can simply create your 
-            <a href='{{ path('item_index') }}'>items</a>.
+            <a href='%item_link%'>items</a>.
         </p>
         <p>Have fun!</p>"
   contact:

@@ -13,13 +13,13 @@
         <h2 id="how-does-it-work">
             {{ 'homepage.howto.title'|trans }}
         </h2>
-        {{ 'homepage.howto.content'|trans|raw }}
+        {{ 'homepage.howto.content'|trans({'%item_link%': path('item_index'), '%rarity_link%': path('rarity_index'), '%table_link%': path('table_index')})|raw }}
     </section>
     <section aria-labelledby="where-to-start">
         <h2 id="where-to-start">
             {{ 'homepage.wherestart.title'|trans }}
         </h2>
-        {{ 'homepage.wherestart.content'|trans|raw }}
+        {{ 'homepage.wherestart.content'|trans({'%item_link%': path('item_index'), '%rarity_link%': path('rarity_index'), '%table_link%': path('table_index'), '%register_link%': path('app_register')})|raw }}
     </section>
     <section aria-labelledby="contact">
         <h2 id="contact">
