@@ -14,7 +14,7 @@ homepage:
       
       The tables and items are assigned <a href='%rarity_link%'>rarities</a>
       created by you. You may recognize the principle from computer games such as World of Warcraft or Borderlands.
-      Jede Seltenheit bekommt von dir einen Wert zugeschrieben. You assign a value to each rarity. This is later used to 
+      You assign a value to each rarity. This is later used to 
       calculate the probability of drawing an item. The whole thing is based on the  
       <a href='https://en.wikipedia.org/wiki/Urn_problem' target='_blank'>urn problem</a>.
       <p>"
