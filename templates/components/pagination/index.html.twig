@@ -1,6 +1,5 @@
 {% block pagination %}
-    <section class="pagination row"
-    >
+    <section class="pagination row">
         {% block pagination_headline %}
             <h1 class="pagination-headline col-12 text-center mb-5">
                 {{ "pagination.entities_found"|trans({'%count%': maxItemsFound}) }}
@@ -8,7 +7,7 @@
         {% endblock %}
         {% block pagination_filter %}
             <div class="col-12" aria-label="{{ "section.pagination"|trans }}">
-                <div class="pagination row align-items-center m-0"
+                <div class="pagination row"
                      data-pagination-target="paginationForm"
                 >
                     {% block pagination_filter_searchbar %}
