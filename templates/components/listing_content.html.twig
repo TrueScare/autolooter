@@ -8,13 +8,19 @@
         </div>
     {% endblock %}
     {% block listing_items %}
-        {% for entity in entities %}
-            {% block listing_item_include %}
-                {% include 'components/cards/card-'~type~'.html.twig' %}
-            {% endblock %}
-        {% endfor %}
+        <div class="col-12 py-3">
+            <div class="row">
+                {% for entity in entities %}
+                    {% block listing_item_include %}
+                        {% include 'components/cards/card-'~type~'.html.twig' %}
+                    {% endblock %}
+                {% endfor %}
+            </div>
+        </div>
     {% endblock %}
-    <div class="row">
-        {% include 'components/pagination/pagination.html.twig' %}
+    <div class="col-12">
+        <div class="row">
+            {% include 'components/pagination/pagination.html.twig' %}
+        </div>
     </div>
 {% endblock %}
