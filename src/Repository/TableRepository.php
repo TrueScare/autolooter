@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Table;
 use App\Struct\Order;
 use App\Struct\PaginationInfo;
+use App\Struct\ProbabilityEntryCollection;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
@@ -71,7 +72,7 @@ class TableRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
-    public function getAllTableIndividualRarities(UserInterface $owner, EntityManagerInterface $em): array
+    public function getAllTableIndividualRarities(UserInterface $owner, EntityManagerInterface $em): ProbabilityEntryCollection
     {
         $conn = $em->getConnection();
         $sql = "select 
@@ -95,8 +96,8 @@ class TableRepository extends ServiceEntityRepository
                     ;
         $stmt = $conn->prepare($sql);
         $result = $stmt->executeQuery();
-
-        return $result->fetchAllAssociative();
+        $collection = new ProbabilityEntryCollection();
+        return  $collection->buildCollectionFromSQLResult($result->fetchAllAssociative());
     }
 
     protected function getDefaultQueryBuilder(UserInterface $owner): QueryBuilder

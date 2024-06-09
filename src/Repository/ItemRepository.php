@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Item;
 use App\Struct\Order;
 use App\Struct\PaginationInfo;
+use App\Struct\ProbabilityEntryCollection;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
@@ -64,7 +65,7 @@ class ItemRepository extends ServiceEntityRepository
         return $qb->getQuery()->getSingleScalarResult();
     }
 
-    public function getAllItemIndividualRarities(UserInterface $owner, EntityManagerInterface $em): array
+    public function getAllItemIndividualRarities(UserInterface $owner, EntityManagerInterface $em): ProbabilityEntryCollection
     {
         $conn = $em->getConnection();
         $sql = "select 
@@ -86,8 +87,9 @@ class ItemRepository extends ServiceEntityRepository
                     order by i.parent_id";
         $stmt = $conn->prepare($sql);
         $result = $stmt->executeQuery();
+        $collection = new ProbabilityEntryCollection();
 
-        return $result->fetchAllAssociative();
+        return $collection->buildCollectionFromSQLResult($result->fetchAllAssociative());
     }
 
     public function getItemsById(UserInterface $owner, array $ids)
