@@ -71,14 +71,14 @@ class ItemRepository extends ServiceEntityRepository
                     i.id, 
                     i.parent_id, 
                     i.name,
-                    r.value,
+                    r.value as rarity_value,
                     CONVERT(r.value / (select sum(r2.value) as rarity_sum 
                                from item i2 
                                    left join autolooter.rarity r2 
                                        on i2.rarity_id = r2.id 
                                where (i.parent_id = i2.parent_id) 
                                  and i2.owner_id = " . $owner->getId() . " 
-                               group by i.parent_id ), FLOAT) as individual_rarity 
+                               group by i.parent_id ), FLOAT) as individual_probability 
                     from item i 
                         left join rarity r
                             on i.rarity_id = r.id

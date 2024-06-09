@@ -6,6 +6,8 @@ use App\Entity\Item;
 use App\Entity\User;
 use App\Repository\ItemRepository;
 use App\Repository\TableRepository;
+use App\Struct\ProbabilityEntry;
+use App\Struct\ProbabilityEntryCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -26,85 +28,69 @@ class ProbabilityService
         $this->itemRepository = $itemRepository;
     }
 
-    public function getTableProbabilities(User $owner, array $subsetIds = [])
+    public function getTableProbabilities(User $owner, array $subsetIds = []): ProbabilityEntryCollection
     {
         $data = $this->tableRepository->getAllTableIndividualRarities($owner, $this->entityManager);
-        $data = $this->mapResultArray($data);
+        $collection = new ProbabilityEntryCollection();
+        $collection->buildCollectionFromSQLResult($data);
 
         if (empty($subsetIds)) {
-            $queue = array_filter($data, function ($item) {
-                return $item['parent_id'] == null;
+            $queue = $collection->getFilteredResult(function (ProbabilityEntry $item) {
+                return $item->getParentId() == null;
             });
         } else {
-            $queue = array_filter($data, function ($item) use ($subsetIds) {
-                return in_array($item['id'], $subsetIds);
+            $queue = $collection->getFilteredResult(function (ProbabilityEntry $item) use ($subsetIds) {
+                return in_array($item->getId(), $subsetIds);
             });
 
             $sum = 0;
             foreach ($queue as $item) {
-                $sum += $item['value'];
+                $sum += $item->getRarityValue();
             }
 
-            foreach ($data as &$item) {
-                if (in_array($item['id'], $subsetIds)) {
-                    $item['individual_rarity'] = $item['value'] / $sum;
+            foreach ($collection as $item) {
+                if (in_array($item->getId(), $subsetIds)) {
+                    $item->setIndividualProbability($item->getRarityValue() / $sum);
                 }
             }
         }
 
-        return $this->prepareProbabilities($data, $queue);
+        return $this->prepareProbabilities($collection, $queue);
     }
 
-    public function getItemProbabilities(User $owner, array $probabilityMapping)
+    public function getItemProbabilities(User $owner, ProbabilityEntryCollection $probabilityMapping): ProbabilityEntryCollection
     {
         $data = $this->itemRepository->getAllItemIndividualRarities($owner, $this->entityManager);
-        $data = $this->mapResultArray($data);
+        $collection = new ProbabilityEntryCollection();
+        $collection->buildCollectionFromSQLResult($data);
 
-        foreach ($data as &$item) {
-            if (!empty($probabilityMapping[$item['parent_id']])) {
-                $item['individual_rarity'] = $item['individual_rarity'] * $probabilityMapping[$item['parent_id']]['individual_rarity'];
+        foreach ($collection as $item) {
+            if ($parent = $probabilityMapping->getEntryByKey($item->getParentId())) {
+                $item->setIndividualProbability($item->getIndividualProbability() * $parent->getIndividualProbability());
             } else {
-                $item['individual_rarity'] = 0;
+                $item->setIndividualProbability(0);
             }
         }
 
-        return $data;
+        return $collection;
     }
 
-    private function mapResultArray(array $data)
-    {
-        $result = [];
-        array_walk($data, function ($item) use (&$result) {
-            $result[$item['id']] = $item;
-        });
-        return $result;
-    }
-
-    private function prepareProbabilities(array $data, array $queue): array
+    private function prepareProbabilities(ProbabilityEntryCollection $collection, ProbabilityEntryCollection $queue): ProbabilityEntryCollection
     {
         $visited = [];
-        while (!empty($current = array_shift($queue))) {
-            $visited[] = $current['id'];
-            foreach ($data as &$child) {
-                if ($child['parent_id'] == $current['id'] && !$this->checkIdInArray($child['id'], $queue)) {
-                    $child['individual_rarity'] = $child['individual_rarity'] * $current['individual_rarity'];
-                    array_push($queue, $child);
+
+        while (!empty($current = $queue->shift())) {
+            $visited[] = $current->getId();
+            foreach ($collection as $child) {
+                if ($child->getParentId() == $current->getId() && !$queue->keyExists($child->getId())) {
+                    $child->setIndividualProbability($child->getIndividualProbability() * $current->getIndividualProbability());
+                    $queue->push($child);
                 }
             }
         }
 
-        return array_filter($data, function ($item) use ($visited) {
-            return in_array($item['id'], $visited);
+        return $collection->getFilteredResult(function (ProbabilityEntry $item) use ($visited) {
+            return in_array($item->getId(), $visited);
         });
-    }
-
-    private function checkIdInArray(int $id, array $haystck)
-    {
-        foreach ($haystck as $item) {
-            if ($item['id'] == $id) {
-                return true;
-            }
-        }
-        return false;
     }
 }
