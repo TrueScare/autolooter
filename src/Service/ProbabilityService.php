@@ -30,9 +30,7 @@ class ProbabilityService
 
     public function getTableProbabilities(User $owner, array $subsetIds = []): ProbabilityEntryCollection
     {
-        $data = $this->tableRepository->getAllTableIndividualRarities($owner, $this->entityManager);
-        $collection = new ProbabilityEntryCollection();
-        $collection->buildCollectionFromSQLResult($data);
+        $collection = $this->tableRepository->getAllTableIndividualRarities($owner, $this->entityManager);
 
         if (empty($subsetIds)) {
             $queue = $collection->getFilteredResult(function (ProbabilityEntry $item) {
@@ -60,9 +58,7 @@ class ProbabilityService
 
     public function getItemProbabilities(User $owner, ProbabilityEntryCollection $probabilityMapping): ProbabilityEntryCollection
     {
-        $data = $this->itemRepository->getAllItemIndividualRarities($owner, $this->entityManager);
-        $collection = new ProbabilityEntryCollection();
-        $collection->buildCollectionFromSQLResult($data);
+        $collection = $this->itemRepository->getAllItemIndividualRarities($owner, $this->entityManager);
 
         foreach ($collection as $item) {
             if ($parent = $probabilityMapping->getEntryByKey($item->getParentId())) {
