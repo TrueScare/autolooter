@@ -5,14 +5,14 @@
        href="{{ path('table_edit', {'id': entity.id}) }}">
         {{ entity.name }}
     </a>
-    <div class="badge-container">
+    <aside class="badge-container">
         {% if entity.tables|length > 0 %}
             <div class="badge bg-primary">{{ entity.tables|length }} {{ 'card.badge.table'|trans }}</div>
         {% endif %}
         {% if entity.items|length > 0 %}
             <div class="badge bg-primary">{{ entity.items|length }} {{ 'card.badge.items'|trans }}</div>
         {% endif %}
-    </div>
+    </aside>
 {% endblock %}
 
 {% block card_subtitle %}
@@ -27,6 +27,6 @@
         {% include 'components/actions/delete-action.html.twig' with {route: path('table_delete', {id: entity.id}), identifier: entity.name} %}
     </div>
 
-    <div class="card-footer" style="background-color: {{ color }}">
-    </div>
+    <footer class="card-footer" style="background-color: {{ color }}">
+    </footer>
 {% endblock %}
