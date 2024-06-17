@@ -3,26 +3,28 @@
         {% set color = entity.color %}
     {% elseif entity.rarity.color|default %}
         {% set color = entity.rarity.color %}
-        {% else %}
+    {% else %}
         {% set color = 'inherit' %}
     {% endif %}
 
 
-    <div class="col-12 col-md-6 col-lg-3 mb-2 mt-2" aria-labelledby="card-title-{{ entity.id }}">
+    <article class="col-12 col-md-6 col-lg-3 mb-2 mt-2" aria-labelledby="card-title-{{ entity.id }}">
         {% block card_inner %}
             <div class="card card-entity" style="border-color:{{ color }}" aria-labelledby="card-title-{{ entity.id }}">
                 {% block card_content %}
                     <div class="card-body">
-                        {% block card_title %}
-                            <div class="card-title h3" id="card-title-{{ entity.id }}">
-                                {% block card_title_inner %}{% endblock %}
-                            </div>
-                        {% endblock %}
-                        {% block card_subtitle %}
-                            <div class="card-subtitle text-muted">
-                                {% block card_subtitle_inner %}{% endblock %}
-                            </div>
-                        {% endblock %}
+                        <header>
+                            {% block card_title %}
+                                <h3 class="card-title" id="card-title-{{ entity.id }}">
+                                    {% block card_title_inner %}{% endblock %}
+                                </h3>
+                            {% endblock %}
+                            {% block card_subtitle %}
+                                <p class="card-subtitle text-muted">
+                                    {% block card_subtitle_inner %}{% endblock %}
+                                </p>
+                            {% endblock %}
+                        </header>
                         {% block card_text %}
                             <p class="card-text">
                                 {% block card_text_inner %}{% endblock %}
@@ -30,12 +32,12 @@
                         {% endblock %}
                     </div>
                     {% block card_footer %}
-                        <div class="card-footer">
+                        <footer class="card-footer">
                             {% block card_footer_inner %}{% endblock %}
-                        </div>
+                        </footer>
                     {% endblock %}
                 {% endblock %}
             </div>
         {% endblock %}
-    </div>
+    </article>
 {% endblock %}

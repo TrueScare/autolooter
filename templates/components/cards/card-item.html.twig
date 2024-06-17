@@ -21,11 +21,11 @@
         </div>
     {% endblock %}
 
-    <div class="card-footer" style="background-color: {{ color }}">
+    <footer class="card-footer" style="background-color: {{ color }}">
         {% block card_footer_inner %}
             <p class="card-text">
                 {{ entity.valueStart }}G - {{ entity.valueEnd }}G
             </p>
         {% endblock %}
-    </div>
+    </footer>
 {% endblock %}
