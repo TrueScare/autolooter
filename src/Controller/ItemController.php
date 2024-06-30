@@ -172,7 +172,10 @@ class ItemController extends EntityController
     private function pickMultipleFromItems(ProbabilityEntryCollection $probabilityMapping, TranslatorInterface $translator, int $amount = 1, bool $uniqueItems = false)
     {
         $keys = [];
-        if (count($probabilityMapping) <= $amount && $uniqueItems) {
+        if(count($probabilityMapping) <= 0){
+            $this->addFlash('info', $translator->trans('item.random.notEnoughItems'));
+        }
+        else if (count($probabilityMapping) <= $amount && $uniqueItems) {
             if (count($probabilityMapping) < $amount) {
                 $this->addFlash('info', $translator->trans('item.random.notEnoughItems'));
             }
