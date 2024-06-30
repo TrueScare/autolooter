@@ -2,6 +2,7 @@
 
 namespace App\Struct;
 
+use App\Entity\Rarity;
 use App\Entity\Table;
 
 class RandomItemConfig
@@ -14,6 +15,11 @@ class RandomItemConfig
 
     private bool $uniqueTables;
 
+    /**
+     * @var Rarity[] $rarities
+     */
+    private array $rarities;
+
     public function getAmount(): int
     {
         return $this->amount;
@@ -21,9 +27,9 @@ class RandomItemConfig
 
     public function setAmount(int $amount): void
     {
-        if(!empty($amount) || $amount >= 1){
+        if (!empty($amount) || $amount >= 1) {
             $this->amount = $amount;
-        }else {
+        } else {
             $this->amount = 1;
         }
 
@@ -54,5 +60,23 @@ class RandomItemConfig
     public function setUniqueTables(bool $uniqueTables): void
     {
         $this->uniqueTables = $uniqueTables;
+    }
+
+    /**
+     * @return Rarity[]
+     */
+    public function getRarities(): array
+    {
+        return $this->rarities;
+    }
+
+
+    /**
+     * @param array $rarities
+     * @return void
+     */
+    public function setRarities(array $rarities): void
+    {
+        $this->rarities = $rarities;
     }
 }

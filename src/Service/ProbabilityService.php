@@ -28,23 +28,27 @@ class ProbabilityService
         $this->itemRepository = $itemRepository;
     }
 
+    /**
+     * @param User $owner
+     * @param int[] $subsetIds
+     * @return ProbabilityEntryCollection
+     */
     public function getTableProbabilities(User $owner, array $subsetIds = []): ProbabilityEntryCollection
     {
         $collection = $this->tableRepository->getAllTableIndividualRarities($owner, $this->entityManager);
 
         if (empty($subsetIds)) {
+            // get the "root" tables
             $queue = $collection->getFilteredResult(function (ProbabilityEntry $item) {
                 return $item->getParentId() == null;
             });
         } else {
+            // build queue from selected ids
             $queue = $collection->getFilteredResult(function (ProbabilityEntry $item) use ($subsetIds) {
                 return in_array($item->getId(), $subsetIds);
             });
 
-            $sum = 0;
-            foreach ($queue as $item) {
-                $sum += $item->getRarityValue();
-            }
+            $sum = $queue->getTotalProbability();
 
             foreach ($collection as $item) {
                 if (in_array($item->getId(), $subsetIds)) {
@@ -56,9 +60,16 @@ class ProbabilityService
         return $this->prepareProbabilities($collection, $queue);
     }
 
-    public function getItemProbabilities(User $owner, ProbabilityEntryCollection $probabilityMapping): ProbabilityEntryCollection
+
+    /**
+     * @param User $owner
+     * @param ProbabilityEntryCollection $probabilityMapping
+     * @param array $rarities
+     * @return ProbabilityEntryCollection
+     */
+    public function getItemProbabilities(User $owner, ProbabilityEntryCollection $probabilityMapping, array $rarities): ProbabilityEntryCollection
     {
-        $collection = $this->itemRepository->getAllItemIndividualRarities($owner, $this->entityManager);
+        $collection = $this->itemRepository->getAllItemIndividualRarities($owner, $this->entityManager, $rarities);
 
         foreach ($collection as $item) {
             if ($parent = $probabilityMapping->getEntryByKey($item->getParentId())) {
@@ -71,6 +82,11 @@ class ProbabilityService
         return $collection;
     }
 
+    /**
+     * @param ProbabilityEntryCollection $collection
+     * @param ProbabilityEntryCollection $queue
+     * @return ProbabilityEntryCollection
+     */
     private function prepareProbabilities(ProbabilityEntryCollection $collection, ProbabilityEntryCollection $queue): ProbabilityEntryCollection
     {
         $visited = [];

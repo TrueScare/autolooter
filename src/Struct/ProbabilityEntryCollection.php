@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Struct;
+
 use Countable;
 
 /**
@@ -64,7 +65,8 @@ class ProbabilityEntryCollection implements \Iterator, Countable
         return $this->entries;
     }
 
-    public function keyExists(int $key): bool{
+    public function keyExists(int $key): bool
+    {
         return key_exists($key, $this->entries);
     }
 
@@ -159,5 +161,16 @@ class ProbabilityEntryCollection implements \Iterator, Countable
     public function count(): int
     {
         return count($this->entries);
+    }
+
+    public function getTotalProbability(): float
+    {
+        $probability = 0;
+
+        foreach ($this->entries as $entry) {
+            $probability += $entry->getIndividualProbability();
+        }
+
+        return $probability;
     }
 }
