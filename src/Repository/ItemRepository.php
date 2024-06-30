@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Item;
+use App\Entity\Rarity;
 use App\Struct\Order;
 use App\Struct\PaginationInfo;
 use App\Struct\ProbabilityEntryCollection;
@@ -65,7 +66,7 @@ class ItemRepository extends ServiceEntityRepository
         return $qb->getQuery()->getSingleScalarResult();
     }
 
-    public function getAllItemIndividualRarities(UserInterface $owner, EntityManagerInterface $em): ProbabilityEntryCollection
+    public function getAllItemIndividualRarities(UserInterface $owner, EntityManagerInterface $em, array $rarities): ProbabilityEntryCollection
     {
         $conn = $em->getConnection();
         $sql = "select 
@@ -83,10 +84,13 @@ class ItemRepository extends ServiceEntityRepository
                     from item i 
                         left join rarity r
                             on i.rarity_id = r.id
-                    where i.owner_id = " . $owner->getId() . "
+                    where i.owner_id = " . $owner->getId() . $this->getRarities($rarities) ."
+                    
                     order by i.parent_id";
+
         $stmt = $conn->prepare($sql);
         $result = $stmt->executeQuery();
+
         $collection = new ProbabilityEntryCollection();
 
         return $collection->buildCollectionFromSQLResult($result->fetchAllAssociative());
@@ -143,4 +147,21 @@ class ItemRepository extends ServiceEntityRepository
         return $qb;
     }
 
+    /**
+     * @param Rarity[] $rarities
+     * @return string
+     */
+    private function getRarities(array $rarities)
+    {
+        if (count($rarities) <= 0) {
+            return "";
+        }
+
+        $output = "";
+        foreach ($rarities as $rarity){
+            $output .= $rarity->getId() . ",";
+        }
+
+        return " AND r.id IN (" . trim($output, ",") . ")";
+    }
 }

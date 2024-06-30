@@ -108,7 +108,8 @@ class ItemController extends EntityController
         /** @var User $user */
         $user = $this->getUser();
         $options = [
-            'tableChoices' => $user->getTables()
+            'tableChoices' => $user->getTables(),
+            'rarityChoices' => $user->getRarities()
         ];
         $form = $this->createForm(RandomItemConfigType::class, $itemConfig, $options);
         $form->handleRequest($request);
@@ -125,7 +126,7 @@ class ItemController extends EntityController
                 $ids
             );
 
-            $probabilities = $probabilityService->getItemProbabilities($this->getUser(), $table_probabilities);
+            $probabilities = $probabilityService->getItemProbabilities($this->getUser(), $table_probabilities, $itemConfig->getRarities());
 
             $probabilities = $probabilities->getFilteredResult(function (ProbabilityEntry $item) {
                 return $item->getIndividualProbability() > 0;
@@ -159,6 +160,15 @@ class ItemController extends EntityController
         ]);
     }
 
+    /**
+     * Produces an array of ids of items from the ProbabilityEntryCollection
+     *
+     * @param ProbabilityEntryCollection $probabilityMapping
+     * @param TranslatorInterface $translator
+     * @param int $amount
+     * @param bool $uniqueItems
+     * @return ProbabilityEntry|array|false
+     */
     private function pickMultipleFromItems(ProbabilityEntryCollection $probabilityMapping, TranslatorInterface $translator, int $amount = 1, bool $uniqueItems = false)
     {
         $keys = [];
@@ -181,8 +191,8 @@ class ItemController extends EntityController
 
     private function getPickFromItems(ProbabilityEntryCollection $probabilityMapping): ProbabilityEntry|false|int
     {
-        // the items probability ALWAYS has to add up to 1 (100%)
-        $luckyPick = (mt_rand() / mt_getrandmax());
+        // calculate random value in between 0 and total individual probability value
+        $luckyPick = lcg_value()*(abs($probabilityMapping->getTotalProbability()));
 
         foreach ($probabilityMapping as $item) {
             $luckyPick -= $item->getIndividualProbability();
@@ -192,7 +202,7 @@ class ItemController extends EntityController
         }
 
         $this->addFlash('danger', "No item found... that's suspicious.");
-        return $probabilityMapping->end();
+        return $probabilityMapping->end()->getId();
     }
 
     private function getPickFromItemsUnique(ProbabilityEntryCollection $probabilityMapping, $amount)
@@ -218,7 +228,7 @@ class ItemController extends EntityController
 
         if (count($picks) <= 0) {
             $this->addFlash('danger', "No item found... that's suspicious.");
-            return $probabilityMapping->end();
+            return $probabilityMapping->end()->getId();
         }
 
         return $picks;

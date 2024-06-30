@@ -46,6 +46,7 @@ amount:
   items: 'Anzahl der Items'
 choice:
   tables: 'Zu nutzende Tabellen'
+  itemRarities: 'Zu nutzende Raritäten'
 password:
   self: 'Passwort'
   reset: 'Passwort zurücksetzten'

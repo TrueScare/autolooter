@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Rarity;
 use App\Entity\Table;
 use App\Struct\RandomItemConfig;
 use Symfony\Component\Form\AbstractType;
@@ -44,6 +45,16 @@ class RandomItemConfigType extends AbstractType
                 'multiple' => true,
                 'label' => new TranslatableMessage('choice.tables', domain: 'labels')
             ])
+            ->add('rarities', ChoiceType::class , [
+                'required' => false,
+                'choices' =>  $options['rarityChoices'],
+                'choice_label' => 'name',
+                'choice_value' => function(?Rarity $rarity): int{
+                return $rarity ? $rarity->getId(): '';
+                },
+                'multiple' => true,
+                'label' => new TranslatableMessage('choice.itemRarities', domain: 'labels')
+            ])
             ->add('submit', SubmitType::class, [
                 'label'=> new TranslatableMessage('item.random', domain: 'labels')
                 ]);
@@ -54,6 +65,7 @@ class RandomItemConfigType extends AbstractType
         $resolver->setDefaults([
             'data_class' => RandomItemConfig::class,
             'tableChoices' => Table::class,
+            'rarityChoices' => Rarity::class,
         ]);
     }
 }
