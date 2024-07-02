@@ -38,6 +38,7 @@ security:
     access_control:
         - { path: ^(|(\/(%locales%)))*/$, roles: PUBLIC_ACCESS}
         - { path: ^(|(\/(%locales%)))*/login, roles: PUBLIC_ACCESS}
+        - { path: ^(|(\/(%locales%)))*/register, roles: PUBLIC_ACCESS}
         - { path: ^(|(\/(%locales%)))*/information, roles: PUBLIC_ACCESS}
         - { path: ^(|(\/(%locales%)))*/reset-password, roles: PUBLIC_ACCESS }
         - { path: ^(|(\/(%locales%)))*/admin, roles: ROLE_ADMIN }
