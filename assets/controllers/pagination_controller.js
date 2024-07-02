@@ -29,7 +29,7 @@ export default class extends Controller {
         this.dispatch('reload', {
             detail: {
                 page: page ?? this.paginationCurrentTarget.value,
-                searchTerm: (searchTerm.length > 0) ? searchTerm: this.paginationSearchTermTarget.value,
+                searchTerm: (searchTerm?.length > 0) ? searchTerm: this.paginationSearchTermTarget.value,
                 order: order ?? this.paginationOrderTarget.value,
                 pageSize: pageSize ?? this.paginationPageSizeTarget.value
             }
