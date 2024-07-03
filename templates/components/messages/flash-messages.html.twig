@@ -1,11 +1,15 @@
 {% block flash_messages %}
-    <div class="flash-message position-relative alert alert-{{ label }}"
+    <div class="flash-message position-absolute w-100 z-3 shadow alert alert-{{ label }} mt-{{ marginTop }}"
          data-controller="message"
          data-action="click->message#close"
     >
         <div class="btn close position-absolute">X</div>
-        {% block flash_messages_message %}
-            {{ message }}
-        {% endblock %}
+        {% for message in messages %}
+            <p>
+                {% block flash_messages_message %}
+                    {{ message }}
+                {% endblock %}
+            </p>
+        {% endfor %}
     </div>
 {% endblock %}
