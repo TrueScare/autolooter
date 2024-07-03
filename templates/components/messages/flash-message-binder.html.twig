@@ -1,7 +1,9 @@
 {% block flash_message_binder %}
-    {% for label, messages in app.flashes() %}
-        {% for message in messages %}
-            {% include 'components/messages/flash-messages.html.twig' %}
-        {% endfor %}
+    {% set labels = ['danger', 'info', 'success'] %}
+    {% for label in labels %}
+        {% set messages = app.flashes(label) %}
+        {% if messages|length > 0 %}
+            {% include 'components/messages/flash-messages.html.twig' with {marginTop: loop.index } %}
+        {% endif %}
     {% endfor %}
 {% endblock %}
