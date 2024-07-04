@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ItemController extends EntityController
@@ -52,7 +53,7 @@ class ItemController extends EntityController
     }
 
     #[Route('/item/edit/{id?}', name: 'item_edit')]
-    public function detail(?Item $item, Request $request, TranslatorInterface $translator): Response
+    public function detail(?Item $item, Request $request, TranslatorInterface $translator, RouterInterface $router): Response
     {
         if ($item?->getOwner() !== $this->getUser()) {
             $this->redirectToRoute('app_home');
@@ -67,7 +68,7 @@ class ItemController extends EntityController
 
         $option = [
             'tableChoices' => $owner->getTables(),
-            'rarityChoices' => $owner->getRarities()
+            'rarityChoices' => $owner->getRarities(),
         ];
 
         $form = $this->createForm(ItemFormType::class, $item, $option);
@@ -77,6 +78,15 @@ class ItemController extends EntityController
             /** @var Item $item */
             $item = $form->getData();
             $item->setOwner($this->getUser());
+
+            if (!empty($valueEnd = $item->getValueEnd()) && $valueEnd < $item->getValueStart()) {
+                $item->setValueEnd($item->getValueStart());
+                $item->setValueStart($valueEnd);
+            }
+
+            // "update" item and form
+            $this->getEntityRepository()->findOneBy(['id' => $item->getId()]);
+            $form = $this->createForm(ItemFormType::class, $item, $option);
 
             try {
                 $this->entityManager->persist($item);
@@ -140,7 +150,7 @@ class ItemController extends EntityController
             );
 
             $items = $this->getEntityRepository()->getItemsById($this->getUser(), $picks);
-            if(!$itemConfig->isUniqueTables()) {
+            if (!$itemConfig->isUniqueTables()) {
 
                 $quantityMapping = array_count_values($picks);
 
@@ -172,10 +182,9 @@ class ItemController extends EntityController
     private function pickMultipleFromItems(ProbabilityEntryCollection $probabilityMapping, TranslatorInterface $translator, int $amount = 1, bool $uniqueItems = false)
     {
         $keys = [];
-        if(count($probabilityMapping) <= 0){
+        if (count($probabilityMapping) <= 0) {
             $this->addFlash('info', $translator->trans('item.random.notEnoughItems'));
-        }
-        else if (count($probabilityMapping) <= $amount && $uniqueItems) {
+        } else if (count($probabilityMapping) <= $amount && $uniqueItems) {
             if (count($probabilityMapping) < $amount) {
                 $this->addFlash('info', $translator->trans('item.random.notEnoughItems'));
             }
@@ -195,7 +204,7 @@ class ItemController extends EntityController
     private function getPickFromItems(ProbabilityEntryCollection $probabilityMapping): ProbabilityEntry|false|int
     {
         // calculate random value in between 0 and total individual probability value
-        $luckyPick = lcg_value()*(abs($probabilityMapping->getTotalProbability()));
+        $luckyPick = lcg_value() * (abs($probabilityMapping->getTotalProbability()));
 
         foreach ($probabilityMapping as $item) {
             $luckyPick -= $item->getIndividualProbability();

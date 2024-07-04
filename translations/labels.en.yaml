@@ -2,7 +2,7 @@ name: 'Name'
 description: 'Description'
 value: 'Value'
 value_from: 'value from...'
-value_to: 'value to...'
+value_to: 'value to... (optional)'
 parent:
   self: 'Parent Table'
   placeholder: '...'

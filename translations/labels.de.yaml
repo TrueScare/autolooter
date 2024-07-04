@@ -2,7 +2,7 @@ name: 'Name'
 description: 'Beschreibung'
 value: 'Wert'
 value_from: 'Wert von...'
-value_to: 'Wert bis...'
+value_to: 'Wert bis... (optional)'
 parent:
   self: 'Übergeordnete Tabelle'
   placeholder: '...'

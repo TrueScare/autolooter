@@ -28,7 +28,7 @@ class Item
     #[ORM\Column]
     private ?float $value_start = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?float $value_end = null;
 
     #[ORM\ManyToOne(inversedBy: 'items')]
