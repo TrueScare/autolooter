@@ -24,7 +24,7 @@
     <footer class="card-footer" style="background-color: {{ color }}">
         {% block card_footer_inner %}
             <p class="card-text">
-                {{ entity.valueStart }}G - {{ entity.valueEnd }}G
+                {{ entity.valueStart }}G {% if entity.valueEnd and not (entity.valueEnd == entity.valueStart) %}- {{ entity.valueEnd }}G{% endif %}
             </p>
         {% endblock %}
     </footer>

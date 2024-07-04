@@ -31,7 +31,8 @@ class ItemFormType extends AbstractType
                 'label' => new TranslatableMessage('value_from', domain: 'labels')
             ])
             ->add('value_end', NumberType::class, [
-                'label' => new TranslatableMessage('value_to', domain: 'labels')
+                'label' => new TranslatableMessage('value_to', domain: 'labels'),
+                'required' => false
             ])
             ->add('parent', EntityType::class, [
                 'class' => Table::class,
