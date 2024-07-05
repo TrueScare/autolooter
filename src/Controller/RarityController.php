@@ -77,6 +77,8 @@ class RarityController extends EntityController
                 $this->logger->error($e);
                 $this->addFlash('danger', $translator->trans('save', domain: 'errors'));
             }
+
+            return $this->redirectToRoute('rarity_edit', [$rarity->getId()]);
         }
 
         return $this->render('rarity/detail.html.twig', [

@@ -85,6 +85,8 @@ class TableController extends EntityController
                 $this->logger->error($e);
                 $this->addFlash('danger', $translator->trans('save', domain: 'errors'));
             }
+
+            return $this->redirectToRoute('table_edit', ['id' => $table->getId()]);
         }
 
         return $this->render('table/detail.html.twig', [
