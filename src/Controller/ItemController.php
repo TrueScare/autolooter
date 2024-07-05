@@ -53,7 +53,7 @@ class ItemController extends EntityController
     }
 
     #[Route('/item/edit/{id?}', name: 'item_edit')]
-    public function detail(?Item $item, Request $request, TranslatorInterface $translator, RouterInterface $router): Response
+    public function detail(?Item $item, Request $request, TranslatorInterface $translator): Response
     {
         if ($item?->getOwner() !== $this->getUser()) {
             $this->redirectToRoute('app_home');
@@ -96,6 +96,8 @@ class ItemController extends EntityController
                 $this->logger->error($e);
                 $this->addFlash('danger', $translator->trans('save', domain: 'errors'));
             }
+            // we should have an id here :) haha nice
+            return $this->redirectToRoute('item_edit', ['id' => $item->getId()]);
         }
 
         return $this->render('item/detail.html.twig', [
