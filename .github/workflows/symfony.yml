@@ -41,6 +41,4 @@ jobs:
       run: |
         docker-compose up -d
     - name: Execute tests (Unit and Feature tests) via PHPUnit
-      env:
-        DATABASE_URL: sqlite:///%kernel.project_dir%/data/database.sqlite
       run: vendor/bin/phpunit
