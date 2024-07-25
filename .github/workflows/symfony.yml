@@ -35,13 +35,11 @@ jobs:
         key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
         restore-keys: |
           ${{ runner.os }}-php-
-    - name: Install Symfony binary
-      run: |
-        curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | sudo -E bash
-        sudo apt install symfony-cli
-    - name: Install Dependencies
+    - name: Install Dependencies & Symfony Binaries
       run: | 
         composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | sudo -E bash
+        sudo apt install symfony-cli
     - name: Build Docker Stack
       run: |
         docker-compose up -d
