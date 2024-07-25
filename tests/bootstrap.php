@@ -14,14 +14,14 @@ if (file_exists(dirname(__DIR__) . '/config/bootstrap.php')) {
 // clear existing db beforehand
 passthru(
     sprintf(
-        'php bin/console doctrine:database:drop -f --env=%s',
+        'php bin/console doctrine:database:drop -f --if-exists --env=%s',
         $_ENV['APP_ENV']
     )
 );
 // create fresh db
 passthru(
     sprintf(
-        'php bin/console doctrine:database:create --env=%s',
+        'php bin/console doctrine:database:create --if-not-exists --env=%s',
         $_ENV['APP_ENV']
     )
 );
