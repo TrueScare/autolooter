@@ -12,31 +12,11 @@ if (file_exists(dirname(__DIR__) . '/config/bootstrap.php')) {
 
 //region setting up test db
 // clear existing db beforehand
-passthru(
-    sprintf(
-        'php bin/console doctrine:database:drop -f --env=%s',
-        $_ENV['APP_ENV']
-    )
-);
+passthru('php bin/console doctrine:database:drop -f');
 // create fresh db
-passthru(
-    sprintf(
-        'php bin/console doctrine:database:create --env=%s',
-        $_ENV['APP_ENV']
-    )
-);
+passthru('php bin/console doctrine:database:create');
 // get done with the migration processes
-passthru(
-    sprintf(
-        'echo yes | php bin/console doctrine:migrations:migrate --env=%s',
-        $_ENV['APP_ENV']
-    )
-);
+passthru('echo yes | php bin/console doctrine:migrations:migrate');
 // load dummy data
-passthru(
-    sprintf(
-        'echo yes | php bin/console doctrine:fixtures:load --env=%s',
-        $_ENV['APP_ENV']
-    )
-);
+passthru('echo yes | php bin/console doctrine:fixtures:load');
 //endregion
