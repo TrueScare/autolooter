@@ -43,3 +43,5 @@ jobs:
         docker compose up -d
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       run: php bin/phpunit
+      env:
+        APP_ENV: 'test'
