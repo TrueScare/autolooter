@@ -71,7 +71,7 @@ class ProbabilityService
 
     /**
      * @param User $owner
-     * @param ProbabilityEntryCollection $probabilityMapping
+     * @param ProbabilityEntryCollection|null $probabilityMapping
      * @param array $rarities
      * @return ProbabilityEntryCollection
      */

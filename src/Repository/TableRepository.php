@@ -87,7 +87,7 @@ class TableRepository extends ServiceEntityRepository
                                where (t2.parent_id = t.parent_id
                                    or (t2.parent_id is null and t.parent_id is null)) 
                                  and t2.owner_id = ". $owner->getId() ." 
-                               group by t2.parent_id ), FLOAT) as individual_probability 
+                               group by t2.parent_id ), DOUBLE) as individual_probability 
                     from `table` t 
                         left join rarity r
                             on t.rarity_id = r.id
