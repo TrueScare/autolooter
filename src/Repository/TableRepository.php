@@ -82,7 +82,7 @@ class TableRepository extends ServiceEntityRepository
                     r.value as rarity_value,
                     CONVERT(r.value / (select sum(r2.value) as rarity_sum 
                                from `table` t2 
-                                   left join autolooter.rarity r2 
+                                   left join rarity r2 
                                        on t2.rarity_id = r2.id 
                                where (t2.parent_id = t.parent_id
                                    or (t2.parent_id is null and t.parent_id is null)) 
