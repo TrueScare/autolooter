@@ -57,9 +57,9 @@ class ProbabilityService
                 return in_array($item->getId(), $subsetIds);
             });
 
-            $sum = $queue->getTotalProbability();
+            $sum = $queue->getSumValues();
 
-            foreach ($collection as $item) {
+            foreach ($queue as $item) {
                 if (in_array($item->getId(), $subsetIds)) {
                     $item->setIndividualProbability($item->getRarityValue() / $sum);
                 }
@@ -188,7 +188,6 @@ class ProbabilityService
     private function prepareProbabilities(ProbabilityEntryCollection $collection, ProbabilityEntryCollection $queue): ProbabilityEntryCollection
     {
         $visited = [];
-
         while (!empty($current = $queue->shift())) {
             $visited[] = $current->getId();
             foreach ($collection as $child) {

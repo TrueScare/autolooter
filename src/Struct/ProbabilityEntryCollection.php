@@ -173,4 +173,14 @@ class ProbabilityEntryCollection implements \Iterator, Countable
 
         return $probability;
     }
+
+    public function getSumValues(): int
+    {
+        $value = 0;
+        foreach ($this->entries as $entry) {
+            $value += $entry->getRarityValue();
+        }
+
+        return $value;
+    }
 }
