@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Item;
 use App\Entity\User;
+use App\Exceptions\NoItemFoundException;
 use App\Form\ItemFormType;
 use App\Form\RandomItemConfigType;
 use App\Repository\ItemRepository;
@@ -144,12 +145,20 @@ class ItemController extends EntityController
                 return $item->getIndividualProbability() > 0;
             });
 
-            $picks = $this->pickMultipleFromItems(
-                $probabilities,
-                $translator,
-                $itemConfig->getAmount() > 0 ? $itemConfig->getAmount() : 1,
-                $itemConfig->isUniqueTables()
-            );
+            try {
+                $picks = $probabilityService->pickMultipleFromItems(
+                    $probabilities,
+                    $itemConfig->getAmount() > 0 ? $itemConfig->getAmount() : 1,
+                    $itemConfig->isUniqueTables()
+                );
+            } catch (NoItemFoundException $e) {
+                $this->addFlash('danger', $translator->trans('item.nonefound', domain: 'errors'));
+                $picks = []; // make sure that the frontend can load
+            }
+
+            if(empty($picks) || count($picks) < $itemConfig->getAmount()) {
+                $this->addFlash('info', $translator->trans('item.random.notEnoughItems'));
+            }
 
             $items = $this->getEntityRepository()->getItemsById($this->getUser(), $picks);
             if (!$itemConfig->isUniqueTables()) {
@@ -170,82 +179,6 @@ class ItemController extends EntityController
             'items' => $quantityItems ?? $items,
             'form' => $form->createView(),
         ]);
-    }
-
-    /**
-     * Produces an array of ids of items from the ProbabilityEntryCollection
-     *
-     * @param ProbabilityEntryCollection $probabilityMapping
-     * @param TranslatorInterface $translator
-     * @param int $amount
-     * @param bool $uniqueItems
-     * @return ProbabilityEntry|array|false
-     */
-    private function pickMultipleFromItems(ProbabilityEntryCollection $probabilityMapping, TranslatorInterface $translator, int $amount = 1, bool $uniqueItems = false)
-    {
-        $keys = [];
-        if (count($probabilityMapping) <= 0) {
-            $this->addFlash('info', $translator->trans('item.random.notEnoughItems'));
-        } else if (count($probabilityMapping) <= $amount && $uniqueItems) {
-            if (count($probabilityMapping) < $amount) {
-                $this->addFlash('info', $translator->trans('item.random.notEnoughItems'));
-            }
-            //only way to return unique items... we may not get the wanted amount though...
-            $keys = $probabilityMapping->getKeys();
-        } else if (count($probabilityMapping) > $amount && $uniqueItems) {
-            $keys = $this->getPickFromItemsUnique($probabilityMapping, $amount);
-        } else {
-            while (count($keys) < $amount) {
-                $keys[] = $this->getPickFromItems($probabilityMapping);
-            }
-        }
-
-        return $keys;
-    }
-
-    private function getPickFromItems(ProbabilityEntryCollection $probabilityMapping): ProbabilityEntry|false|int
-    {
-        // calculate random value in between 0 and total individual probability value
-        $luckyPick = lcg_value() * (abs($probabilityMapping->getTotalProbability()));
-
-        foreach ($probabilityMapping as $item) {
-            $luckyPick -= $item->getIndividualProbability();
-            if ($luckyPick <= 0) {
-                return $item->getId();
-            }
-        }
-
-        $this->addFlash('danger', "No item found... that's suspicious.");
-        return $probabilityMapping->end()->getId();
-    }
-
-    private function getPickFromItemsUnique(ProbabilityEntryCollection $probabilityMapping, $amount)
-    {
-        $baseProbability = 1;
-        $picks = [];
-
-        for ($i = 0; $i < $amount; $i++) {
-
-            $luckyPick = (mt_rand() / mt_getrandmax()) * $baseProbability;
-
-            foreach ($probabilityMapping as $key => $item) {
-                $luckyPick = $luckyPick - $item->getIndividualProbability();
-
-                if ($luckyPick <= 0) {
-                    $picks[$item->getId()] = $item->getId();
-                    $baseProbability = $baseProbability - $item->getIndividualProbability();
-                    $probabilityMapping->removeEntry($item);
-                    break;
-                }
-            }
-        }
-
-        if (count($picks) <= 0) {
-            $this->addFlash('danger', "No item found... that's suspicious.");
-            return $probabilityMapping->end()->getId();
-        }
-
-        return $picks;
     }
 
     /**

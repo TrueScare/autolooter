@@ -7,6 +7,7 @@ table:
   notfound: 'Table could not be found.'
 item:
   notfound: 'Item could not be found.'
+  nonefound: 'Unfortunately something bad happened while searching for a suitable item.'
 rarity:
   notfound: 'Rarity could not be found.'
 delete: 'An error occurred while deleting.'
