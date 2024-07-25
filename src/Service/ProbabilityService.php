@@ -69,15 +69,18 @@ class ProbabilityService
         return $this->prepareProbabilities($collection, $queue);
     }
 
-
     /**
      * @param User $owner
      * @param ProbabilityEntryCollection $probabilityMapping
      * @param array $rarities
      * @return ProbabilityEntryCollection
      */
-    public function getItemProbabilities(User $owner, ProbabilityEntryCollection $probabilityMapping, array $rarities): ProbabilityEntryCollection
+    public function getItemProbabilities(User $owner, ProbabilityEntryCollection $probabilityMapping = null, array $rarities = []): ProbabilityEntryCollection
     {
+        if ($probabilityMapping == null) {
+            $probabilityMapping = $this->getTableProbabilities($owner);
+        }
+
         $collection = $this->itemRepository->getAllItemIndividualRarities($owner, $this->entityManager, $rarities);
 
         foreach ($collection as $item) {

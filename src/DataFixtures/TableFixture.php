@@ -31,7 +31,7 @@ class TableFixture extends Fixture implements DependentFixtureInterface
         $layerOneOne->setOwner($owner);
         $layerOneOne->setName("Layer One 1");
         $layerOneOne->setDescription("First Table of the first layer");
-        $layerOneOne->setRarity($this->getReference(RarityFixture::RARITY_RARE));
+        $layerOneOne->setRarity($this->getReference(RarityFixture::RARITY_COMMON));
         $layerOneOne->setParent($baseTable);
         $manager->persist($layerOneOne);
 
@@ -39,7 +39,7 @@ class TableFixture extends Fixture implements DependentFixtureInterface
         $layerOneTwo->setOwner($owner);
         $layerOneTwo->setName("Layer One 2");
         $layerOneTwo->setDescription("First Table of the Second layer");
-        $layerOneTwo->setRarity($this->getReference(RarityFixture::RARITY_COMMON));
+        $layerOneTwo->setRarity($this->getReference(RarityFixture::RARITY_RARE));
         $layerOneTwo->setParent($baseTable);
         $manager->persist($layerOneTwo);
 
@@ -47,7 +47,7 @@ class TableFixture extends Fixture implements DependentFixtureInterface
         $layerTwoOno->setOwner($owner);
         $layerTwoOno->setName("Layer Two 1");
         $layerTwoOno->setDescription("Second Table of the Second layer");
-        $layerTwoOno->setRarity($this->getReference(RarityFixture::RARITY_RARE));
+        $layerTwoOno->setRarity($this->getReference(RarityFixture::RARITY_COMMON));
         $layerTwoOno->setParent($layerOneOne);
         $manager->persist($layerTwoOno);
 
@@ -55,7 +55,7 @@ class TableFixture extends Fixture implements DependentFixtureInterface
         $layerTwoTwo->setOwner($owner);
         $layerTwoTwo->setName("Layer Two 2");
         $layerTwoTwo->setDescription("Third Table of the Second layer");
-        $layerTwoTwo->setRarity($this->getReference(RarityFixture::RARITY_COMMON));
+        $layerTwoTwo->setRarity($this->getReference(RarityFixture::RARITY_RARE));
         $layerTwoTwo->setParent($layerOneOne);
         $manager->persist($layerTwoTwo);
 
@@ -71,7 +71,7 @@ class TableFixture extends Fixture implements DependentFixtureInterface
         $layerTwoFour->setOwner($owner);
         $layerTwoFour->setName("Layer Two 4");
         $layerTwoFour->setDescription("Fourth Table of the Second layer");
-        $layerTwoFour->setRarity($this->getReference(RarityFixture::RARITY_COMMON));
+        $layerTwoFour->setRarity($this->getReference(RarityFixture::RARITY_ULTRARARE));
         $layerTwoFour->setParent($layerOneTwo);
         $manager->persist($layerTwoFour);
 
