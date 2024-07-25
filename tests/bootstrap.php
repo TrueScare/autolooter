@@ -14,28 +14,28 @@ if (file_exists(dirname(__DIR__) . '/config/bootstrap.php')) {
 // clear existing db beforehand
 passthru(
     sprintf(
-        'symfony console doctrine:database:drop -f --if-exists --env=%s',
+        'php bin/console doctrine:database:drop -f --if-exists --env=%s',
         $_ENV['APP_ENV']
     )
 );
 // create fresh db
 passthru(
     sprintf(
-        'symfony console doctrine:database:create --if-not-exists --env=%s',
+        'php bin/console doctrine:database:create --if-not-exists --env=%s',
         $_ENV['APP_ENV']
     )
 );
 // get done with the migration processes
 passthru(
     sprintf(
-        'echo yes | symfony console doctrine:migrations:migrate --env=%s',
+        'echo yes | php bin/console doctrine:migrations:migrate --env=%s',
         $_ENV['APP_ENV']
     )
 );
 // load dummy data
 passthru(
     sprintf(
-        'echo yes | symfony console doctrine:fixtures:load --env=%s',
+        'echo yes | php bin/console doctrine:fixtures:load --env=%s',
         $_ENV['APP_ENV']
     )
 );
