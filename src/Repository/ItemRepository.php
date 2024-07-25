@@ -80,7 +80,7 @@ class ItemRepository extends ServiceEntityRepository
                                        on i2.rarity_id = r2.id 
                                where (i.parent_id = i2.parent_id) 
                                  and i2.owner_id = " . $owner->getId() . " 
-                               group by i.parent_id ), FLOAT) as individual_probability 
+                               group by i.parent_id ), DOUBLE) as individual_probability 
                     from item i 
                         left join rarity r
                             on i.rarity_id = r.id

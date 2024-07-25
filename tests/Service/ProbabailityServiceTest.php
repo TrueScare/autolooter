@@ -13,7 +13,7 @@ class ProbabailityServiceTest extends KernelTestCase
 {
     protected User $user;
 
-    protected function setUp():void
+    protected function setUp(): void
     {
         parent::setUp();
         $container = static::getContainer();
@@ -43,6 +43,6 @@ class ProbabailityServiceTest extends KernelTestCase
         $entry = $collection->getEntryByKey($item->getId());
         $manualProbability = (pow((100 / 150), 2) * 100 / 160);
 
-        $this->assertEquals($manualProbability,7, $entry->getIndividualProbability());
+        $this->assertEquals(round($manualProbability, 8), round($entry->getIndividualProbability(), 8));
     }
 }
