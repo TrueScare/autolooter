@@ -12,6 +12,8 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class ProbabailityServiceTest extends KernelTestCase
 {
+    /* When testing the probability of a table or item a precision of upto 8 decimals is sufficient. */
+    protected static $decimalPresicion = 8;
     protected User $user;
 
     protected function setUp(): void
@@ -77,7 +79,7 @@ class ProbabailityServiceTest extends KernelTestCase
         });
 
         $this->assertNotEmpty($collection);
-        $this->assertEquals(round((100 / 150) * 100 / 160, 8), round($items->getEntryByKey($item->getId())->getIndividualProbability(),8));
+        $this->assertEquals(round((100 / 150) * 100 / 160, self::$decimalPresicion), round($items->getEntryByKey($item->getId())->getIndividualProbability(), self::$decimalPresicion));
     }
 
     public function testProbabilityCalculation()
@@ -91,6 +93,6 @@ class ProbabailityServiceTest extends KernelTestCase
         $entry = $collection->getEntryByKey($item->getId());
         $manualProbability = (pow((100 / 150), 2) * 100 / 160);
 
-        $this->assertEquals(round($manualProbability, 8), round($entry->getIndividualProbability(), 8));
+        $this->assertEquals(round($manualProbability, self::$decimalPresicion), round($entry->getIndividualProbability(), self::$decimalPresicion));
     }
 }
