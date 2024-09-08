@@ -14,6 +14,7 @@ The idea was to give the website all the tables and then have a button to get a 
 4. [Demo Data](#demo-data)
 5. [Routes](#routes)
 6. [How I develop](#how-i-develop-this-project)
+7. [Testing](#testing)
 
 # Requirements
 
@@ -29,8 +30,8 @@ The idea was to give the website all the tables and then have a button to get a 
 - ```composer install```
 - ``npm install``
 - build files
-  - for development: ``npm run dev``
-  - for production:  ``npm run build``
+    - for development: ``npm run dev``
+    - for production:  ``npm run build``
 - best case create a .env.local file for your environment such as your **DATABASE_URL**
 
 # Setup Database
@@ -41,8 +42,10 @@ The idea was to give the website all the tables and then have a button to get a 
   ```
   DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=10.11.2-MariaDB&charset=utf8mb4"
   ```
+
 to your .env.local (symfony adds the username/password/database).
-- to get the SQL-Container started type: 
+
+- to get the SQL-Container started type:
   ```
   docker-compose up
   ```
@@ -59,7 +62,7 @@ to your .env.local (symfony adds the username/password/database).
   ```mariadb
   FLUSH ALL PRIVILEGES;
   ```
-- add DATABASE_URL to .env.local 
+- add DATABASE_URL to .env.local
   ```
   DATABASE_URL="mysql://autolooter_admin:{YOUR PASSWORD}@127.0.0.1:3306/autolooter_db?serverVersion=10.11.2-MariaDB&charset=utf8mb4"
   ```
@@ -85,7 +88,7 @@ Included are two users:
 The base user has all the rarities, tables and items from the fixtures.
 The admin user has access to the backend but no rarities, tables and items prepared.
 
-- if you want some demo data run 
+- if you want some demo data run
   ```
   php bin/console doctrine:fixtures:load
   ```
@@ -135,3 +138,8 @@ Fun fact, it sure is not the optimal way, but it works for me :)
 - run npm ```npm run watch``` to track all my style changes
 - run symfony server ```syfmony server:start -d``` as local server
 - hack away and have fun :)
+
+# Testing
+
+There are some tests i've written that can be run with
+```symfony php bin/phpunit```
