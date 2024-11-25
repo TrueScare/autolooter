@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3124b7e9e6fbf8decf98a7727062d519",
+    "content-hash": "b0313c7ca9207d7dbecd78cbb0db733c",
     "packages": [
         {
             "name": "doctrine/cache",
@@ -3708,21 +3708,22 @@
         },
         {
             "name": "symfony/http-client",
-            "version": "v7.0.9",
+            "version": "v7.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client.git",
-                "reference": "10be5723e079acf878f7c4350021539e2071fac2"
+                "reference": "c30d91a1deac0dc3ed5e604683cf2e1dfc635b8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client/zipball/10be5723e079acf878f7c4350021539e2071fac2",
-                "reference": "10be5723e079acf878f7c4350021539e2071fac2",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/c30d91a1deac0dc3ed5e604683cf2e1dfc635b8a",
+                "reference": "c30d91a1deac0dc3ed5e604683cf2e1dfc635b8a",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.2",
                 "psr/log": "^1|^2|^3",
+                "symfony/deprecation-contracts": "^2.5|^3",
                 "symfony/http-client-contracts": "^3.4.1",
                 "symfony/service-contracts": "^2.5|^3"
             },
@@ -3749,6 +3750,7 @@
                 "symfony/http-kernel": "^6.4|^7.0",
                 "symfony/messenger": "^6.4|^7.0",
                 "symfony/process": "^6.4|^7.0",
+                "symfony/rate-limiter": "^6.4|^7.0",
                 "symfony/stopwatch": "^6.4|^7.0"
             },
             "type": "library",
@@ -3780,7 +3782,7 @@
                 "http"
             ],
             "support": {
-                "source": "https://github.com/symfony/http-client/tree/v7.0.9"
+                "source": "https://github.com/symfony/http-client/tree/v7.1.8"
             },
             "funding": [
                 {
@@ -3796,7 +3798,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-06-28T07:59:17+00:00"
+            "time": "2024-11-13T13:40:27+00:00"
         },
         {
             "name": "symfony/http-client-contracts",
