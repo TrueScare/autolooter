@@ -24,6 +24,6 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "slim-select": "^2.8.2"
+        "slim-select": "^2.9.2"
     }
 }
