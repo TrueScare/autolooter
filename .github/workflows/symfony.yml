@@ -34,7 +34,6 @@ jobs:
         sudo apt install symfony-cli
     - name: Build Docker Stack
       run: |
-        docker-compose up -d
         docker compose up -d
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       run: symfony php bin/phpunit
