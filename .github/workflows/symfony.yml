@@ -32,15 +32,11 @@ jobs:
         composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
         curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | sudo -E bash
         sudo apt install symfony-cli
-    - name: Build Docker Stack
-      run: |
-        docker compose up -d
 
-    - name: Wait for MySQL
-      run: |
-        while ! mysqladmin ping --host=127.0.0.1 --password=$MYSQL_ROOT_PASSWORD --silent; do
-          sleep 1
-        done
+    - name: Build Docker Stack
+      uses: hoverkraft-tech/compose-action@v2.0.1
+      with:
+        compose-file: "./docker-compose.yaml"
 
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       run: symfony php bin/phpunit
