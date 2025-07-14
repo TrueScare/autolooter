@@ -3,10 +3,9 @@
 namespace App\DataFixtures;
 
 use App\Entity\Rarity;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-
-;
 
 class RarityFixture extends Fixture
 {
@@ -18,7 +17,7 @@ class RarityFixture extends Fixture
     public function load(ObjectManager $manager): void
     {
         $baseRarity = 100;
-        $owner = $this->getReference(UserFixture::BASE_USER);
+        $owner = $this->getReference(UserFixture::BASE_USER, User::class);
 
         $common = new Rarity();
         $common->setValue($baseRarity);
