@@ -2,7 +2,9 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Rarity;
 use App\Entity\Table;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -18,20 +20,20 @@ class TableFixture extends Fixture implements DependentFixtureInterface
     public const TABLE4 = "table4";
     public function load(ObjectManager $manager): void
     {
-        $owner = $this->getReference(UserFixture::BASE_USER);
+        $owner = $this->getReference(UserFixture::BASE_USER, User::class);
 
         $baseTable = new Table();
         $baseTable->setOwner($owner);
         $baseTable->setName("Base Table");
         $baseTable->setDescription("Very first Table of the whole tree");
-        $baseTable->setRarity($this->getReference(RarityFixture::RARITY_COMMON));
+        $baseTable->setRarity($this->getReference(RarityFixture::RARITY_COMMON, Rarity::class));
         $manager->persist($baseTable);
 
         $layerOneOne = new Table();
         $layerOneOne->setOwner($owner);
         $layerOneOne->setName("Layer One 1");
         $layerOneOne->setDescription("First Table of the first layer");
-        $layerOneOne->setRarity($this->getReference(RarityFixture::RARITY_COMMON));
+        $layerOneOne->setRarity($this->getReference(RarityFixture::RARITY_COMMON, Rarity::class));
         $layerOneOne->setParent($baseTable);
         $manager->persist($layerOneOne);
 
@@ -39,7 +41,7 @@ class TableFixture extends Fixture implements DependentFixtureInterface
         $layerOneTwo->setOwner($owner);
         $layerOneTwo->setName("Layer One 2");
         $layerOneTwo->setDescription("First Table of the Second layer");
-        $layerOneTwo->setRarity($this->getReference(RarityFixture::RARITY_RARE));
+        $layerOneTwo->setRarity($this->getReference(RarityFixture::RARITY_RARE, Rarity::class));
         $layerOneTwo->setParent($baseTable);
         $manager->persist($layerOneTwo);
 
@@ -47,7 +49,7 @@ class TableFixture extends Fixture implements DependentFixtureInterface
         $layerTwoOno->setOwner($owner);
         $layerTwoOno->setName("Layer Two 1");
         $layerTwoOno->setDescription("Second Table of the Second layer");
-        $layerTwoOno->setRarity($this->getReference(RarityFixture::RARITY_COMMON));
+        $layerTwoOno->setRarity($this->getReference(RarityFixture::RARITY_COMMON, Rarity::class));
         $layerTwoOno->setParent($layerOneOne);
         $manager->persist($layerTwoOno);
 
@@ -55,7 +57,7 @@ class TableFixture extends Fixture implements DependentFixtureInterface
         $layerTwoTwo->setOwner($owner);
         $layerTwoTwo->setName("Layer Two 2");
         $layerTwoTwo->setDescription("Third Table of the Second layer");
-        $layerTwoTwo->setRarity($this->getReference(RarityFixture::RARITY_RARE));
+        $layerTwoTwo->setRarity($this->getReference(RarityFixture::RARITY_RARE, Rarity::class));
         $layerTwoTwo->setParent($layerOneOne);
         $manager->persist($layerTwoTwo);
 
@@ -63,7 +65,7 @@ class TableFixture extends Fixture implements DependentFixtureInterface
         $layerTwoThree->setOwner($owner);
         $layerTwoThree->setName("Layer Two 3");
         $layerTwoThree->setDescription("Third Table of the Second layer");
-        $layerTwoThree->setRarity($this->getReference(RarityFixture::RARITY_COMMON));
+        $layerTwoThree->setRarity($this->getReference(RarityFixture::RARITY_COMMON, Rarity::class));
         $layerTwoThree->setParent($layerOneTwo);
         $manager->persist($layerTwoThree);
 
@@ -71,7 +73,7 @@ class TableFixture extends Fixture implements DependentFixtureInterface
         $layerTwoFour->setOwner($owner);
         $layerTwoFour->setName("Layer Two 4");
         $layerTwoFour->setDescription("Fourth Table of the Second layer");
-        $layerTwoFour->setRarity($this->getReference(RarityFixture::RARITY_ULTRARARE));
+        $layerTwoFour->setRarity($this->getReference(RarityFixture::RARITY_ULTRARARE, Rarity::class));
         $layerTwoFour->setParent($layerOneTwo);
         $manager->persist($layerTwoFour);
 
