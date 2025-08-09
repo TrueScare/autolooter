@@ -4,12 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserFormType;
-use App\Repository\UserRepository;
-use App\Service\HeaderActionService;
-use App\Service\PaginationService;
 use App\Struct\Order;
-use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

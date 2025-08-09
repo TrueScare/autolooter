@@ -7,23 +7,15 @@ use App\Entity\User;
 use App\Exceptions\NoItemFoundException;
 use App\Form\ItemFormType;
 use App\Form\RandomItemConfigType;
-use App\Repository\ItemRepository;
-use App\Service\HeaderActionService;
-use App\Service\PaginationService;
 use App\Service\ProbabilityService;
 use App\Struct\Order;
 use App\Struct\ProbabilityEntry;
-use App\Struct\ProbabilityEntryCollection;
 use App\Struct\RandomItemConfig;
-use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
-use Random\Randomizer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ItemController extends EntityController
