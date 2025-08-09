@@ -51,6 +51,11 @@ export default class extends Controller {
             }
         }
         this.dialogCancel.addEventListener('click', () => this.close());
+        this.dialog.addEventListener('keydown', (e) => {
+            if (e.keyCode == 27) {
+                this.close();
+            }
+        })
         this.dialog.style.display = 'block';
         this.dialog.showModal();
     }
