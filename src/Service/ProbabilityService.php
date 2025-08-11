@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use App\Entity\Item;
 use App\Entity\User;
 use App\Exceptions\NoItemFoundException;
 use App\Repository\ItemRepository;
@@ -11,7 +10,6 @@ use App\Struct\ProbabilityEntry;
 use App\Struct\ProbabilityEntryCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ProbabilityService
