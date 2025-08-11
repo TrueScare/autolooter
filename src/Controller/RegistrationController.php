@@ -7,6 +7,7 @@ use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use App\Service\HeaderActionService;
+use App\Service\InitialUserService;
 use App\Service\MailService;
 use App\Service\PaginationService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -81,7 +82,7 @@ class RegistrationController extends BaseController
     }
 
     #[Route('/verify/email', name: 'app_verify_email')]
-    public function verifyUserEmail(Request $request, TranslatorInterface $translator, UserRepository $userRepository): Response
+    public function verifyUserEmail(Request $request, TranslatorInterface $translator, UserRepository $userRepository, InitialUserService $initialUserService): Response
     {
         $id = $request->query->get('id');
 
@@ -103,6 +104,8 @@ class RegistrationController extends BaseController
 
             return $this->redirectToRoute('app_register');
         }
+
+        $initialUserService->provideDefaultsAfterRegistration($user);
 
         $this->addFlash('success', $translator->trans('registration.mail.verified'));
 
