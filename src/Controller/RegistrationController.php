@@ -62,15 +62,6 @@ class RegistrationController extends BaseController
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
 
-            $mail = (new TemplatedEmail())
-                ->subject('New User Registered')
-                ->htmlTemplate('registration/new_user_registered.html.twig');
-            $context = $mail->getContext();
-            $context['user'] = $user;
-            $mail->context($context);
-
-            $mailService->notifyAdmin($mail);
-
             return $this->render('registration/registration_complete.html.twig', [
                 'user' => $user,
             ]);
