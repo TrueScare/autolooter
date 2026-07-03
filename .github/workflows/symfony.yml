@@ -17,6 +17,19 @@ permissions:
 jobs:
   symfony-tests:
     runs-on: ubuntu-latest
+    services:
+      database:
+        image: mariadb:10.11
+        env:
+          MARIADB_ROOT_PASSWORD: password
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mariadb-admin ping -ppassword"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
     #  To automatically get bug fixes and new Php versions for shivammathur/setup-php,
     # change this to (see https://github.com/shivammathur/setup-php#bookmark-versioning):
@@ -24,19 +37,28 @@ jobs:
     - uses: shivammathur/setup-php@2cb9b829437ee246e9b3cac53555a39208ca6d28
       with:
         php-version: '8.2'
+        extensions: mbstring, xml, intl, pdo_mysql
+        coverage: none
+
     - uses: actions/checkout@v4
     - name: Copy .env.test.local
       run: php -r "file_exists('.env.test.local') || copy('.env.test', '.env.test.local');"
-    - name: Install Dependencies & Symfony Binaries
-      run: | 
-        composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-        curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | sudo -E bash
-        sudo apt install symfony-cli
 
-    - name: Build Docker Stack
-      uses: hoverkraft-tech/compose-action@v2.0.1
+    - name: Validate composer.json and composer.lock
+      run: composer validate
+
+    - name: Install Dependencies
+      uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda
       with:
-        compose-file: "./docker-compose.yaml"
+        composer-options: "-q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist"
+
+    - name: Database Schema Setup
+      run: |
+        php bin/console doctrine:database:create --env=test
+        php bin/console doctrine:migrations:migrate --env=test --no-interaction
+
+    - name: Check if migrations are up to date
+      run: php bin/console doctrine:schema:validate --env=test --skip-sync
 
     - name: Execute tests (Unit and Feature tests) via PHPUnit
-      run: symfony php bin/phpunit
+      run: vendor/bin/phpunit
